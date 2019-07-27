@@ -1,0 +1,16 @@
+#searchButton {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    flex-basis: auto;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+:host {
+    display: flex;
+    justify-content: flex-end;
+    align-items: stretch;
+    flex-grow: 1;
+}
