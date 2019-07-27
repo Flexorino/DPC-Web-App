@@ -79,6 +79,10 @@ export class EintrgeService {
 
         let headers = this.defaultHeaders;
 
+        // authentication (basicAuth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
         // to determine the Accept header
         const httpHeaderAccepts: string[] = [
             'application/json'
@@ -116,19 +120,23 @@ export class EintrgeService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public diariesDiaryIdEntriesEntryIdDelete(diaryId: string, entryId: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public diariesDiaryIdEntriesEntryIdDelete(diaryId: string, entryId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public diariesDiaryIdEntriesEntryIdDelete(diaryId: string, entryId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public diariesDiaryIdEntriesEntryIdDelete(diaryId: string, entryId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public deleteDiaryEntry(diaryId: string, entryId: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public deleteDiaryEntry(diaryId: string, entryId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public deleteDiaryEntry(diaryId: string, entryId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public deleteDiaryEntry(diaryId: string, entryId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (diaryId === null || diaryId === undefined) {
-            throw new Error('Required parameter diaryId was null or undefined when calling diariesDiaryIdEntriesEntryIdDelete.');
+            throw new Error('Required parameter diaryId was null or undefined when calling deleteDiaryEntry.');
         }
         if (entryId === null || entryId === undefined) {
-            throw new Error('Required parameter entryId was null or undefined when calling diariesDiaryIdEntriesEntryIdDelete.');
+            throw new Error('Required parameter entryId was null or undefined when calling deleteDiaryEntry.');
         }
 
         let headers = this.defaultHeaders;
 
+        // authentication (basicAuth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
         // to determine the Accept header
         const httpHeaderAccepts: string[] = [
         ];
@@ -163,12 +171,12 @@ export class EintrgeService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getEntriesFromDiary(diaryId: string, from?: number, to?: number, limit?: number, order?: 'asc' | 'desc', showDeactivatedEntries?: boolean, observe?: 'body', reportProgress?: boolean): Observable<InlineResponse2002>;
-    public getEntriesFromDiary(diaryId: string, from?: number, to?: number, limit?: number, order?: 'asc' | 'desc', showDeactivatedEntries?: boolean, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<InlineResponse2002>>;
-    public getEntriesFromDiary(diaryId: string, from?: number, to?: number, limit?: number, order?: 'asc' | 'desc', showDeactivatedEntries?: boolean, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<InlineResponse2002>>;
-    public getEntriesFromDiary(diaryId: string, from?: number, to?: number, limit?: number, order?: 'asc' | 'desc', showDeactivatedEntries?: boolean, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getDiaryEntries(diaryId: string, from?: number, to?: number, limit?: number, order?: 'asc' | 'desc', showDeactivatedEntries?: boolean, observe?: 'body', reportProgress?: boolean): Observable<InlineResponse2002>;
+    public getDiaryEntries(diaryId: string, from?: number, to?: number, limit?: number, order?: 'asc' | 'desc', showDeactivatedEntries?: boolean, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<InlineResponse2002>>;
+    public getDiaryEntries(diaryId: string, from?: number, to?: number, limit?: number, order?: 'asc' | 'desc', showDeactivatedEntries?: boolean, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<InlineResponse2002>>;
+    public getDiaryEntries(diaryId: string, from?: number, to?: number, limit?: number, order?: 'asc' | 'desc', showDeactivatedEntries?: boolean, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (diaryId === null || diaryId === undefined) {
-            throw new Error('Required parameter diaryId was null or undefined when calling getEntriesFromDiary.');
+            throw new Error('Required parameter diaryId was null or undefined when calling getDiaryEntries.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -190,6 +198,10 @@ export class EintrgeService {
 
         let headers = this.defaultHeaders;
 
+        // authentication (basicAuth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
         // to determine the Accept header
         const httpHeaderAccepts: string[] = [
             'application/json'
@@ -222,19 +234,23 @@ export class EintrgeService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getEntryFromDiary(diaryId: string, entryId: string, observe?: 'body', reportProgress?: boolean): Observable<EntryReprResponse>;
-    public getEntryFromDiary(diaryId: string, entryId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EntryReprResponse>>;
-    public getEntryFromDiary(diaryId: string, entryId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EntryReprResponse>>;
-    public getEntryFromDiary(diaryId: string, entryId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getDiaryEntry(diaryId: string, entryId: string, observe?: 'body', reportProgress?: boolean): Observable<EntryReprResponse>;
+    public getDiaryEntry(diaryId: string, entryId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EntryReprResponse>>;
+    public getDiaryEntry(diaryId: string, entryId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EntryReprResponse>>;
+    public getDiaryEntry(diaryId: string, entryId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (diaryId === null || diaryId === undefined) {
-            throw new Error('Required parameter diaryId was null or undefined when calling getEntryFromDiary.');
+            throw new Error('Required parameter diaryId was null or undefined when calling getDiaryEntry.');
         }
         if (entryId === null || entryId === undefined) {
-            throw new Error('Required parameter entryId was null or undefined when calling getEntryFromDiary.');
+            throw new Error('Required parameter entryId was null or undefined when calling getDiaryEntry.');
         }
 
         let headers = this.defaultHeaders;
 
+        // authentication (basicAuth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
         // to determine the Accept header
         const httpHeaderAccepts: string[] = [
             'application/json'
@@ -266,19 +282,23 @@ export class EintrgeService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateEntryFromDiary(diaryId: string, entryId: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public updateEntryFromDiary(diaryId: string, entryId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public updateEntryFromDiary(diaryId: string, entryId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public updateEntryFromDiary(diaryId: string, entryId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public updateDiaryEntry(diaryId: string, entryId: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public updateDiaryEntry(diaryId: string, entryId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public updateDiaryEntry(diaryId: string, entryId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public updateDiaryEntry(diaryId: string, entryId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (diaryId === null || diaryId === undefined) {
-            throw new Error('Required parameter diaryId was null or undefined when calling updateEntryFromDiary.');
+            throw new Error('Required parameter diaryId was null or undefined when calling updateDiaryEntry.');
         }
         if (entryId === null || entryId === undefined) {
-            throw new Error('Required parameter entryId was null or undefined when calling updateEntryFromDiary.');
+            throw new Error('Required parameter entryId was null or undefined when calling updateDiaryEntry.');
         }
 
         let headers = this.defaultHeaders;
 
+        // authentication (basicAuth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
         // to determine the Accept header
         const httpHeaderAccepts: string[] = [
         ];

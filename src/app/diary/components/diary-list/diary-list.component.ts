@@ -1,3 +1,4 @@
+import { EintrgeService } from './../../../../web-api/api/eintrge.service';
 import { EntryAttributeTypes } from './../../../../shared/model/diary/entry/entry-attribute-types';
 import { Component, OnInit } from '@angular/core';
 import { Entry } from 'src/shared/model/diary/entry/entry';
@@ -8,9 +9,12 @@ import { BaseEntryAttribute } from 'src/shared/model/diary/entry/base-entry-attr
   templateUrl: './diary-list.component.html',
   styleUrls: ['./diary-list.component.scss']
 })
-export class DiaryListComponent {
+export class DiaryListComponent implements OnInit {
+  ngOnInit(): void {
+    this.entrysrc.getDiaryEntries("2").subscribe(x => console.log(x));
+  }
 
-  constructor() { }
+  constructor(private entrysrc: EintrgeService) { }
   public dayMappedEntries = [
     {
       day: 1563573600, entries: [new Entry(1563620244, [new BaseEntryAttribute(EntryAttributeTypes.BS_MEASURE, 6), new BaseEntryAttribute(EntryAttributeTypes.MEAL_UNITS, 6)]),

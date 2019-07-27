@@ -83,6 +83,10 @@ export class UserManagementService {
 
         let headers = this.defaultHeaders;
 
+        // authentication (basicAuth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
         // to determine the Accept header
         const httpHeaderAccepts: string[] = [
         ];
@@ -128,6 +132,10 @@ export class UserManagementService {
 
         let headers = this.defaultHeaders;
 
+        // authentication (basicAuth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
         // to determine the Accept header
         const httpHeaderAccepts: string[] = [
             'application/json'
@@ -166,6 +174,10 @@ export class UserManagementService {
 
         let headers = this.defaultHeaders;
 
+        // authentication (basicAuth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
         // to determine the Accept header
         const httpHeaderAccepts: string[] = [
             'application/json'

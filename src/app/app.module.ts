@@ -54,7 +54,7 @@ import {MatCardModule} from '@angular/material/card';
     MatSidenavModule,
     MatIconModule,
     MatListModule,
-    ApiModule.forRoot(()=> new Configuration({basePath: "localhost"})),
+    ApiModule.forRoot(()=> new Configuration({basePath: "http://localhost:8088"})),
     HttpClientModule,
     MatCardModule
   ],

@@ -71,6 +71,10 @@ export class GrantManagementService {
 
         let headers = this.defaultHeaders;
 
+        // authentication (basicAuth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
         // to determine the Accept header
         const httpHeaderAccepts: string[] = [
         ];
@@ -110,6 +114,10 @@ export class GrantManagementService {
 
         let headers = this.defaultHeaders;
 
+        // authentication (basicAuth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
         // to determine the Accept header
         const httpHeaderAccepts: string[] = [
         ];
@@ -149,6 +157,10 @@ export class GrantManagementService {
 
         let headers = this.defaultHeaders;
 
+        // authentication (basicAuth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
         // to determine the Accept header
         const httpHeaderAccepts: string[] = [
         ];
@@ -193,6 +205,10 @@ export class GrantManagementService {
 
         let headers = this.defaultHeaders;
 
+        // authentication (basicAuth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
         // to determine the Accept header
         const httpHeaderAccepts: string[] = [
         ];
@@ -236,6 +252,10 @@ export class GrantManagementService {
 
         let headers = this.defaultHeaders;
 
+        // authentication (basicAuth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
         // to determine the Accept header
         const httpHeaderAccepts: string[] = [
         ];
