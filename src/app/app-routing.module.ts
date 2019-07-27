@@ -14,7 +14,7 @@ const routes: Routes = [
       path: "diary", children: [
         { path: "", component: DiaryHeaderExtensionComponent, outlet: "base-nav-extension" },
         {
-          path: "", component: DiaryNavComponent, children: [
+          path: ":diary-id", component: DiaryNavComponent, children: [
             { path: "", redirectTo: "overview", pathMatch: 'full' },
             { path: "overview", component: DiaryOverviewComponent },
             { path: "statistics", component: DiaryStatisticsComponent },
