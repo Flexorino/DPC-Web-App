@@ -1,2 +1,23 @@
-<router-outlet></router-outlet>
-<p>diary-nav works!</p>
+<div id="contentContainer">
+    <div id="content">
+        <router-outlet></router-outlet>
+    </div>
+</div>
+<div id="nav">
+    <div class="nav_entry" [routerLink]="['/diary/overview']">
+        <div class="material-icons">book</div>
+        Übersicht
+    </div>
+    <div class="nav_entry" [routerLink]="['/diary/statistics']">
+        <div class="material-icons">pie_chart</div>
+        Statistik
+    </div>
+    <div class="nav_entry" [routerLink]="['/diary/list']">
+        <div class="material-icons">show_chart</div>
+        Liste
+    </div>
+    <div class="nav_entry" [routerLink]="['/']">
+        <div class="material-icons">add</div>
+        Hinzufügen
+    </div>
+</div>

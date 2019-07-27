@@ -1,0 +1,48 @@
+#nav {
+    display: flex;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    background: white;
+    font-family: Arial, Helvetica, sans-serif;
+    height: 4rem;
+}
+
+:host { 
+    display: flex;
+    flex-flow: column;
+    overflow: hidden;
+}
+
+
+#contentContainer {
+    height: calc(100% - 4rem);
+    overflow-y: scroll;
+}
+
+.nav_entry {
+    display: flex;
+    flex-flow: column;
+    flex-grow: 1;
+    flex-basis: 25%;
+    align-items: center;
+    position: relative;
+    padding: 0.5rem 0;
+}
+
+.nav_entry:not(:last-child)::after {
+    content: "";
+    height: 80%;
+    position: absolute;
+    right: 0;
+    border-left: 1px solid gray;
+
+}
+
+.nav_entry {
+    font-size: 0.8em;
+
+    .div {
+        font-size: 2em;
+    }
+}

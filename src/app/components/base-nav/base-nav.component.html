@@ -5,9 +5,9 @@
       [opened]="(isHandset$ | async) === false">
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item routerLink="/diary/test/overview">Übersicht</a>
-      <a mat-list-item routerLink="/diary/test/statistics">Statistik</a>
-      <a mat-list-item routerLink="/diary/test/list">Liste</a>
+      <a mat-list-item routerLink="/diary/test/overview" (click)="drawer.toggle()">Übersicht</a>
+      <a mat-list-item routerLink="/diary/test/statistics" (click)="drawer.toggle()">Statistik</a>
+      <a mat-list-item routerLink="/diary/test/list" (click)="drawer.toggle()">Liste</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
