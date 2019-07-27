@@ -12,8 +12,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
-import { OverviewComponent } from './diary/components/overview/overview.component';
-import { ListComponent } from './diary/components/list/list.component';
 import { DiaryStatisticsComponent } from './diary/components/diary-statistics/diary-statistics.component';
 import { DiaryHeaderExtensionComponent } from './diary/diary-header-extension/diary-header-extension.component';
 import { DiaryListComponent } from './diary/components/diary-list/diary-list.component';
@@ -24,8 +22,6 @@ import { DiaryOverviewComponent } from './diary/components/diary-overview/diary-
     AppComponent,
     DiaryNavComponent,
     BaseNavComponent,
-    OverviewComponent,
-    ListComponent,
     DiaryStatisticsComponent,
     DiaryHeaderExtensionComponent,
     DiaryListComponent,
