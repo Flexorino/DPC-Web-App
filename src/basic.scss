@@ -57,3 +57,22 @@ $candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include angular-material-theme($candy-app-theme);
+
+// Component-Themes
+
+@mixin bottom-vavbar-theme($theme) {
+    // Extract the palettes you need from the theme definition.
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+  
+    // Define any styles affected by the theme.
+    .bottomNavbar {
+      // Use mat-color to extract individual colors from a palette.
+      background-color: mat-color($primary,50);
+      color: mat-color($primary, '50-contrast');
+      border-color: mat-color($primary, '50-contrast');
+    }
+  }
+
+
+@include bottom-vavbar-theme($candy-app-theme);
