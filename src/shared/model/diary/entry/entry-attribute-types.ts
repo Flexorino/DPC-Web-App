@@ -1,0 +1,13 @@
+export enum EntryAttributeTypes {
+    BS_MEASURE,
+    MEAL_BOLUS,
+    CORRECTION_BOLUS,
+    BASAL,
+    MEAL_UNITS,
+    MEAL_DESCRIPTION,
+    COMMENT,
+    TEMP_BASAL_CHANGE,
+    MEDICATION,
+    ACTIVITY,
+    TAGS
+}

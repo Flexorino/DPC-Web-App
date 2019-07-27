@@ -1,3 +1,5 @@
+import { BASE_PATH } from './../web-api/variables';
+import { ApiModule } from './../web-api/api.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
@@ -16,6 +18,15 @@ import { DiaryStatisticsComponent } from './diary/components/diary-statistics/di
 import { DiaryHeaderExtensionComponent } from './diary/diary-header-extension/diary-header-extension.component';
 import { DiaryListComponent } from './diary/components/diary-list/diary-list.component';
 import { DiaryOverviewComponent } from './diary/components/diary-overview/diary-overview.component';
+import { Configuration } from 'src/web-api';
+import { HttpClientModule } from '@angular/common/http';
+import { BloodSugarPipe } from 'src/shared/pipes/blood-sugar.pipe';
+import { BSTendencyPipe } from 'src/shared/pipes/bstendency.pipe';
+import { BSEvaluationPipePipe } from 'src/shared/pipes/bsevaluation-pipe.pipe';
+import { CarbsPipe } from 'src/shared/pipes/carbs.pipe';
+import { CustomTimePipe } from 'src/shared/pipes/custom-time.pipe';
+import { EntryMainValueDisplayPipe } from 'src/shared/pipes/entry-main-value-display.pipe';
+import {MatCardModule} from '@angular/material/card';
 
 @NgModule({
   declarations: [
@@ -25,7 +36,13 @@ import { DiaryOverviewComponent } from './diary/components/diary-overview/diary-
     DiaryStatisticsComponent,
     DiaryHeaderExtensionComponent,
     DiaryListComponent,
-    DiaryOverviewComponent
+    DiaryOverviewComponent,
+    CarbsPipe,
+    EntryMainValueDisplayPipe,
+    BSEvaluationPipePipe,
+    CustomTimePipe,
+    BSTendencyPipe,
+    BloodSugarPipe
   ],
   imports: [
     BrowserModule,
@@ -36,9 +53,12 @@ import { DiaryOverviewComponent } from './diary/components/diary-overview/diary-
     MatButtonModule,
     MatSidenavModule,
     MatIconModule,
-    MatListModule
+    MatListModule,
+    ApiModule.forRoot(()=> new Configuration({basePath: "localhost"})),
+    HttpClientModule,
+    MatCardModule
   ],
-  providers: [],
+  providers: [BloodSugarPipe, CarbsPipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

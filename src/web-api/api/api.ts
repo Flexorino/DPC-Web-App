@@ -1,0 +1,11 @@
+export * from './diaries.service';
+import { DiariesService } from './diaries.service';
+export * from './eintrge.service';
+import { EintrgeService } from './eintrge.service';
+export * from './grantManagement.service';
+import { GrantManagementService } from './grantManagement.service';
+export * from './userManagement.service';
+import { UserManagementService } from './userManagement.service';
+export * from './util.service';
+import { UtilService } from './util.service';
+export const APIS = [DiariesService, EintrgeService, GrantManagementService, UserManagementService, UtilService];

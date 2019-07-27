@@ -1,1 +1,18 @@
-<p>diary-list works!</p>
+<div [ngStyle]="{'flex-grow':graphViewActivated?1:0}" id="graphArea">asdas
+    {{graphViewActivated}}
+    <div (click)="graphViewActivated= !graphViewActivated" id="graphShowButton" class="material-icons"> expand_less
+    </div>
+</div>
+<div id="entryArea">
+    <mat-card *ngFor="let aggr of dayMappedEntries">
+            <mat-card-title> {{aggr.day |customTime:"date"}} 
+            </mat-card-title>
+            <div class="entry" *ngFor="let entry of aggr.entries">
+                <div class="timeDisplay">{{entry.time |customTime:"dayTime" }} </div>
+                <div class="entry_attribute" *ngFor="let attribute of entry.attributes">
+                    {{attribute | entryMainValueDisplay}}
+                </div>
+            </div>
+    </mat-card>
+    
+</div>

@@ -1,0 +1,58 @@
+:host {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+}
+
+#graphArea {
+    flex-grow: 1;
+    border-bottom: 1px solid gray;
+    position: relative;
+    transition: all 1s;
+}
+
+#graphShowButton {
+    position: absolute;
+    bottom: calc(0px - 1rem);
+    width: 2rem;
+    height: 2rem;
+    left: calc(50% - 1rem);
+    background: blanchedalmond;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    border: 1px solid gray;
+    z-index: 999;
+
+}
+
+#entryArea {
+    flex-grow: 2;
+}
+
+.hide {
+    flex-grow: 0 i;
+}
+
+mat-card {
+    margin: 0.2rem;
+}
+
+.entry {
+    display: flex;
+    padding: 0.2rem 0;
+    border-top: 1px solid gray;
+    border-bottom: 1px solid gray;
+    align-items: center;
+}
+
+.timeDisplay {
+    background: lightblue;
+    padding: 0.2rem;
+    margin-right: 1rem;
+}
+
+.entry_attribute {
+    margin-left: 1rem;
+}
