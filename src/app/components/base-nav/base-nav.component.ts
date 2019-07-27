@@ -1,3 +1,4 @@
+import { PageTitleService } from './../../../shared/services/title.service';
 import { Component } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
@@ -10,11 +11,15 @@ import { map, share } from 'rxjs/operators';
 })
 export class BaseNavComponent {
 
+  public shellTitle : Observable<string>;
+
   isHandset$: Observable<boolean> = this.breakpointObserver.observe([Breakpoints.Small, Breakpoints.XSmall])
     .pipe(
       map(result => result.matches)
     );
-
-  constructor(private breakpointObserver: BreakpointObserver) { }
+    
+  constructor(private breakpointObserver: BreakpointObserver, private titleService : PageTitleService) { 
+    this.shellTitle = titleService.title;
+  }
 
 }

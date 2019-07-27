@@ -20,7 +20,7 @@
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon> 
       </button>
-      <span>dia-pc2</span> <router-outlet name="base-nav-extension"></router-outlet>
+      <span>{{shellTitle | async }}</span> <router-outlet name="base-nav-extension"></router-outlet>
     </mat-toolbar>
     <router-outlet></router-outlet>
   </mat-sidenav-content>

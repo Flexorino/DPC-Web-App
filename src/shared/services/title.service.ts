@@ -1,0 +1,21 @@
+import { Injectable } from "@angular/core";
+import { Subject, BehaviorSubject } from 'rxjs';
+import { Title } from '@angular/platform-browser';
+
+@Injectable({ providedIn: 'root' })
+export class PageTitleService {
+    public title: BehaviorSubject<string> = new BehaviorSubject("");
+
+    constructor(private ngTitelService: Title) {
+        this.title.subscribe(x => 
+            ngTitelService.setTitle(x));
+    }
+
+    public getTitle() {
+        return this.title.getValue();
+    }
+
+    public setTitle(title: string) {
+        this.title.next(title);
+    }
+}

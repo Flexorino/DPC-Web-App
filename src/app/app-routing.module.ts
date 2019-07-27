@@ -1,3 +1,4 @@
+import { PageTitleResolver } from './../shared/guards/page-title-resolver';
 import { BaseNavComponent } from './components/base-nav/base-nav.component';
 import { DiaryHeaderExtensionComponent } from './diary/diary-header-extension/diary-header-extension.component';
 import { NgModule } from '@angular/core';
@@ -16,9 +17,9 @@ const routes: Routes = [
         {
           path: ":diary-id", component: DiaryNavComponent, children: [
             { path: "", redirectTo: "overview", pathMatch: 'full' },
-            { path: "overview", component: DiaryOverviewComponent },
-            { path: "statistics", component: DiaryStatisticsComponent },
-            { path: "list", component: DiaryListComponent }]
+            { path: "overview", component: DiaryOverviewComponent,resolve: {null: PageTitleResolver}, data:{title: "Übersicht"}  },
+            { path: "statistics", component: DiaryStatisticsComponent, resolve: {null: PageTitleResolver}, data:{title: "Statistik"} },
+            { path: "list", component: DiaryListComponent, resolve: {null: PageTitleResolver}, data:{title: "Listen-Ansicht"} }]
         }
       ]
     }]
