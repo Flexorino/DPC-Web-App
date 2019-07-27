@@ -25,7 +25,7 @@ export interface EntryReprResponse {
     /**
      * Unix-Zeit
      */
-    timeStamp: number;
+    timestamp: number;
     /**
      * Blutzucker in mmol/l
      */

@@ -1,3 +1,4 @@
+import { EntryService } from './../../../../shared/services/entry.service';
 import { EintrgeService } from './../../../../web-api/api/eintrge.service';
 import { EntryAttributeTypes } from './../../../../shared/model/diary/entry/entry-attribute-types';
 import { Component, OnInit } from '@angular/core';
@@ -11,44 +12,13 @@ import { BaseEntryAttribute } from 'src/shared/model/diary/entry/base-entry-attr
 })
 export class DiaryListComponent implements OnInit {
   ngOnInit(): void {
-    this.entrysrc.getDiaryEntries("2").subscribe(x => console.log(x));
+    this.entryService.getEntries("2").subscribe(x => this.dayMappedEntries = this.entryService.mapEntriesToDays(x));
   }
 
-  constructor(private entrysrc: EintrgeService) { }
-  public dayMappedEntries = [
-    {
-      day: 1563573600, entries: [new Entry(1563620244, [new BaseEntryAttribute(EntryAttributeTypes.BS_MEASURE, 6), new BaseEntryAttribute(EntryAttributeTypes.MEAL_UNITS, 6)]),
-      new Entry(1563624424, [new BaseEntryAttribute(EntryAttributeTypes.BS_MEASURE, 6), new BaseEntryAttribute(EntryAttributeTypes.MEAL_UNITS, 6)]),
-      new Entry(1563635224, [new BaseEntryAttribute(EntryAttributeTypes.BS_MEASURE, 6), new BaseEntryAttribute(EntryAttributeTypes.MEAL_UNITS, 6)]),
-      new Entry(1563649624, [new BaseEntryAttribute(EntryAttributeTypes.BS_MEASURE, 6), new BaseEntryAttribute(EntryAttributeTypes.MEAL_UNITS, 6)])
-      ]
-    },
-    {
-      day: 1563487200, entries: [new Entry(1563620244, [new BaseEntryAttribute(EntryAttributeTypes.BS_MEASURE, 6), new BaseEntryAttribute(EntryAttributeTypes.MEAL_UNITS, 6)]),
-      new Entry(1563624424, [new BaseEntryAttribute(EntryAttributeTypes.BS_MEASURE, 6), new BaseEntryAttribute(EntryAttributeTypes.MEAL_UNITS, 6)]),
-      new Entry(1563635224, [new BaseEntryAttribute(EntryAttributeTypes.BS_MEASURE, 6), new BaseEntryAttribute(EntryAttributeTypes.MEAL_UNITS, 6)]),
-      new Entry(1563649624, [new BaseEntryAttribute(EntryAttributeTypes.BS_MEASURE, 6), new BaseEntryAttribute(EntryAttributeTypes.MEAL_UNITS, 6)])
-      ]
-    }
-    ,
-    {
-      day: 1563486800, entries: [new Entry(1563620244, [new BaseEntryAttribute(EntryAttributeTypes.BS_MEASURE, 6), new BaseEntryAttribute(EntryAttributeTypes.MEAL_UNITS, 6)]),
-      new Entry(1563624424, [new BaseEntryAttribute(EntryAttributeTypes.BS_MEASURE, 6), new BaseEntryAttribute(EntryAttributeTypes.MEAL_UNITS, 6)]),
-      new Entry(1563635224, [new BaseEntryAttribute(EntryAttributeTypes.BS_MEASURE, 6), new BaseEntryAttribute(EntryAttributeTypes.MEAL_UNITS, 6)]),
-      new Entry(1563649624, [new BaseEntryAttribute(EntryAttributeTypes.BS_MEASURE, 6), new BaseEntryAttribute(EntryAttributeTypes.MEAL_UNITS, 6)])
-      ]
-    },
-    {
-      day: 1563486400, entries: [new Entry(1563620244, [new BaseEntryAttribute(EntryAttributeTypes.BS_MEASURE, 6), new BaseEntryAttribute(EntryAttributeTypes.MEAL_UNITS, 6)]),
-      new Entry(1563624424, [new BaseEntryAttribute(EntryAttributeTypes.BS_MEASURE, 6), new BaseEntryAttribute(EntryAttributeTypes.MEAL_UNITS, 6)]),
-      new Entry(1563635224, [new BaseEntryAttribute(EntryAttributeTypes.BS_MEASURE, 6), new BaseEntryAttribute(EntryAttributeTypes.MEAL_UNITS, 6)]),
-      new Entry(1563649624, [new BaseEntryAttribute(EntryAttributeTypes.BS_MEASURE, 6), new BaseEntryAttribute(EntryAttributeTypes.MEAL_UNITS, 6)])
-      ]
-    }
+  constructor(private entryService: EntryService) { }
+  public dayMappedEntries = [];
 
-  ]
-
-  public graphViewActivated = true;
+  public graphViewActivated = false;
 
 
 }
