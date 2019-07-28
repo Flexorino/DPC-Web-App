@@ -10,6 +10,7 @@ import { DiaryListComponent } from './diary/components/diary-list/diary-list.com
 
 
 const routes: Routes = [
+  {path: "",component: BaseNavComponent, outlet: 'test'},
   {
     path: "", component: BaseNavComponent, children: [{
       path: "diary", children: [
