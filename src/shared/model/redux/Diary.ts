@@ -5,7 +5,6 @@ import { state } from '@angular/animations';
 import { Action } from 'rxjs/internal/scheduler/Action';
 
 export class Diary {
-    ;
     constructor(public loadedEntries: Array<Entry> ){
 
     }
@@ -13,4 +12,7 @@ export class Diary {
 
 export const initialState: Diary = new Diary( []);
 
-export const diaryReducer = createReducer(initialState, on(entryApiLoaded, (state, action) => ({ ...state, diary: new Diary(action.entries) })));
+export const diaryReducer = createReducer(initialState, on(entryApiLoaded, (state, action) =>
+    {
+  return new Diary(action.entries);
+})); 

@@ -9,10 +9,13 @@ import { entryApiLoaded } from '../services/entry.service.actions';
 export class DiaryEffects {
     loadMovies$ = createEffect(() => this.actions$.pipe(
         ofType('[Dialist Component] loaded'),
-        mergeMap(() => this.entryService.getEntries('')
+        mergeMap(() => this.entryService.getEntries('test')
             .pipe(
-                map(entries => (entryApiLoaded({ entries: entries }))),
-                catchError(() => EMPTY)
+                map(
+                    entries => {
+                        return (entryApiLoaded({ entries: entries }));
+                    }), 
+                catchError((err) => EMPTY)
             ))
     )
     );
