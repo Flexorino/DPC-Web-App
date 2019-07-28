@@ -1,4 +1,6 @@
+import { AddEntryComponent } from './../components/add-entry/add-entry.component';
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-diary-nav',
@@ -7,9 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DiaryNavComponent implements OnInit {
 
-  constructor() { }
+  constructor(public dialog: MatDialog) { }
 
   ngOnInit() {
   }
 
+  public openAddEntryDialog() {
+    this.dialog.open(AddEntryComponent, { panelClass:'full_screen_dialog' })
+  }
 }

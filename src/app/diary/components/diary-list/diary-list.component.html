@@ -4,8 +4,9 @@
     </div>
 </div>
 <div id="entryArea">
-    <mat-card *ngFor="let aggr of dayMappedEntries">
-            <mat-card-title> {{aggr.day |customTime:"date"}} 
+    <ng-template [ngIf]="dayMappedEntries.length" [ngIfElse]="elseBlock">
+        <mat-card *ngFor="let aggr of dayMappedEntries">
+            <mat-card-title> {{aggr.day |customTime:"date"}}
             </mat-card-title>
             <div class="entry" *ngFor="let entry of aggr.entries">
                 <div class="timeDisplay">{{entry.time |customTime:"dayTime" }} </div>
@@ -13,5 +14,7 @@
                     {{attribute | entryMainValueDisplay}}
                 </div>
             </div>
-    </mat-card>
+        </mat-card>
+    </ng-template>
+    <ng-template #elseBlock><mat-spinner></mat-spinner></ng-template>
 </div>

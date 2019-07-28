@@ -26,7 +26,10 @@ import { BSEvaluationPipePipe } from 'src/shared/pipes/bsevaluation-pipe.pipe';
 import { CarbsPipe } from 'src/shared/pipes/carbs.pipe';
 import { CustomTimePipe } from 'src/shared/pipes/custom-time.pipe';
 import { EntryMainValueDisplayPipe } from 'src/shared/pipes/entry-main-value-display.pipe';
-import {MatCardModule} from '@angular/material/card';
+import { MatCardModule } from '@angular/material/card';
+import { AddEntryComponent } from './diary/components/add-entry/add-entry.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -42,7 +45,8 @@ import {MatCardModule} from '@angular/material/card';
     BSEvaluationPipePipe,
     CustomTimePipe,
     BSTendencyPipe,
-    BloodSugarPipe
+    BloodSugarPipe,
+    AddEntryComponent
   ],
   imports: [
     BrowserModule,
@@ -54,11 +58,14 @@ import {MatCardModule} from '@angular/material/card';
     MatSidenavModule,
     MatIconModule,
     MatListModule,
-    ApiModule.forRoot(()=> new Configuration({basePath: "http://localhost:8088"})),
+    ApiModule.forRoot(() => new Configuration({ basePath: "http://localhost:8088" })),
     HttpClientModule,
-    MatCardModule
+    MatCardModule,
+    MatDialogModule,
+    MatProgressSpinnerModule
   ],
   providers: [BloodSugarPipe, CarbsPipe],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [AddEntryComponent]
 })
 export class AppModule { }
