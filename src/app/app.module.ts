@@ -32,6 +32,10 @@ import { MatDialogModule } from '@angular/material/dialog';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatInputModule} from '@angular/material/input';
+import { EffectsModule } from '@ngrx/effects';
+import { DiaryEffects } from 'src/shared/effects/entries-effects';
+import { StoreModule } from '@ngrx/store';
+import { diaryReducer } from 'src/shared/model/redux/Diary';
 
 @NgModule({
   declarations: [
@@ -67,7 +71,9 @@ import {MatInputModule} from '@angular/material/input';
     MatProgressSpinnerModule,
     MatListModule,
     MatGridListModule,
-    MatInputModule
+    MatInputModule,
+    StoreModule.forRoot({ diary: diaryReducer }),
+    EffectsModule.forRoot([DiaryEffects])
 
   ],
   providers: [BloodSugarPipe, CarbsPipe],
