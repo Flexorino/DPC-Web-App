@@ -1,3 +1,4 @@
+import { SettingsService } from './../../../../shared/services/settings.service';
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 
@@ -8,9 +9,12 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class AddEntryComponent implements OnInit {
 
-  constructor(public dialogRef: MatDialogRef<AddEntryComponent>) { }
+  constructor(public dialogRef: MatDialogRef<AddEntryComponent>, private settings: SettingsService) { }
+  public bsUnit : string;
+
 
   ngOnInit() {
+    this.bsUnit = this.settings.getBSUnit();
   }
 
   public confirm(): void{

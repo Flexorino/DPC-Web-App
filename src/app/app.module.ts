@@ -30,6 +30,8 @@ import { MatCardModule } from '@angular/material/card';
 import { AddEntryComponent } from './diary/components/add-entry/add-entry.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatGridListModule} from '@angular/material/grid-list';
+import {MatInputModule} from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -62,7 +64,11 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     HttpClientModule,
     MatCardModule,
     MatDialogModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatListModule,
+    MatGridListModule,
+    MatInputModule
+
   ],
   providers: [BloodSugarPipe, CarbsPipe],
   bootstrap: [AppComponent],

@@ -1,6 +1,87 @@
 <mat-toolbar class="mat-elevation-z4" color='primary'>
-    <span id="left" (click)="abort()" class="material-icons">arrow_back</span>
-    <span id="middle" class="example-fill-remaining-space"></span>
-    <span id="right" (click)="confirm()"  class="material-icons">check</span>
+    <span id="left" (click)="abort()" class="material-icons">clear</span>
+    <span id="middle" class="example-fill-remaining-space">Eintrag hinzufügen</span>
+    <span id="right" (click)="confirm()" class="material-icons">check</span>
 </mat-toolbar>
-<p>add-entry works!</p>
+<mat-dialog-content>
+    <mat-list>
+        <mat-list-item>
+            <div class="inputwrapper">
+                <mat-form-field>
+                    <input matInput placeholder="Zeit" type="date">
+                </mat-form-field>
+            </div>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+            <div class="inputwrapper">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Blutzucker</mat-label>
+                    <input matInput type="number">
+                    <span matSuffix>{{bsUnit}}</span>
+                </mat-form-field>
+            </div>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+            <div class="inputwrapper">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Kohlenhydrat-Einheiten</mat-label>
+                    <input matInput type="number">
+                    <span matSuffix>KE</span>
+                </mat-form-field>
+            </div>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+            <div class="inputwrapper">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Essen-Bolus</mat-label>
+                    <input matInput type="number">
+                    <span matSuffix>IE</span>
+                </mat-form-field>
+                <div class="field-extra-buttons">
+                    <div class="material-icons">settings</div>
+                    <div class="material-icons">assessment</div>
+                </div>
+            </div>
+        </mat-list-item>
+        <mat-list-item>
+            <div class="inputwrapper">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Korrektur-Bolus</mat-label>
+                    <input matInput type="number">
+                    <span matSuffix>IE</span>
+                </mat-form-field>
+                <div class="field-extra-buttons">
+                    <div class="material-icons">settings</div>
+                    <div class="material-icons">assessment</div>
+                </div>
+            </div>
+        </mat-list-item>
+        <mat-list-item>
+            <div class="inputwrapper">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Basal-Insulin</mat-label>
+                    <input matInput type="number">
+                    <span matSuffix>IE</span>
+                </mat-form-field>
+                <div class="field-extra-buttons">
+                    <div class="material-icons">settings</div>
+                </div>
+            </div>
+        </mat-list-item>
+        <mat-list-item>
+            <div class="inputwrapper">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Temp-Basal</mat-label>
+                    <input matInput type="number">
+                    <span matSuffix>IE</span>
+                </mat-form-field>
+                <div class="field-extra-buttons">
+                    <div class="material-icons">settings</div>
+                </div>
+            </div>
+        </mat-list-item>
+    </mat-list>
+</mat-dialog-content>
