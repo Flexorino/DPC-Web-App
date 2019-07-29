@@ -64,7 +64,7 @@ import { diaryReducer } from 'src/shared/model/redux/Diary';
     MatSidenavModule,
     MatIconModule,
     MatListModule,
-    ApiModule.forRoot(() => new Configuration({ basePath: "http://localhost:8088" })),
+    ApiModule.forRoot(() => new Configuration({ basePath: "http://localhost:8888" })),
     HttpClientModule,
     MatCardModule,
     MatDialogModule,

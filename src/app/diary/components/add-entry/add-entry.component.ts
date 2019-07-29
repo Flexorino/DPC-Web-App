@@ -1,6 +1,9 @@
 import { SettingsService } from './../../../../shared/services/settings.service';
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import { Store } from '@ngrx/store';
+import { Diary } from 'src/web-api';
+import { addEntryConfrim } from './add-entry.actions';
 
 @Component({
   selector: 'app-add-entry',
@@ -9,19 +12,20 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class AddEntryComponent implements OnInit {
 
-  constructor(public dialogRef: MatDialogRef<AddEntryComponent>, private settings: SettingsService) { }
-  public bsUnit : string;
+  constructor(private store: Store<{ diary: Diary }>, public dialogRef: MatDialogRef<AddEntryComponent>, private settings: SettingsService) { }
+  public bsUnit: string;
 
 
   ngOnInit() {
     this.bsUnit = this.settings.getBSUnit();
   }
 
-  public confirm(): void{
+  public confirm(): void {
     this.dialogRef.close();
+    this.store.dispatch(addEntryConfrim());
   }
 
-  public abort(){
+  public abort() {
     this.dialogRef.close();
   }
 }

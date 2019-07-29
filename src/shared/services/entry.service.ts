@@ -1,10 +1,11 @@
+import { EntryRepr } from './../../web-api/model/entryRepr';
+import { Entry } from 'src/shared/model/diary/entry/entry';
 import { BaseEntryAttribute } from './../model/diary/entry/base-entry-attribute';
 import { EntryAttribute } from './../model/diary/entry/entry-attribute';
 import { InlineResponse2002 } from './../../web-api/model/inlineResponse2002';
 import { map } from 'rxjs/operators';
 import { EintrgeService } from './../../web-api/api/eintrge.service';
 import { Observable } from 'rxjs';
-import { Entry } from '../model/diary/entry/entry';
 import { EntryReprResponse } from 'src/web-api';
 import { EntryAttributeTypes } from '../model/diary/entry/entry-attribute-types';
 import { Injectable } from '@angular/core';
@@ -30,6 +31,10 @@ export class EntryService {
         );
     }
 
+    public addEntry(id: string, entry: Entry): Observable<Entry> {
+        return this.webEntryervice.addDiaryEntry("test", { timeStamp: entry.time }).pipe(map(x => new Entry(x.timestamp, this.convertAttributesToList(x))));
+    }
+
 
     private convertAttributesToList(obj: EntryReprResponse): Array<EntryAttribute> {
         let list: Array<EntryAttribute> = [];
@@ -45,7 +50,7 @@ export class EntryService {
         let map: Array<{ day: number, entries: Array<Entry> }> = [];
         let curMap = d3.nest().key(function (d) {
             return Number.parseInt((d.time / 86400).toFixed(0)) * 86400;
-        }).entries(entries).map((x) => {return{ day: x.key, entries: x.values };}).sort((a,b)=> a.day -b.day);
+        }).entries(entries).map((x) => { return { day: x.key, entries: x.values }; }).sort((a, b) => a.day - b.day);
         return curMap;
-    }  
+    }
 } 
