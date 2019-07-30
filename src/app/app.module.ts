@@ -36,6 +36,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { DiaryEffects } from 'src/shared/effects/entries-effects';
 import { StoreModule } from '@ngrx/store';
 import { diaryReducer } from 'src/shared/model/redux/Diary';
+import { MatRippleModule } from '@angular/material/core';
+
 
 @NgModule({
   declarations: [
@@ -73,7 +75,8 @@ import { diaryReducer } from 'src/shared/model/redux/Diary';
     MatGridListModule,
     MatInputModule,
     StoreModule.forRoot({ diary: diaryReducer }),
-    EffectsModule.forRoot([DiaryEffects])
+    EffectsModule.forRoot([DiaryEffects]),
+    MatRippleModule
 
   ],
   providers: [BloodSugarPipe, CarbsPipe],

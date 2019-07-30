@@ -1,22 +1,22 @@
 <div id="contentContainer">
 
-        <router-outlet></router-outlet>
+    <router-outlet></router-outlet>
 
 </div>
 <div id="nav" class="bottomNavbar mat-elevation-z4">
-    <div class="nav_entry" [routerLink]="['/diary/test/overview']">
+    <div matRipple class="nav_entry" [routerLink]="['/diary/test/overview']">
         <div class="material-icons">book</div>
         Übersicht
     </div>
-    <div class="nav_entry" [routerLink]="['/diary/test/statistics']">
+    <div matRipple class="nav_entry" [routerLink]="['/diary/test/statistics']">
         <div class="material-icons">pie_chart</div>
         Statistik
     </div>
-    <div class="nav_entry" [routerLink]="['/diary/test/list']">
+    <div matRipple class="nav_entry" [routerLink]="['/diary/test/list']">
         <div class="material-icons">show_chart</div>
         Liste
     </div>
-    <div id="add" class="nav_entry" (click)="openAddEntryDialog()">
+    <div matRipple id="add" class="nav_entry" (click)="openAddEntryDialog()">
         <div class="material-icons">add</div>
         Hinzufügen
     </div>
