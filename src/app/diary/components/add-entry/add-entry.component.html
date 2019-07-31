@@ -7,8 +7,15 @@
     <mat-list>
         <mat-list-item>
             <div class="inputwrapper">
-                <mat-form-field>
-                    <input matInput placeholder="Zeit" type="date">
+                <mat-form-field class="example-full-width">
+                    <input [(ngModel)]="date" matInput placeholder="Datum" type="date">
+                </mat-form-field>
+            </div>
+        </mat-list-item>
+        <mat-list-item>
+            <div class="inputwrapper">
+                <mat-form-field class="example-full-width">
+                    <input [(ngModel)]="time" matInput placeholder="Zeit" type="time">
                 </mat-form-field>
             </div>
         </mat-list-item>

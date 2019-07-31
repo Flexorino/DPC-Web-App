@@ -1,3 +1,4 @@
+import { AddEntryActions } from './../../app/diary/components/add-entry/add-entry.actions';
 import { DiaryListActions } from './../../app/diary/components/diary-list/diary-list.actions';
 import { Store } from '@ngrx/store';
 import { Entry } from 'src/shared/model/diary/entry/entry';
@@ -17,7 +18,7 @@ export class DiaryEffects {
     )
     );
     addEntry$ = createEffect(() => this.actions$.pipe(
-        ofType('[AddEntry Component] confirm'),
+        ofType(AddEntryActions.CONFIRM),
         mergeMap(() => this.entryService.addEntry('test', new Entry(123, []))
             .pipe(
                 map(
