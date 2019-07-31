@@ -27,6 +27,7 @@ export class DiaryEffects {
             .pipe(
                 map(
                     entries => {
+                        this.store.dispatch({ type: '[Dialist Component] loaded' });
                         return (entryApiEntryAdded());
                     }),
                 catchError((err) => EMPTY),
@@ -37,6 +38,6 @@ export class DiaryEffects {
     constructor(
         private actions$: Actions,
         private entryService: EntryService,
-        private store : Store<any>
+        private store: Store<any>
     ) { }
 }

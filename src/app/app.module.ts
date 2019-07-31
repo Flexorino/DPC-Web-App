@@ -66,7 +66,7 @@ import { MatRippleModule } from '@angular/material/core';
     MatSidenavModule,
     MatIconModule,
     MatListModule,
-    ApiModule.forRoot(() => new Configuration({ basePath: "http://localhost:8888" })),
+    ApiModule.forRoot(() => new Configuration({ basePath: "http://localhost:8889" })),
     HttpClientModule,
     MatCardModule,
     MatDialogModule,
@@ -74,7 +74,7 @@ import { MatRippleModule } from '@angular/material/core';
     MatListModule,
     MatGridListModule,
     MatInputModule,
-    StoreModule.forRoot({ diary: diaryReducer }),
+    StoreModule.forRoot({ diary: diaryReducer, kek: diaryReducer }),
     EffectsModule.forRoot([DiaryEffects]),
     MatRippleModule
 
