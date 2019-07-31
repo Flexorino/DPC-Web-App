@@ -4,6 +4,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Diary } from 'src/web-api';
 import { addEntryConfrim } from './add-entry.actions';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-add-entry',
@@ -22,7 +23,9 @@ export class AddEntryComponent implements OnInit {
 
   public confirm(): void {
     this.dialogRef.close();
-    this.store.dispatch(addEntryConfrim());
+    this.store.dispatch(addEntryConfrim(null));
+    let pr: Promise<any> = new Promise<any>();
+    
   }
 
   public abort() {
