@@ -13,19 +13,18 @@ import { Observable } from 'rxjs';
 })
 export class AddEntryComponent implements OnInit {
 
-  constructor(private store: Store<{ diary: Diary }>, public dialogRef: MatDialogRef<AddEntryComponent>, private settings: SettingsService) { }
+  constructor(private store: Store<{ diary: Diary }>, public dialogRef:
+    MatDialogRef<AddEntryComponent>, private settings: SettingsService) { }
   public bsUnit: string;
 
 
   ngOnInit() {
     this.bsUnit = this.settings.getBSUnit();
-  }
+  } 
 
   public confirm(): void {
     this.dialogRef.close();
-    this.store.dispatch(addEntryConfrim(null));
-    let pr: Promise<any> = new Promise<any>();
-    
+
   }
 
   public abort() {

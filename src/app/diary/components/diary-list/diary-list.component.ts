@@ -1,3 +1,4 @@
+import { BasicActionProps } from './../../../../shared/actions/basic-action-props';
 import { Diary } from './../../../../shared/model/redux/Diary';
 import { Store, select } from '@ngrx/store';
 import { EntryService } from './../../../../shared/services/entry.service';
@@ -6,9 +7,9 @@ import { EntryAttributeTypes } from './../../../../shared/model/diary/entry/entr
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { BaseEntryAttribute } from 'src/shared/model/diary/entry/base-entry-attribute';
-import { openList, closed } from './diary-list.actions';
 import { map, tap } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { DiaryListActions } from './diary-list.actions';
 
 @Component({
   selector: 'app-diary-list',
@@ -23,7 +24,7 @@ export class DiaryListComponent implements OnInit, OnDestroy {
   private entrySubscription: Subscription;
 
   ngOnDestroy(): void {
-    this.store.dispatch(closed());
+    this.store.dispatch(DiaryListActions.CLOSED(new BasicActionProps(this)));
     this.entrySubscription.unsubscribe();
   }
   ngOnInit(): void {
@@ -34,7 +35,8 @@ export class DiaryListComponent implements OnInit, OnDestroy {
         this.dayMappedEntries = x
       }
     );
-    this.store.dispatch(openList());
+    console.log("kek");
+    this.store.dispatch(DiaryListActions.OPENEND(new BasicActionProps(this)));
     this.entrySubscription = x;
   }
 
