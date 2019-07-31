@@ -27,13 +27,12 @@ export class DiaryEffects {
             .pipe(
                 map(
                     entries => {
-                        this.store.dispatch({ type: '[Dialist Component] loaded' });
                         return (entryApiEntryAdded());
                     }),
                 catchError((err) => EMPTY),
             ))
     )
-    );
+    , { dispatch: true });
 
     constructor(
         private actions$: Actions,
