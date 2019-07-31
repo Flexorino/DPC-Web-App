@@ -1,9 +1,11 @@
+import { BasicActionProps } from './../../../../shared/actions/basic-action-props';
+import { AddEntryConfrimProps } from './custom-actions/AddEntryConfirmProps';
 import { SettingsService } from './../../../../shared/services/settings.service';
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Diary } from 'src/web-api';
-import { addEntryConfrim } from './add-entry.actions';
+import { AddEntryActions } from './add-entry.actions';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -20,14 +22,16 @@ export class AddEntryComponent implements OnInit {
 
   ngOnInit() {
     this.bsUnit = this.settings.getBSUnit();
-  } 
+  }
 
   public confirm(): void {
+    this.store.dispatch(AddEntryActions.CONFIRM(new AddEntryConfrimProps(this, {})));
     this.dialogRef.close();
 
   }
 
   public abort() {
+    this.store.dispatch(AddEntryActions.ABORT(new BasicActionProps(this)));
     this.dialogRef.close();
   }
 }
