@@ -1,3 +1,4 @@
+import { CompletableAction } from 'src/shared/actions/CompletableAction';
 import { BasicActionProps } from './basic-action-props';
 export class CancelableAction<T, R> extends BasicActionProps<T> {
 

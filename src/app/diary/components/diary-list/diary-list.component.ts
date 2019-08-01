@@ -25,7 +25,7 @@ export class DiaryListComponent implements OnInit, OnDestroy {
   public graphViewActivated = false;
   private entrySubscription: Subscription;
 
-  private currentAction : CancelableAction<DiaryListComponent, void> = null;
+  private currentAction: CancelableAction<DiaryListComponent, void> = null;
 
   ngOnDestroy(): void {
     this.currentAction.cancel(null);

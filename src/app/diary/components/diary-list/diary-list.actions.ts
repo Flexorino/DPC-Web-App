@@ -1,9 +1,9 @@
+import { CancelableAction } from './../../../../shared/actions/CancelableAction';
 import { DiaryListComponent } from './diary-list.component';
 import { BasicActionProps } from './../../../../shared/actions/basic-action-props';
 import { Action } from 'rxjs/internal/scheduler/Action';
 import { createAction, ActionCreator, props } from '@ngrx/store';
 import { CompletableAction } from 'src/shared/actions/CompletableAction';
-import { CancelableAction } from 'src/shared/actions/CancelableAction';
 
 // any relevant events that this component can dispatch
 

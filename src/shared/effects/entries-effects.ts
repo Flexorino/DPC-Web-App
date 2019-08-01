@@ -15,7 +15,7 @@ import { EntryServiceActions } from '../services/entry.service.actions';
 @Injectable()
 export class DiaryEffects {
     loadEntries$ = createEffect(() => this.actions$.pipe(
-        ofType(DiaryListActions.OPENEND, DiaryListActions.CLOSED),
+        ofType(DiaryListActions.OPENEND),
         mergeMap(action => {
             return this.loadEntries(action, DiaryListActions.CLOSED);
         })
