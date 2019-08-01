@@ -1,3 +1,4 @@
+import { CancelableAction } from './../../../../shared/actions/CancelableAction';
 import { CompletableAction } from './../../../../shared/actions/CompletableAction';
 import { BasicActionProps } from './../../../../shared/actions/basic-action-props';
 import { Diary } from './../../../../shared/model/redux/Diary';
@@ -24,7 +25,10 @@ export class DiaryListComponent implements OnInit, OnDestroy {
   public graphViewActivated = false;
   private entrySubscription: Subscription;
 
+  private currentAction : CancelableAction<DiaryListComponent, void> = null;
+
   ngOnDestroy(): void {
+    this.currentAction.cancel(null);
     this.store.dispatch(DiaryListActions.CLOSED(new BasicActionProps(this)));
     this.entrySubscription.unsubscribe();
   }
@@ -42,8 +46,10 @@ export class DiaryListComponent implements OnInit, OnDestroy {
       promiseResolve = resolve;
       promiseReject = reject;
     });
-    this.store.dispatch(DiaryListActions.OPENEND(new CompletableAction(this, promiseResolve, promiseReject)));
-    promise.then(()=> console.log("fertig"));
+    let action: CancelableAction<DiaryListComponent, void> = new CancelableAction(this);
+    this.store.dispatch(DiaryListActions.OPENEND(action));
+    promise.then(() => console.log("fertig"));
+    this.currentAction = action;
     this.entrySubscription = x;
   }
 

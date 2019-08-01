@@ -39,11 +39,12 @@ export class AddEntryComponent implements OnInit {
   }
 
   public confirm(): void {
-    this.store.dispatch(AddEntryActions.CONFIRM(new AddEntryConfrimProps(this, {})));
+
     console.log(+new Date(this.date));
     console.log(Object.getPrototypeOf(this.time));
-    this.dialogRef.close();
-
+    let action = AddEntryActions.CONFIRM(new AddEntryConfrimProps(this, {}));
+    this.store.dispatch(AddEntryActions.CONFIRM(action));
+    action.then(x => this.dialogRef.close());
   }
 
   public abort() {
