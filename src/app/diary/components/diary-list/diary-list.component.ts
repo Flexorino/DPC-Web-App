@@ -1,3 +1,4 @@
+import { CompletableAction } from './../../../../shared/actions/CompletableAction';
 import { BasicActionProps } from './../../../../shared/actions/basic-action-props';
 import { Diary } from './../../../../shared/model/redux/Diary';
 import { Store, select } from '@ngrx/store';
@@ -35,8 +36,14 @@ export class DiaryListComponent implements OnInit, OnDestroy {
         this.dayMappedEntries = x
       }
     );
-    console.log("kek");
-    this.store.dispatch(DiaryListActions.OPENEND(new BasicActionProps(this)));
+    let promiseResolve;
+    let promiseReject;
+    let promise = new Promise((resolve, reject) => {
+      promiseResolve = resolve;
+      promiseReject = reject;
+    });
+    this.store.dispatch(DiaryListActions.OPENEND(new CompletableAction(this, promiseResolve, promiseReject)));
+    promise.then(()=> console.log("fertig"));
     this.entrySubscription = x;
   }
 

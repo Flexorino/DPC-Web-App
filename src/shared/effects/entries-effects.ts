@@ -16,7 +16,9 @@ import { EntryServiceActions } from '../services/entry.service.actions';
 export class DiaryEffects {
     loadEntries$ = createEffect(() => this.actions$.pipe(
         ofType(DiaryListActions.OPENEND, DiaryListActions.CLOSED),
-        mergeMap(this.loadEntries(DiaryListActions.OPENEND, DiaryListActions.CLOSED))
+        mergeMap(action => { 
+            return this.loadEntries(action, DiaryListActions.CLOSED);
+        })
     )
     );
     addEntry$ = createEffect(() => this.actions$.pipe(
@@ -36,12 +38,13 @@ export class DiaryEffects {
         private actions$: Actions,
         private entryService: EntryService) { }
 
-    private loadEntries(req, cancel): () => Observable<TypedAction<any>> {
-        return () => this.entryService.getEntries('test')
+    private loadEntries(req, cancel): Observable<TypedAction<any>> {
+        return this.entryService.getEntries('test')
             .pipe(
                 delay(3000),
                 map(
                     entries => {
+                        req.resolve();
                         return (EntryServiceActions.ENTRIES_LOADED({ entries: entries }));
                     }),
                 catchError(() => EMPTY),
