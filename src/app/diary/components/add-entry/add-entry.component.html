@@ -103,12 +103,12 @@
             <div class="inputwrapper">
                 <mat-form-field class="example-chip-list">
                     <mat-chip-list #chipList aria-label="Fruit selection">
-                      <mat-chip *ngFor="let fruit of fruits" [selectable]="selectable"
-                               [removable]="removable" (removed)="remove(fruit)">
-                        {{fruit.name}}
+                      <mat-chip *ngFor="let tag of selectedTags"
+                               [removable]="removable" (removed)="remove(tag)">
+                        {{tag.name}}
                         <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
                       </mat-chip>
-                      <input placeholder="New fruit..."
+                      <input placeholder="Tag hinzufügen"
                              [matChipInputFor]="chipList"
                              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                              [matChipInputAddOnBlur]="addOnBlur"
@@ -117,5 +117,48 @@
                   </mat-form-field>
             </div>
         </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+            <div class="inputwrapper">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Aktivität Beschreibung</mat-label>
+                    <input matInput type="text">
+                </mat-form-field>
+            </div>
+        </mat-list-item>
+        <mat-list-item>
+            <div class="inputwrapper">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Dauer</mat-label>
+                    <input matInput type="time">
+                </mat-form-field>
+            </div>
+        </mat-list-item>
+        <mat-list-item>
+            <div class="inputwrapper">
+                <mat-form-field>
+                    <mat-label>Select an option</mat-label>
+                    <mat-select [(value)]="selected">
+                      <mat-option>keine Angabe</mat-option>
+                      <mat-option value="--">Sehr geringe Aktivität</mat-option>
+                      <mat-option value="-">Geringe Aktivität</mat-option>
+                      <mat-option value="o">Normale Aktivität</mat-option>
+                      <mat-option value="+">Hohe Aktivität</mat-option>
+                      <mat-option value="++">Sehr hohe Aktivität</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+            </div>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+            <div class="inputwrapper">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Kommentar</mat-label>
+                    <input matInput type="text">
+                </mat-form-field>
+            </div>
+        </mat-list-item>
+
     </mat-list>
+
 </mat-dialog-content>

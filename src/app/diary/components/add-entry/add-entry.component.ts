@@ -56,10 +56,9 @@ export class AddEntryComponent implements OnInit {
   removable = true;
   addOnBlur = true;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-  fruits: Fruit[] = [
-    { name: 'Lemon' },
-    { name: 'Lime' },
-    { name: 'Apple' },
+  selectedTags = [
+    { name: 'vor dem Essen' },
+    { name: 'Korrektur' },
   ];
 
   add(event: MatChipInputEvent): void {
@@ -68,7 +67,7 @@ export class AddEntryComponent implements OnInit {
 
     // Add our fruit
     if ((value || '').trim()) {
-      this.fruits.push({ name: value.trim() });
+      this.selectedTags.push({ name: value.trim() });
     }
 
     // Reset the input value
@@ -77,11 +76,11 @@ export class AddEntryComponent implements OnInit {
     }
   }
 
-  remove(fruit: Fruit): void {
-    const index = this.fruits.indexOf(fruit);
+  remove(fruit): void {
+    const index = this.selectedTags.indexOf(fruit);
 
     if (index >= 0) {
-      this.fruits.splice(index, 1);
+      this.selectedTags.splice(index, 1);
     }
   }
 }
