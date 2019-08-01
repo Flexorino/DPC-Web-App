@@ -7,8 +7,10 @@ import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { EMPTY, Observable } from 'rxjs';
 import { map, mergeMap, catchError, takeUntil, delay, filter, tap } from 'rxjs/operators';
 import { EntryService } from '../services/entry.service';
-import { entryApiLoaded, entryApiEntryAdded } from '../services/entry.service.actions';
 import { TypedAction } from '@ngrx/store/src/models';
+import { EntryServiceActions } from '../services/entry.service.actions';
+
+// Effects for Loading Entries over Network
 
 @Injectable()
 export class DiaryEffects {
@@ -22,10 +24,10 @@ export class DiaryEffects {
         mergeMap(() => this.entryService.addEntry('test', new Entry(123, []))
             .pipe(
                 map(
-                    () => {
-                        return (entryApiEntryAdded());
+                    (entry: Entry) => {
+                        return (EntryServiceActions.ENTRY_ADDED({ entry: entry }));
                     }),
-                catchError(() => EMPTY),
+                catchError((e) => EMPTY),
             ))
     )
         , { dispatch: true });
@@ -40,10 +42,10 @@ export class DiaryEffects {
                 delay(3000),
                 map(
                     entries => {
-                        return (entryApiLoaded({ entries: entries }));
+                        return (EntryServiceActions.ENTRIES_LOADED({ entries: entries }));
                     }),
                 catchError(() => EMPTY),
-                takeUntil(this.actions$.pipe(tap(x => console.log(x.type)),ofType(DiaryListActions.CLOSED)))
+                takeUntil(this.actions$.pipe(tap(x => console.log(x.type)), ofType(DiaryListActions.CLOSED)))
             );
     }
 }

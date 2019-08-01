@@ -1,9 +1,9 @@
 import { AddEntryActions } from './../../../app/diary/components/add-entry/add-entry.actions';
 import { Entry } from '../diary/entry/entry';
 import { createReducer, on } from '@ngrx/store';
-import { entryApiLoaded } from 'src/shared/services/entry.service.actions';
 import { state } from '@angular/animations';
 import { Action } from 'rxjs/internal/scheduler/Action';
+import { EntryServiceActions } from 'src/shared/services/entry.service.actions';
 
 export class Diary {
   constructor(public loadedEntries: Array<Entry>) {
@@ -13,6 +13,6 @@ export class Diary {
 
 export const initialState: Diary = new Diary([]);
 
-export const diaryReducer = createReducer(initialState, on(entryApiLoaded, (state, action) => {
+export const diaryReducer = createReducer(initialState, on(EntryServiceActions.ENTRIES_LOADED, (state, action) => {
   return new Diary(action.entries);
-}), on(AddEntryActions.CONFIRM, (state) => (new Diary([]))));
+}), on(EntryServiceActions.ENTRY_ADDED, (state, action) => (new Diary(state.loadedEntries.concat([action.entry])))));

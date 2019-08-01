@@ -32,7 +32,12 @@ export class EntryService {
     }
 
     public addEntry(id: string, entry: Entry): Observable<Entry> {
-        return this.webEntryervice.addDiaryEntry("test", { timeStamp: entry.time }).pipe(map(x => new Entry(x.timestamp, this.convertAttributesToList(x))));
+        return this.webEntryervice.addDiaryEntry("test", { timeStamp: entry.time }).pipe(map(
+            x => { 
+                console.log("X");
+                console.log(x);
+                return new Entry(x.timestamp, this.convertAttributesToList(x));
+            }));
     }
 
 
