@@ -7,7 +7,7 @@ export class EntryInputData {
     public basal?: number;
     public tempBasalChange?: number;
     public temBasalChangeDuration?: string;
-    public tags: Array<any>;
+    public tags: Array<string>;
     public activityDescription: string;
     public activityDuration: string;
     public activityStrain: string;

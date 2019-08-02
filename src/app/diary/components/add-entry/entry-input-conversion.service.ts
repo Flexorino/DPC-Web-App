@@ -6,6 +6,7 @@ import { Entry } from 'src/shared/model/diary/entry/entry';
 import { TempBasalChangeAttribute } from 'src/shared/model/diary/entry/attributes/temp-basal-change-attribute';
 import { SettingsService } from 'src/shared/services/settings.service';
 import { InsulinAttribute } from 'src/shared/model/diary/entry/attributes/insulin-attribute';
+import { TagAttribute } from 'src/shared/model/diary/entry/attributes/tag-attribute';
 @Injectable()
 
 export class EntryInputConversionService {
@@ -37,7 +38,7 @@ export class EntryInputConversionService {
             entry.tempBasalChange = new TempBasalChangeAttribute(changeDuration, data.tempBasalChange);
         }
         if (data.tags) {
-            entry.tags = data.tags;
+            entry.tags = data.tags.map(x => new TagAttribute(x, null));
         }
         if (data.basal) {
             entry.basal = new InsulinAttribute(this.settings.defaultBasalInsulin, null, data.basal);

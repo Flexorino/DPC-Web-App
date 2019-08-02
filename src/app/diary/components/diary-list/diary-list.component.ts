@@ -36,7 +36,7 @@ export class DiaryListComponent implements OnInit, OnDestroy {
       return this.entryService.mapEntriesToDays(x.loadedEntries);
     }, tap(x => console.log(x)))).subscribe(
       x => {
-        this.dayMappedEntries = x.map(z => ({day: z.day, entries: z.entries.map(u => ({timeStamp: u.timeStamp, attributes: JSON.stringify(u)}))}));
+        this.dayMappedEntries = x.map(z => ({ day: z.day, entries: z.entries.map(u => ({ timeStamp: u.timeStamp, attributes: JSON.stringify(u) })) }));
       }
     );
     let promiseResolve;

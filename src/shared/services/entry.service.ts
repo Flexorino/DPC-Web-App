@@ -13,6 +13,8 @@ import { Injectable } from '@angular/core';
 import * as d3 from "d3";
 import { EntryInputData } from 'src/app/diary/components/add-entry/entry-input-data';
 import { InsulinAttribute } from '../model/diary/entry/attributes/insulin-attribute';
+import { TempBasalChangeAttribute } from '../model/diary/entry/attributes/temp-basal-change-attribute';
+import { TagAttribute } from '../model/diary/entry/attributes/tag-attribute';
 @Injectable({ providedIn: "root" })
 export class EntryService {
 
@@ -82,6 +84,12 @@ export class EntryService {
             newEntry.mealBolus = new InsulinAttribute(webEntry.mealBolus.insulin, webEntry.mealBolus.insulinName,
                 webEntry.mealBolus.units);
         }
+        if (webEntry.tempBasalChange) {
+            newEntry.tempBasalChange = new TempBasalChangeAttribute(webEntry.tempBasalChange.duration, webEntry.tempBasalChange.percentage);
+        }
+        if (webEntry.tags) {
+            newEntry.tags = newEntry.tags.map(x => new TagAttribute(x.tagId, x.name));
+        }
         return newEntry;
     }
 
@@ -117,6 +125,9 @@ export class EntryService {
             webEntry.tempBasalChange.duration = entry.tempBasalChange.duration;
             webEntry.tempBasalChange.percentage = entry.tempBasalChange.factor;
         }
+        if (entry.tags) {
+            webEntry.tags = entry.tags.map(x => x.tagId);
+        }
         return webEntry;
     }
-} 
+}
