@@ -7,6 +7,10 @@ export class SettingsService {
 
   constructor() { }
 
+  public defaultCorrectionInsulin = '1';
+  public defaultMealInsulin = '1';
+  public defaultBasalInsulin = '1';
+
   public getBSUnit(): string {
     return 'mg/dl';
   }

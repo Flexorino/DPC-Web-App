@@ -1,3 +1,4 @@
+import { EntryReprMealBolus } from './../../web-api/model/entryReprMealBolus';
 import { EntryRepr } from './../../web-api/model/entryRepr';
 import { Entry } from 'src/shared/model/diary/entry/entry';
 import { BaseEntryAttribute } from './../model/diary/entry/base-entry-attribute';
@@ -11,6 +12,7 @@ import { EntryAttributeTypes } from '../model/diary/entry/entry-attribute-types'
 import { Injectable } from '@angular/core';
 import * as d3 from "d3";
 import { EntryInputData } from 'src/app/diary/components/add-entry/entry-input-data';
+import { InsulinAttribute } from '../model/diary/entry/attributes/insulin-attribute';
 @Injectable({ providedIn: "root" })
 export class EntryService {
 
@@ -59,11 +61,26 @@ export class EntryService {
 
     private convertNetworkEntryToInternalEntry(webEntry: EntryReprResponse): Entry {
         const newEntry: Entry = new Entry(webEntry.timestamp);
+        newEntry._selfId = webEntry.selfID;
         if (webEntry.bloodSugar) {
             newEntry.bloodSuger = webEntry.bloodSugar;
         }
         if (webEntry.mealUnits) {
             newEntry.carbs = webEntry.mealUnits;
+        }
+        if (webEntry.basal) {
+            newEntry.basal = new InsulinAttribute(webEntry.basal.insulin, webEntry.basal.insulinName, webEntry.basal.units);
+        }
+        if (webEntry.comment) {
+            newEntry.comment = webEntry.comment;
+        }
+        if (webEntry.correctionBolus) {
+            newEntry.correctionBolus = new InsulinAttribute(webEntry.correctionBolus.insulin, webEntry.correctionBolus.insulinName,
+                webEntry.correctionBolus.units);
+        }
+        if (webEntry.mealBolus) {
+            newEntry.mealBolus = new InsulinAttribute(webEntry.mealBolus.insulin, webEntry.mealBolus.insulinName,
+                webEntry.mealBolus.units);
         }
         return newEntry;
     }
@@ -76,6 +93,29 @@ export class EntryService {
         }
         if (entry.carbs) {
             webEntry.mealUnits = entry.carbs;
+        }
+        if (entry.basal) {
+            webEntry.basal = {};
+            webEntry.basal.insulin = entry.basal.insulinId;
+            webEntry.basal.units = entry.basal.units;
+        }
+        if (entry.comment) {
+            webEntry.comment = entry.comment;
+        }
+        if (entry.correctionBolus) {
+            webEntry.correctionBolus = {};
+            webEntry.correctionBolus.insulin = entry.correctionBolus.insulinId;
+            webEntry.correctionBolus.units = entry.correctionBolus.units;
+        }
+        if (entry.mealBolus) {
+            webEntry.mealBolus = {};
+            webEntry.mealBolus.insulin = entry.mealBolus.insulinId;
+            webEntry.mealBolus.units = entry.mealBolus.units;
+        }
+        if (entry.tempBasalChange) {
+            webEntry.tempBasalChange = {};
+            webEntry.tempBasalChange.duration = entry.tempBasalChange.duration;
+            webEntry.tempBasalChange.percentage = entry.tempBasalChange.factor;
         }
         return webEntry;
     }
