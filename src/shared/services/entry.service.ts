@@ -15,16 +15,17 @@ import { EntryInputData } from 'src/app/diary/components/add-entry/entry-input-d
 import { InsulinAttribute } from '../model/diary/entry/attributes/insulin-attribute';
 import { TempBasalChangeAttribute } from '../model/diary/entry/attributes/temp-basal-change-attribute';
 import { TagAttribute } from '../model/diary/entry/attributes/tag-attribute';
+import { DiaryNavigationService } from './diary.navigation.service';
 @Injectable({ providedIn: "root" })
 export class EntryService {
 
 
-    constructor(private webEntryervice: EintrgeService) {
+    constructor(private webEntryervice: EintrgeService, private currentDiaryService: DiaryNavigationService) {
 
     }
 
     public getEntries(id: string): Observable<Array<Entry>> {
-        return this.webEntryervice.getDiaryEntries(id).pipe(
+        return this.webEntryervice.getDiaryEntries(this.currentDiaryService.currentDiaryId$.getValue()).pipe(
             map((x: InlineResponse2002) => {
                 let entries: Array<Entry> = [];
                 x.entries.forEach((y: EntryReprResponse) => {
@@ -36,10 +37,11 @@ export class EntryService {
     }
 
     public addEntry(id: string, entry: Entry): Observable<Entry> {
-        return this.webEntryervice.addDiaryEntry("test", this.convertInternatlEntryToNEtworkEntry(entry)).pipe(map(
-            x => {
-                return this.convertNetworkEntryToInternalEntry(x);
-            }));
+        return this.webEntryervice.addDiaryEntry(this.currentDiaryService.currentDiaryId$.getValue(),
+            this.convertInternatlEntryToNEtworkEntry(entry)).pipe(map(
+                x => {
+                    return this.convertNetworkEntryToInternalEntry(x);
+                }));
     }
 
 

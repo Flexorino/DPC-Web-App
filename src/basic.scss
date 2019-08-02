@@ -71,8 +71,16 @@ $candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-
       background-color: mat-color($primary,50);
       color: mat-color($primary, '50-contrast');
       border-color: mat-color($primary, '50-contrast');
+
+      .link-activated {
+        color: mat-color($primary,100);
+        font-size: 3rem;
+      }
     }
   }
 
+  .link-deactivated {
+    opacity: 0.4;
+  }
 
 @include bottom-vavbar-theme($candy-app-theme);

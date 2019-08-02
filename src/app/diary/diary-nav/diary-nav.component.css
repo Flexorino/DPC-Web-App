@@ -1,0 +1,40 @@
+#nav {
+  display: flex;
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  height: 4rem;
+}
+:host {
+  display: flex;
+  flex-flow: column;
+  overflow: hidden;
+  flex-grow: 1;
+}
+#contentContainer {
+  height: calc(100% - 4rem);
+  overflow-y: scroll;
+}
+.nav_entry {
+  display: flex;
+  flex-flow: column;
+  flex-grow: 1;
+  flex-basis: 25%;
+  align-items: center;
+  position: relative;
+  padding: 0.5rem 0;
+}
+.nav_entry:not(:last-child)::after {
+  content: "";
+  height: 80%;
+  position: absolute;
+  right: 0;
+  border-left-width: 1px;
+  border-left-style: solid;
+}
+.nav_entry {
+  font-size: 0.8em;
+}
+.nav_entry .div {
+  font-size: 2em;
+}
