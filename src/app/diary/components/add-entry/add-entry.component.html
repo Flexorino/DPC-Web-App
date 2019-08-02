@@ -5,160 +5,157 @@
 </mat-toolbar>
 <mat-dialog-content>
     <mat-list>
-        <mat-list-item>
-            <div class="inputwrapper">
-                <mat-form-field class="example-full-width">
-                    <input [(ngModel)]="date" matInput placeholder="Datum" type="date">
-                </mat-form-field>
-            </div>
-        </mat-list-item>
-        <mat-list-item>
-            <div class="inputwrapper">
-                <mat-form-field class="example-full-width">
-                    <input [(ngModel)]="time" matInput placeholder="Zeit" type="time">
-                </mat-form-field>
-            </div>
-        </mat-list-item>
-        <mat-divider></mat-divider>
-        <mat-list-item>
-            <div class="inputwrapper">
-                <mat-form-field class="example-full-width">
-                    <mat-label>Blutzucker</mat-label>
-                    <input matInput type="number">
-                    <span matSuffix>{{bsUnit}}</span>
-                </mat-form-field>
-            </div>
-        </mat-list-item>
-        <mat-divider></mat-divider>
-        <mat-list-item>
-            <div class="inputwrapper">
-                <mat-form-field class="example-full-width">
-                    <mat-label>Kohlenhydrat-Einheiten</mat-label>
-                    <input matInput type="number">
-                    <span matSuffix>KE</span>
-                </mat-form-field>
-            </div>
-        </mat-list-item>
-        <mat-divider></mat-divider>
-        <mat-list-item>
-            <div class="inputwrapper">
-                <mat-form-field class="example-full-width">
-                    <mat-label>Essen-Bolus</mat-label>
-                    <input matInput type="number">
-                    <span matSuffix>IE</span>
-                </mat-form-field>
-                <div class="field-extra-buttons">
-                    <div class="material-icons">settings</div>
-                    <div class="material-icons">assessment</div>
+        <form  #form="ngForm">
+            {{form.valid}}
+            {{diagnostic}}
+            <!-- TODO: mache für Felder eigene Validatoren. Z.B. darf Zeit nicht in Zukunft liegen oder BZ-Werte belibeig hoch oder negativ -->T
+            <mat-list-item>
+                <div class="inputwrapper">
+                    <mat-form-field class="example-full-width">
+                        <input [(ngModel)]="entryData.date" name="date" [disabled]="!fullLoaded" [(ngModel)]="date"
+                            matInput placeholder="Datum" type="date" required>
+                    </mat-form-field>
                 </div>
-            </div>
-        </mat-list-item>
-        <mat-divider></mat-divider>
-        <mat-list-item>
-            <div class="inputwrapper">
-                <mat-form-field class="example-full-width">
-                    <mat-label>Korrektur-Bolus</mat-label>
-                    <input matInput type="number">
-                    <span matSuffix>IE</span>
-                </mat-form-field>
-                <div class="field-extra-buttons">
-                    <div class="material-icons">settings</div>
-                    <div class="material-icons">assessment</div>
+            </mat-list-item>
+            <mat-list-item>
+                <div class="inputwrapper">
+                    <mat-form-field class="example-full-width">
+                        <input name="time" [(ngModel)]="entryData.time" [disabled]="!fullLoaded" [(ngModel)]="time"
+                            matInput placeholder="Zeit" type="time" required>
+                    </mat-form-field>
                 </div>
-            </div>
-        </mat-list-item>
-        <mat-list-item>
-            <div class="inputwrapper">
-                <mat-form-field class="example-full-width">
-                    <mat-label>Basal-Insulin</mat-label>
-                    <input matInput type="number">
-                    <span matSuffix>IE</span>
-                </mat-form-field>
-                <div class="field-extra-buttons">
-                    <div class="material-icons">settings</div>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item>
+                <div class="inputwrapper">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Blutzucker</mat-label>
+                        <input [(ngModel)]="entryData.bloodSugar" name="bloodSugar" [disabled]="!fullLoaded" matInput type="number">
+                        <span matSuffix>{{bsUnit}}</span>
+                    </mat-form-field>
                 </div>
-            </div>
-        </mat-list-item>
-        <mat-divider></mat-divider>
-        <mat-list-item>
-            <div class="inputwrapper">
-                <mat-form-field class="example-full-width">
-                    <mat-label>Temp-Basal Änderung in %</mat-label>
-                    <input matInput type="number">
-                    <span matSuffix>IE</span>
-                </mat-form-field>
-            </div>
-        </mat-list-item>
-        <mat-list-item>
-            <div class="inputwrapper">
-                <mat-form-field class="example-full-width">
-                    <mat-label>Temp-Basal Zeitraum</mat-label>
-                    <input matInput type="number">
-                    <span matSuffix>IE</span>
-                </mat-form-field>
-            </div>
-        </mat-list-item>
-        <mat-divider></mat-divider>
-        <mat-list-item>
-            <div class="inputwrapper">
-                <mat-form-field class="example-chip-list">
-                    <mat-chip-list #chipList aria-label="Fruit selection">
-                      <mat-chip *ngFor="let tag of selectedTags"
-                               [removable]="removable" (removed)="remove(tag)">
-                        {{tag.name}}
-                        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-                      </mat-chip>
-                      <input placeholder="Tag hinzufügen"
-                             [matChipInputFor]="chipList"
-                             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                             [matChipInputAddOnBlur]="addOnBlur"
-                             (matChipInputTokenEnd)="add($event)">
-                    </mat-chip-list>
-                  </mat-form-field>
-            </div>
-        </mat-list-item>
-        <mat-divider></mat-divider>
-        <mat-list-item>
-            <div class="inputwrapper">
-                <mat-form-field class="example-full-width">
-                    <mat-label>Aktivität Beschreibung</mat-label>
-                    <input matInput type="text">
-                </mat-form-field>
-            </div>
-        </mat-list-item>
-        <mat-list-item>
-            <div class="inputwrapper">
-                <mat-form-field class="example-full-width">
-                    <mat-label>Dauer</mat-label>
-                    <input matInput type="time">
-                </mat-form-field>
-            </div>
-        </mat-list-item>
-        <mat-list-item>
-            <div class="inputwrapper">
-                <mat-form-field>
-                    <mat-label>Select an option</mat-label>
-                    <mat-select [(value)]="selected">
-                      <mat-option>keine Angabe</mat-option>
-                      <mat-option value="--">Sehr geringe Aktivität</mat-option>
-                      <mat-option value="-">Geringe Aktivität</mat-option>
-                      <mat-option value="o">Normale Aktivität</mat-option>
-                      <mat-option value="+">Hohe Aktivität</mat-option>
-                      <mat-option value="++">Sehr hohe Aktivität</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-            </div>
-        </mat-list-item>
-        <mat-divider></mat-divider>
-        <mat-list-item>
-            <div class="inputwrapper">
-                <mat-form-field class="example-full-width">
-                    <mat-label>Kommentar</mat-label>
-                    <input matInput type="text">
-                </mat-form-field>
-            </div>
-        </mat-list-item>
-
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item>
+                <div class="inputwrapper">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Kohlenhydrat-Einheiten</mat-label>
+                        <input  [(ngModel)]="entryData.carbs" name="carbs" [disabled]="!fullLoaded" matInput type="number">
+                        <span matSuffix>KE</span>
+                    </mat-form-field>
+                </div>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item>
+                <div class="inputwrapper">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Essen-Bolus</mat-label>
+                        <input [(ngModel)]="entryData.mealBolus" name="mealBolus" [disabled]="!fullLoaded" matInput type="number">
+                        <span matSuffix>IE</span>
+                    </mat-form-field>
+                    <div class="field-extra-buttons">
+                        <div class="material-icons">settings</div>
+                        <div class="material-icons">assessment</div>
+                    </div>
+                </div>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item>
+                <div class="inputwrapper">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Korrektur-Bolus</mat-label>
+                        <input [(ngModel)]="entryData.correctionBolus" name="correctionBolus" [disabled]="!fullLoaded" matInput type="number">
+                        <span matSuffix>IE</span>
+                    </mat-form-field>
+                    <div class="field-extra-buttons">
+                        <div class="material-icons">settings</div>
+                        <div class="material-icons">assessment</div>
+                    </div>
+                </div>
+            </mat-list-item>
+            <mat-list-item>
+                <div class="inputwrapper">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Basal-Insulin</mat-label>
+                        <input [(ngModel)]="entryData.basal" name="basal" [disabled]="!fullLoaded" matInput type="number">
+                        <span matSuffix>IE</span>
+                    </mat-form-field>
+                    <div class="field-extra-buttons">
+                        <div class="material-icons">settings</div>
+                    </div>
+                </div>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item>
+                <div class="inputwrapper">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Temp-Basal Änderung in %</mat-label>
+                        <input [(ngModel)]="entryData.tempBasalChange" name="tempBasal" [disabled]="!fullLoaded" matInput type="number">
+                        <span matSuffix>%</span>
+                    </mat-form-field>
+                </div>
+            </mat-list-item>
+            <mat-list-item>
+                <div class="inputwrapper">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Temp-Basal Zeitraum</mat-label>
+                        <input [(ngModel)]="entryData.temBasalChangeDuration" name="tempBasalTime" [disabled]="!fullLoaded" matInput type="time">
+                    </mat-form-field>
+                </div>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item>
+                <div class="inputwrapper">
+                    <mat-form-field>
+                        <mat-label>Tags</mat-label>
+                        <mat-select [(ngModel)]="entryData.tags" multiple name="activityStrain" [disabled]="!fullLoaded" [(value)]="selected">
+                            <mat-option *ngFor="let tag of tags" [value]="tag.id">{{tag.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item>
+                <div class="inputwrapper">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Aktivität Beschreibung</mat-label>
+                        <input [(ngModel)]="entryData.activityDescription" name="activityDescription" [disabled]="!fullLoaded" matInput type="text">
+                    </mat-form-field>
+                </div>
+            </mat-list-item>
+            <mat-list-item>
+                <div class="inputwrapper">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Dauer</mat-label>
+                        <input [(ngModel)]="entryData.activityDuration" name="activityTime" [disabled]="!fullLoaded" matInput type="time">
+                    </mat-form-field>
+                </div>
+            </mat-list-item>
+            <mat-list-item>
+                <div class="inputwrapper">
+                    <mat-form-field>
+                        <mat-label>Aktivitäts-Anstrengung</mat-label>
+                        <mat-select [(ngModel)]="entryData.activityStrain" name="activityStrain" [disabled]="!fullLoaded">
+                            <mat-option>keine Angabe</mat-option>
+                            <mat-option value="--">Sehr geringe Aktivität</mat-option>
+                            <mat-option value="-">Geringe Aktivität</mat-option>
+                            <mat-option value="o">Normale Aktivität</mat-option>
+                            <mat-option value="+">Hohe Aktivität</mat-option>
+                            <mat-option value="++">Sehr hohe Aktivität</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item>
+                <div class="inputwrapper">
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Kommentar</mat-label>
+                        <input [(ngModel)]="entryData.comment" name="comment" [disabled]="!fullLoaded" matInput type="text">
+                    </mat-form-field>
+                </div>
+            </mat-list-item>
+        </form>
     </mat-list>
 
 </mat-dialog-content>

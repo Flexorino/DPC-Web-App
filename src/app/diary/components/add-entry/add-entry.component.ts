@@ -1,3 +1,4 @@
+import { CompletableAction } from 'src/shared/actions/CompletableAction';
 import { BasicActionProps } from './../../../../shared/actions/basic-action-props';
 import { AddEntryConfrimProps } from './custom-actions/AddEntryConfirmProps';
 import { SettingsService } from './../../../../shared/services/settings.service';
@@ -12,7 +13,8 @@ import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material
 import { MatChipInputEvent } from '@angular/material/chips';
 import { startWith, map } from 'rxjs/operators';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { FormControl } from '@angular/forms';
+import { FormControl, NgForm } from '@angular/forms';
+import { EntryInputData } from './entry-input-data';
 
 @Component({
   selector: 'app-add-entry',
@@ -21,8 +23,14 @@ import { FormControl } from '@angular/forms';
 })
 export class AddEntryComponent implements OnInit {
   // Inputs
-  private date: string;
-  private time: any;
+  private entryData: EntryInputData;
+
+  get diagnostic() { return JSON.stringify(this.entryData); }
+
+  @ViewChild('form', { static: false }) form: NgForm;
+
+  private fullLoaded = false;
+  private tags: Array<any> = [{ name: "kek", id: "asd" }, { name: "kek2", id: "asd2" }];
 
   constructor(private store: Store<{ diary: Diary }>, public dialogRef:
     MatDialogRef<AddEntryComponent>, private settings: SettingsService) {
@@ -32,56 +40,30 @@ export class AddEntryComponent implements OnInit {
 
 
   ngOnInit() {
+    console.log(this.form);
+    let action = AddEntryActions.OPENED(new CompletableAction(this));
+    this.store.dispatch(action);
+    action.then(x => this.fullLoaded = true);
+
     this.bsUnit = this.settings.getBSUnit();
     let date: Date = new Date();
-    this.date = date.toISOString().slice(0, 10);
-    this.time = date.getHours() + ":" + date.getMinutes();
+    this.entryData = new EntryInputData(date.toISOString().slice(0, 10), date.getHours() + ":" + date.getMinutes());
+
   }
 
   public confirm(): void {
 
-    console.log(+new Date(this.date));
-    console.log(Object.getPrototypeOf(this.time));
-    let action = AddEntryActions.CONFIRM(new AddEntryConfrimProps(this, {}));
-    this.store.dispatch(AddEntryActions.CONFIRM(action));
-    action.then(x => this.dialogRef.close());
+    if (this.form.valid) {
+      const action = AddEntryActions.CONFIRM(new AddEntryConfrimProps(this, this.entryData));
+      this.store.dispatch(AddEntryActions.CONFIRM(action));
+      action.then(x => this.dialogRef.close());
+    } else {
+      alert('Eingaben ungültig');
+    }
   }
 
   public abort() {
-    this.store.dispatch(AddEntryActions.ABORT(new BasicActionProps(this)));
+    this.store.dispatch(AddEntryActions.ABORT(new CompletableAction(this)));
     this.dialogRef.close();
-  }
-
-  visible = true;
-  selectable = true;
-  removable = true;
-  addOnBlur = true;
-  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-  selectedTags = [
-    { name: 'vor dem Essen' },
-    { name: 'Korrektur' },
-  ];
-
-  add(event: MatChipInputEvent): void {
-    const input = event.input;
-    const value = event.value;
-
-    // Add our fruit
-    if ((value || '').trim()) {
-      this.selectedTags.push({ name: value.trim() });
-    }
-
-    // Reset the input value
-    if (input) {
-      input.value = '';
-    }
-  }
-
-  remove(fruit): void {
-    const index = this.selectedTags.indexOf(fruit);
-
-    if (index >= 0) {
-      this.selectedTags.splice(index, 1);
-    }
   }
 }

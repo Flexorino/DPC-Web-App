@@ -4,7 +4,7 @@ export class CompletableAction<T, R> extends BasicActionProps<T>  {
     public resolve: (x: R) => void;
     public reject: (x: Error) => void;
     private promise: Promise<R>;
-    constructor(source: T, ) {
+    constructor(source: T) {
         super(source);
         this.promise = new Promise((resolve, reject) => { this.resolve = resolve; this.reject = reject; });
     }

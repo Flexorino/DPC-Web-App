@@ -10,6 +10,7 @@ import { EntryReprResponse } from 'src/web-api';
 import { EntryAttributeTypes } from '../model/diary/entry/entry-attribute-types';
 import { Injectable } from '@angular/core';
 import * as d3 from "d3";
+import { EntryInputData } from 'src/app/diary/components/add-entry/entry-input-data';
 @Injectable({ providedIn: "root" })
 export class EntryService {
 
@@ -30,10 +31,14 @@ export class EntryService {
             })
         );
     }
+    // TODO - mache mich woanders hin
+    public convertToEntry(input: EntryInputData): Entry {
+
+    }
 
     public addEntry(id: string, entry: Entry): Observable<Entry> {
         return this.webEntryervice.addDiaryEntry("test", { timeStamp: entry.time }).pipe(map(
-            x => { 
+            x => {
                 console.log("X");
                 console.log(x);
                 return new Entry(x.timestamp, this.convertAttributesToList(x));

@@ -1,7 +1,6 @@
 import { CancelableAction } from './../../../../shared/actions/CancelableAction';
 import { CompletableAction } from './../../../../shared/actions/CompletableAction';
 import { BasicActionProps } from './../../../../shared/actions/basic-action-props';
-import { Diary } from './../../../../shared/model/redux/Diary';
 import { Store, select } from '@ngrx/store';
 import { EntryService } from './../../../../shared/services/entry.service';
 import { EintrgeService } from './../../../../web-api/api/eintrge.service';
@@ -12,6 +11,7 @@ import { BaseEntryAttribute } from 'src/shared/model/diary/entry/base-entry-attr
 import { map, tap } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { DiaryListActions } from './diary-list.actions';
+import { Diary } from 'src/shared/model/diary/diary';
 
 @Component({
   selector: 'app-diary-list',
