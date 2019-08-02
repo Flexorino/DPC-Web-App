@@ -28,6 +28,7 @@ import { diaryReducer } from 'src/shared/model/redux/Diary';
 import { FormsModule } from '@angular/forms';
 import { AddEntryComponent } from './diary/components/add-entry/add-entry.component';
 import { MaterialModule } from './material-module';
+import { CollViewComponent } from './configs/component/coll-view/coll-view.component';
 
 
 @NgModule({
@@ -45,7 +46,8 @@ import { MaterialModule } from './material-module';
     CustomTimePipe,
     BSTendencyPipe,
     BloodSugarPipe,
-    AddEntryComponent
+    AddEntryComponent,
+    CollViewComponent
   ],
   imports: [
     BrowserModule,
