@@ -25,7 +25,7 @@ export class DiaryEffects {
     );
     addEntry$ = createEffect(() => this.actions$.pipe(
         ofType(AddEntryActions.CONFIRM),
-        mergeMap((action) => this.entryService.addEntry('test', new Entry(123, []))
+        mergeMap((action) => this.entryService.addEntry('test', action.entry)
             .pipe(
                 map(
                     (entry: Entry) => {

@@ -3,7 +3,7 @@ import { Entry } from 'src/shared/model/diary/entry/entry';
 import { BaseEntryAttribute } from './../model/diary/entry/base-entry-attribute';
 import { EntryAttribute } from './../model/diary/entry/entry-attribute';
 import { InlineResponse2002 } from './../../web-api/model/inlineResponse2002';
-import { map } from 'rxjs/operators';
+import { map, timestamp } from 'rxjs/operators';
 import { EintrgeService } from './../../web-api/api/eintrge.service';
 import { Observable } from 'rxjs';
 import { EntryReprResponse } from 'src/web-api';
@@ -24,24 +24,17 @@ export class EntryService {
             map((x: InlineResponse2002) => {
                 let entries: Array<Entry> = [];
                 x.entries.forEach((y: EntryReprResponse) => {
-
-                    entries.push(new Entry(y.timestamp, this.convertAttributesToList(y)));
+                    entries.push(this.convertNetworkEntryToInternalEntry(y));
                 });
                 return entries;
             })
         );
     }
-    // TODO - mache mich woanders hin
-    public convertToEntry(input: EntryInputData): Entry {
-
-    }
 
     public addEntry(id: string, entry: Entry): Observable<Entry> {
-        return this.webEntryervice.addDiaryEntry("test", { timeStamp: entry.time }).pipe(map(
+        return this.webEntryervice.addDiaryEntry("test", this.convertInternatlEntryToNEtworkEntry(entry)).pipe(map(
             x => {
-                console.log("X");
-                console.log(x);
-                return new Entry(x.timestamp, this.convertAttributesToList(x));
+                return this.convertNetworkEntryToInternalEntry(x);
             }));
     }
 
@@ -59,8 +52,31 @@ export class EntryService {
     public mapEntriesToDays(entries: Array<Entry>): Array<{ day: number, entries: Array<Entry> }> {
         let map: Array<{ day: number, entries: Array<Entry> }> = [];
         let curMap = d3.nest().key(function (d) {
-            return Number.parseInt((d.time / 86400).toFixed(0)) * 86400;
+            return Number.parseInt((d.timeStamp / 86400).toFixed(0)) * 86400;
         }).entries(entries).map((x) => { return { day: x.key, entries: x.values }; }).sort((a, b) => a.day - b.day);
         return curMap;
+    }
+
+    private convertNetworkEntryToInternalEntry(webEntry: EntryReprResponse): Entry {
+        const newEntry: Entry = new Entry(webEntry.timestamp);
+        if (webEntry.bloodSugar) {
+            newEntry.bloodSuger = webEntry.bloodSugar;
+        }
+        if (webEntry.mealUnits) {
+            newEntry.carbs = webEntry.mealUnits;
+        }
+        return newEntry;
+    }
+
+    private convertInternatlEntryToNEtworkEntry(entry: Entry): EntryRepr {
+        const webEntry: EntryRepr = { timeStamp: 0 };
+        webEntry.timeStamp = entry.timeStamp;
+        if (entry.bloodSuger) {
+            webEntry.bloodSugar = entry.bloodSuger;
+        }
+        if (entry.carbs) {
+            webEntry.mealUnits = entry.carbs;
+        }
+        return webEntry;
     }
 } 

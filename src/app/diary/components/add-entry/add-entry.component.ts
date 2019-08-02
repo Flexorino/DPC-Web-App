@@ -15,11 +15,13 @@ import { startWith, map } from 'rxjs/operators';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { FormControl, NgForm } from '@angular/forms';
 import { EntryInputData } from './entry-input-data';
+import { EntryInputConversionService } from './entry-input-conversion.service';
 
 @Component({
   selector: 'app-add-entry',
   templateUrl: './add-entry.component.html',
-  styleUrls: ['./add-entry.component.scss']
+  styleUrls: ['./add-entry.component.scss'],
+  providers: [EntryInputConversionService]
 })
 export class AddEntryComponent implements OnInit {
   // Inputs
@@ -33,7 +35,7 @@ export class AddEntryComponent implements OnInit {
   private tags: Array<any> = [{ name: "kek", id: "asd" }, { name: "kek2", id: "asd2" }];
 
   constructor(private store: Store<{ diary: Diary }>, public dialogRef:
-    MatDialogRef<AddEntryComponent>, private settings: SettingsService) {
+    MatDialogRef<AddEntryComponent>, private settings: SettingsService, private conversionService: EntryInputConversionService) {
 
   }
   public bsUnit: string;
@@ -54,9 +56,11 @@ export class AddEntryComponent implements OnInit {
   public confirm(): void {
 
     if (this.form.valid) {
-      const action = AddEntryActions.CONFIRM(new AddEntryConfrimProps(this, this.entryData));
+      const entryToCreate = this.conversionService.convertToEntry(this.entryData);
+      const action = AddEntryActions.CONFIRM(new AddEntryConfrimProps(this, entryToCreate));
       this.store.dispatch(AddEntryActions.CONFIRM(action));
       action.then(x => this.dialogRef.close());
+
     } else {
       alert('Eingaben ungültig');
     }

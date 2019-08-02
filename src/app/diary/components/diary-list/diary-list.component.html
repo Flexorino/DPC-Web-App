@@ -9,9 +9,9 @@
             <mat-card-title> {{aggr.day |customTime:"date"}}
             </mat-card-title>
             <div class="entry" *ngFor="let entry of aggr.entries">
-                <div class="timeDisplay">{{entry.time |customTime:"dayTime" }} </div>
-                <div class="entry_attribute" *ngFor="let attribute of entry.attributes">
-                    {{attribute | entryMainValueDisplay}}
+                <div class="timeDisplay">{{entry.timeStamp |customTime:"dayTime" }} </div>
+                <div class="entry_attribute">
+                    {{entry.attributes}}
                 </div>
             </div>
         </mat-card>

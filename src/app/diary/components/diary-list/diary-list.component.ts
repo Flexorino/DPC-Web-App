@@ -8,7 +8,7 @@ import { EntryAttributeTypes } from './../../../../shared/model/diary/entry/entr
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { BaseEntryAttribute } from 'src/shared/model/diary/entry/base-entry-attribute';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, timestamp } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { DiaryListActions } from './diary-list.actions';
 import { Diary } from 'src/shared/model/diary/diary';
@@ -21,7 +21,6 @@ import { Diary } from 'src/shared/model/diary/diary';
 export class DiaryListComponent implements OnInit, OnDestroy {
 
   public dayMappedEntries = [];
-
   public graphViewActivated = false;
   private entrySubscription: Subscription;
 
@@ -37,7 +36,7 @@ export class DiaryListComponent implements OnInit, OnDestroy {
       return this.entryService.mapEntriesToDays(x.loadedEntries);
     }, tap(x => console.log(x)))).subscribe(
       x => {
-        this.dayMappedEntries = x
+        this.dayMappedEntries = x.map(z => ({day: z.day, entries: z.entries.map(u => ({timeStamp: u.timeStamp, attributes: JSON.stringify(u)}))}));
       }
     );
     let promiseResolve;
