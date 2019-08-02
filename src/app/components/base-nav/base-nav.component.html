@@ -3,9 +3,11 @@
     [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item (click)='onNavigate()'  routerLink="/diary/test/overview">Übersicht</a>
+      <a mat-list-item (click)='onNavigate()'  routerLink="/diary/{{currentSelectedDiary}}/overview">Übersicht</a>
       <a mat-list-item (click)='onNavigate()' routerLink="/diary/test/statistics">Statistik</a>
       <a mat-list-item (click)='onNavigate()' routerLink="/diary/test/list">Liste</a>
+      <hr>
+      <a mat-list-item (click)='onNavigate()' routerLink="/diary-collaboration-settings">Kollaborations-Einst.</a>  
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
