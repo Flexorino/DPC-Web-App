@@ -1,3 +1,4 @@
+import { DiaryNavActions } from './../../app/diary/diary-nav/diary-nav.actions';
 import { Action } from 'rxjs/internal/scheduler/Action';
 import { AddEntryActions } from './../../app/diary/components/add-entry/add-entry.actions';
 import { DiaryListActions } from './../../app/diary/components/diary-list/diary-list.actions';
@@ -12,6 +13,7 @@ import { TypedAction } from '@ngrx/store/src/models';
 import { EntryServiceActions } from '../services/entry.service.actions';
 import { DiaryService } from '../services/diary.service';
 import { DiaryNavigationService } from '../services/diary.navigation.service';
+import { DiaryServiceActions } from '../services/diary.service.actions';
 
 // Effects for Loading Entries over Network
 
@@ -50,12 +52,21 @@ export class DiaryEffects {
             })
         ))
     ));
+
+    diaryNavViewLoadedEffect$ = createEffect(() => this.actions$.pipe(
+        ofType(DiaryNavActions.OPEN),
+        mergeMap((action) => this.diaryService.getDiaryInformation(this.currentDiaryService.currentDiaryId$.getValue()).pipe(
+            map(x => DiaryServiceActions.DIARY_INFOMATION_LOADED({ diary: x })),
+            catchError(() => EMPTY)
+        ))
+    ));
+
     constructor(
         private actions$: Actions,
         private entryService: EntryService,
         private diaryService: DiaryService,
         private currentDiaryService: DiaryNavigationService
-        ) { }
+    ) { }
 
     private loadEntries(req, cancel): Observable<TypedAction<any>> {
         return this.entryService.getEntries(this.currentDiaryService.currentDiaryId$.getValue())
