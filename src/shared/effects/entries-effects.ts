@@ -11,6 +11,7 @@ import { EntryService } from '../services/entry.service';
 import { TypedAction } from '@ngrx/store/src/models';
 import { EntryServiceActions } from '../services/entry.service.actions';
 import { DiaryService } from '../services/diary.service';
+import { DiaryNavigationService } from '../services/diary.navigation.service';
 
 // Effects for Loading Entries over Network
 
@@ -25,7 +26,7 @@ export class DiaryEffects {
     );
     addEntry$ = createEffect(() => this.actions$.pipe(
         ofType(AddEntryActions.CONFIRM),
-        mergeMap((action) => this.entryService.addEntry('test', action.entry)
+        mergeMap((action) => this.entryService.addEntry(this.currentDiaryService.currentDiaryId$.getValue(), action.entry)
             .pipe(
                 map(
                     (entry: Entry) => {
@@ -40,7 +41,7 @@ export class DiaryEffects {
     // Sorgt dafür, dass alle notwendigen Daten wie z.B. Medikamente geladen werden
     addEntryViewLoadedEffect = createEffect(() => this.actions$.pipe(
         ofType(AddEntryActions.OPENED),
-        mergeMap((action) => this.diaryService.getDrugs("test").pipe(
+        mergeMap((action) => this.diaryService.getDrugs(this.currentDiaryService.currentDiaryId$.getValue()).pipe(
             tap(answer => action.resolve(null)),
             flatMap(x => EMPTY),
             catchError((e) => {
@@ -52,10 +53,12 @@ export class DiaryEffects {
     constructor(
         private actions$: Actions,
         private entryService: EntryService,
-        private diaryService: DiaryService) { }
+        private diaryService: DiaryService,
+        private currentDiaryService: DiaryNavigationService
+        ) { }
 
     private loadEntries(req, cancel): Observable<TypedAction<any>> {
-        return this.entryService.getEntries('test')
+        return this.entryService.getEntries(this.currentDiaryService.currentDiaryId$.getValue())
             .pipe(
                 map(
                     entries => {
