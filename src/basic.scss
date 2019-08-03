@@ -73,8 +73,7 @@ $candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-
       border-color: mat-color($primary, '50-contrast');
 
       .link-activated {
-        color: mat-color($primary,100);
-        font-size: 3rem;
+        background: mat-color($primary,100);
       }
     }
   }
