@@ -1,5 +1,6 @@
 import { CollViewComponent } from './configs/component/coll-view/coll-view.component';
 import { PageTitleResolver } from './../shared/guards/page-title-resolver';
+import { CanActivateDiaryViewGuard } from './../shared/guards/can-activate-diary-view.guard';
 import { BaseNavComponent } from './components/base-nav/base-nav.component';
 import { DiaryHeaderExtensionComponent } from './diary/diary-header-extension/diary-header-extension.component';
 import { NgModule } from '@angular/core';
@@ -17,7 +18,7 @@ const routes: Routes = [
       path: "diary", children: [
         { path: "", component: DiaryHeaderExtensionComponent, outlet: "base-nav-extension" },
         {
-          path: ":diary-id", component: DiaryNavComponent, children: [
+          path: ":diary-id", canActivateChild: [CanActivateDiaryViewGuard], component: DiaryNavComponent, children: [
             { path: "", redirectTo: "overview", pathMatch: 'full' },
             { path: "overview", component: DiaryOverviewComponent, resolve: { null: PageTitleResolver }, data: { title: "Übersicht" } },
             { path: "statistics", component: DiaryStatisticsComponent, resolve: { null: PageTitleResolver }, data: { title: "Statistik" } },
@@ -36,4 +37,5 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+ }
