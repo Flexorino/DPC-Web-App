@@ -4,15 +4,15 @@
 
 </div>
 <div id="nav" class="bottomNavbar mat-elevation-z4">
-    <div matRipple class="nav_entry" routerLinkActive="link-activated" [routerLink]="['/diary/test/overview']">
+    <div matRipple class="nav_entry" routerLinkActive="link-activated" routerLink="/diary/{{currentSelectedDiary$ | async}}/overview">
         <div class="material-icons">book</div>
         Übersicht
     </div>
-    <div matRipple class="nav_entry" routerLinkActive="link-activated" [routerLink]="['/diary/test/statistics']">
+    <div matRipple class="nav_entry" routerLinkActive="link-activated" routerLink="/diary/{{currentSelectedDiary$ | async}}/statistics">
         <div class="material-icons">pie_chart</div>
         Statistik
     </div>
-    <div matRipple class="nav_entry" routerLinkActive="link-activated" [routerLink]="['/diary/test/list']">
+    <div matRipple class="nav_entry" routerLinkActive="link-activated" routerLink="/diary/{{currentSelectedDiary$ | async}}/list">
         <div class="material-icons">show_chart</div>
         Liste
     </div>

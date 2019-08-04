@@ -1,3 +1,4 @@
+import { DiaryNavigationService } from './../../../shared/services/diary.navigation.service';
 import { Subscription } from 'rxjs';
 import { PageTitleService } from './../../../shared/services/title.service';
 import { DiaryNavActions } from './diary-nav.actions';
@@ -19,8 +20,12 @@ export class DiaryNavComponent implements OnInit, OnDestroy {
       this.navigationSubscription.unsubscribe();
     }
   }
+  
+  public currentSelectedDiary$;
 
-  constructor(public dialog: MatDialog, private store: Store<any>, private titelServie: PageTitleService, private router: Router) { }
+  constructor(public dialog: MatDialog,private diaryNavService: DiaryNavigationService, private store: Store<any>, private titelServie: PageTitleService, private router: Router) {
+    this.currentSelectedDiary$ = diaryNavService.currentDiaryId$;
+   }
 
   private navigationSubscription :  Subscription;
   private currentSelectedDiaryName = "";
