@@ -9,16 +9,18 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Right } from './right';
 
 
-export interface EntryReprTempBasalChange { 
+export interface GrantRequest { 
     /**
-     * Die Zeit in der die Basalrate der Pumpe ge�ndert werden soll in Sekunden
+     * Das Tagebuch, auf das sich die Freigabe beziehen soll.
      */
-    duration?: number;
+    diaryId?: string;
     /**
-     * Die Prozent, um wie viel die Rate ge�ndert werden soll.
+     * Die NutzerId, f�r den die Fraigabe gelten soll.
      */
-    percentage?: number;
+    userId?: string;
+    rights?: Array<Right>;
 }
 

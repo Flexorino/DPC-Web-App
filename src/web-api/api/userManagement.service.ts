@@ -1,6 +1,6 @@
 /**
  * Diabetes Web-App
- * Die ist die vorläufige REST-artige Schnittstelle, für das Dia-PC Projekt. Diese Schnittstelle ist nicht REST, da sie nicht Hypermedialität benutzt - Das bedeutet, der Client muss selbt Anfragen konstruieren. 
+ * Die ist die vorl�ufige REST-artige Schnittstelle, f�r das Dia-PC Projekt. Diese Schnittstelle ist nicht REST, da sie nicht Hypermedialit�t benutzt - Das bedeutet, der Client muss selbt Anfragen konstruieren. 
  *
  * The version of the OpenAPI document: 1.0.0
  * 
@@ -21,6 +21,7 @@ import { Observable }                                        from 'rxjs';
 import { InlineObject1 } from '../model/inlineObject1';
 import { InlineResponse2003 } from '../model/inlineResponse2003';
 import { InlineResponse201 } from '../model/inlineResponse201';
+import { ListedDiaryReferences } from '../model/listedDiaryReferences';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -62,24 +63,15 @@ export class UserManagementService {
 
 
     /**
-     * Get the diaries of the current user (from which the current user is the owner)
+     * Bekomme Referenzen auf Tageb�cher, die durch den momentanen Nutzer verwaltet werden.
      * 
-     * @param searchSnipptet TODO: spezifiziere den Filter genauer
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getUserDiaries(searchSnipptet: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getUserDiaries(searchSnipptet: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getUserDiaries(searchSnipptet: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getUserDiaries(searchSnipptet: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-        if (searchSnipptet === null || searchSnipptet === undefined) {
-            throw new Error('Required parameter searchSnipptet was null or undefined when calling getUserDiaries.');
-        }
-
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (searchSnipptet !== undefined && searchSnipptet !== null) {
-            queryParameters = queryParameters.set('searchSnipptet', <any>searchSnipptet);
-        }
+    public getUserDiaries(observe?: 'body', reportProgress?: boolean): Observable<ListedDiaryReferences>;
+    public getUserDiaries(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ListedDiaryReferences>>;
+    public getUserDiaries(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ListedDiaryReferences>>;
+    public getUserDiaries(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -89,6 +81,7 @@ export class UserManagementService {
         }
         // to determine the Accept header
         const httpHeaderAccepts: string[] = [
+            'application/json'
         ];
         const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         if (httpHeaderAcceptSelected !== undefined) {
@@ -99,9 +92,8 @@ export class UserManagementService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<any>(`${this.configuration.basePath}/user/diaries`,
+        return this.httpClient.get<ListedDiaryReferences>(`${this.configuration.basePath}/user/diaries`,
             {
-                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -111,7 +103,7 @@ export class UserManagementService {
     }
 
     /**
-     * Erhalte Basis Informationen über Nutzer.
+     * Erhalte Basis Informationen �ber Nutzer.
      * 
      * @param searchSnipptet Es werden alle User mit den Namen ausgegeben, die diese Snippet enthalten.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -132,10 +124,6 @@ export class UserManagementService {
 
         let headers = this.defaultHeaders;
 
-        // authentication (basicAuth) required
-        if (this.configuration.username || this.configuration.password) {
-            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
-        }
         // to determine the Accept header
         const httpHeaderAccepts: string[] = [
             'application/json'
@@ -174,10 +162,6 @@ export class UserManagementService {
 
         let headers = this.defaultHeaders;
 
-        // authentication (basicAuth) required
-        if (this.configuration.username || this.configuration.password) {
-            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
-        }
         // to determine the Accept header
         const httpHeaderAccepts: string[] = [
             'application/json'

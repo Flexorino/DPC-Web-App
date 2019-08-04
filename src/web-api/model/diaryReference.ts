@@ -11,14 +11,14 @@
  */
 
 
-export interface EntryReprTempBasalChange { 
+export interface DiaryReference { 
     /**
-     * Die Zeit in der die Basalrate der Pumpe ge�ndert werden soll in Sekunden
+     * Die Id des Tagebuches.
      */
-    duration?: number;
+    diaryId?: string;
     /**
-     * Die Prozent, um wie viel die Rate ge�ndert werden soll.
+     * Der Name des Tagebuches, damit dieser gleich angezeigt werden kann auf dem Client.
      */
-    percentage?: number;
+    diaryName?: string;
 }
 

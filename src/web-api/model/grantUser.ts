@@ -11,14 +11,17 @@
  */
 
 
-export interface EntryReprTempBasalChange { 
+/**
+ * Der Nutzer, dem diese Freigabe gegeben wurde
+ */
+export interface GrantUser { 
     /**
-     * Die Zeit in der die Basalrate der Pumpe ge�ndert werden soll in Sekunden
+     * Die Id des Nutzers
      */
-    duration?: number;
+    id?: string;
     /**
-     * Die Prozent, um wie viel die Rate ge�ndert werden soll.
+     * Der Name des Nutzers, damit diese Eigenschaft nicht noch exta abgefraft werden muss.
      */
-    percentage?: number;
+    name?: string;
 }
 

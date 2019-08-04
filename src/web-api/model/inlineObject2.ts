@@ -9,16 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Right } from './right';
 
 
-export interface EntryReprTempBasalChange { 
-    /**
-     * Die Zeit in der die Basalrate der Pumpe ge�ndert werden soll in Sekunden
-     */
-    duration?: number;
-    /**
-     * Die Prozent, um wie viel die Rate ge�ndert werden soll.
-     */
-    percentage?: number;
+export interface InlineObject2 { 
+    rights?: Array<Right>;
 }
 

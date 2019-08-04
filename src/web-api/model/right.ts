@@ -11,14 +11,13 @@
  */
 
 
-export interface EntryReprTempBasalChange { 
-    /**
-     * Die Zeit in der die Basalrate der Pumpe ge�ndert werden soll in Sekunden
-     */
-    duration?: number;
-    /**
-     * Die Prozent, um wie viel die Rate ge�ndert werden soll.
-     */
-    percentage?: number;
+export interface Right { 
+    scope?: Right.ScopeEnum;
+}
+export namespace Right {
+    export type ScopeEnum = 'FULL_ACCESS';
+    export const ScopeEnum = {
+        FULLACCESS: 'FULL_ACCESS' as ScopeEnum
+    };
 }
 

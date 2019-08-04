@@ -1,6 +1,6 @@
 /**
  * Diabetes Web-App
- * Die ist die vorläufige REST-artige Schnittstelle, für das Dia-PC Projekt. Diese Schnittstelle ist nicht REST, da sie nicht Hypermedialität benutzt - Das bedeutet, der Client muss selbt Anfragen konstruieren. 
+ * Die ist die vorl�ufige REST-artige Schnittstelle, f�r das Dia-PC Projekt. Diese Schnittstelle ist nicht REST, da sie nicht Hypermedialit�t benutzt - Das bedeutet, der Client muss selbt Anfragen konstruieren. 
  *
  * The version of the OpenAPI document: 1.0.0
  * 
@@ -60,7 +60,7 @@ export class UtilService {
 
     /**
      * get the Bolus-Modul for offline usage
-     * Die Idee ist hier, dass der Client sich gleich den Gesamten calculator in einer JS-Repräsentation runterladen kann. Ob das wirklich so REST-konform umgesetzt werden kann ist eine andere Frage...
+     * Die Idee ist hier, dass der Client sich gleich den Gesamten calculator in einer JS-Repr�sentation runterladen kann. Ob das wirklich so REST-konform umgesetzt werden kann ist eine andere Frage...
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -71,10 +71,6 @@ export class UtilService {
 
         let headers = this.defaultHeaders;
 
-        // authentication (basicAuth) required
-        if (this.configuration.username || this.configuration.password) {
-            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
-        }
         // to determine the Accept header
         const httpHeaderAccepts: string[] = [
         ];
@@ -110,10 +106,6 @@ export class UtilService {
 
         let headers = this.defaultHeaders;
 
-        // authentication (basicAuth) required
-        if (this.configuration.username || this.configuration.password) {
-            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
-        }
         // to determine the Accept header
         const httpHeaderAccepts: string[] = [
         ];

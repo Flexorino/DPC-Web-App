@@ -9,16 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Grant } from './grant';
 
 
-export interface EntryReprTempBasalChange { 
-    /**
-     * Die Zeit in der die Basalrate der Pumpe ge�ndert werden soll in Sekunden
-     */
-    duration?: number;
-    /**
-     * Die Prozent, um wie viel die Rate ge�ndert werden soll.
-     */
-    percentage?: number;
+export interface ListedGrantAnswer { 
+    grants?: Array<Grant>;
 }
 

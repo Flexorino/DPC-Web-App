@@ -9,16 +9,18 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { DiaryReference } from './diaryReference';
+import { GrantUser } from './grantUser';
+import { Right } from './right';
 
 
-export interface EntryReprTempBasalChange { 
+export interface Grant { 
     /**
-     * Die Zeit in der die Basalrate der Pumpe ge�ndert werden soll in Sekunden
+     * Die Id des Grants. Wird gebrauccht, wenn ein Grant modifiziert werden soll.
      */
-    duration?: number;
-    /**
-     * Die Prozent, um wie viel die Rate ge�ndert werden soll.
-     */
-    percentage?: number;
+    id?: string;
+    diaryReference?: DiaryReference;
+    rights?: Array<Right>;
+    user?: GrantUser;
 }
 

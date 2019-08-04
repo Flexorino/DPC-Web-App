@@ -64,7 +64,7 @@ export class EntryService {
     }
 
     private convertNetworkEntryToInternalEntry(webEntry: EntryReprResponse): Entry {
-        const newEntry: Entry = new Entry(webEntry.timestamp);
+        const newEntry: Entry = new Entry(webEntry.timeStamp);
         newEntry._selfId = webEntry.selfID;
         if (webEntry.bloodSugar) {
             newEntry.bloodSuger = webEntry.bloodSugar;
