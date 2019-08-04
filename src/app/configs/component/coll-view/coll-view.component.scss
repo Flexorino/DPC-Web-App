@@ -1,3 +1,10 @@
 mat-list {
     margin-top: 20px;
+
+    .list-icons {
+        display: flex;
+        justify-content: flex-end;
+        flex-grow: 1;
+    }
 }
+

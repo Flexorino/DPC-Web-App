@@ -1,15 +1,17 @@
 <mat-list>
     <h3 mat-subheader>Meine Tagebücher</h3>
+    <mat-divider></mat-divider> 
     <mat-list-item [class.link-activated]="ref.diaryId==diarySelectionService.currentDiaryId$.getValue()"
         (click)="switchDiary(ref.diaryId)" matRipple *ngFor="let ref of myDiaries">
-        {{ref.diaryName}}
+        <div>{{ref.diaryName}}</div> <div class="list-icons"> <div class="material-icons">settings</div> </div>
         <mat-divider></mat-divider>
     </mat-list-item>
     <h3 mat-subheader>Freigegebene Tagebücher</h3>
+    <mat-divider></mat-divider> 
     <mat-list-item
         [class.link-activated]="grant.diaryReference.diaryId==diarySelectionService.currentDiaryId$.getValue()"
         (click)="switchDiary(grant.diaryReference.diaryId)" matRipple *ngFor="let grant of myGrants">
-        {{grant.diaryReference.diaryName}}
-        <mat-divider></mat-divider>
+        <div>{{grant.diaryReference.diaryName}}</div> <div class="list-icons"> <div class="material-icons">info</div> </div>
+        <mat-divider></mat-divider> 
     </mat-list-item>
 </mat-list>
