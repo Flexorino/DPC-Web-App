@@ -56,7 +56,9 @@ export class DiaryEffects {
     diaryNavViewLoadedEffect$ = createEffect(() => this.actions$.pipe(
         ofType(DiaryNavActions.OPEN),
         mergeMap((action) => this.diaryService.getDiaryInformation(this.currentDiaryService.currentDiaryId$.getValue()).pipe(
-            map(x => DiaryServiceActions.DIARY_INFOMATION_LOADED({ diary: x })),
+            map(x => {
+                return DiaryServiceActions.DIARY_INFOMATION_LOADED({ diary: x });
+            }),
             catchError(() => EMPTY)
         ))
     ));

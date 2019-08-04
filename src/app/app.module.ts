@@ -29,6 +29,8 @@ import { FormsModule } from '@angular/forms';
 import { AddEntryComponent } from './diary/components/add-entry/add-entry.component';
 import { MaterialModule } from './material-module';
 import { CollViewComponent } from './configs/component/coll-view/coll-view.component';
+import { UserEffects } from 'src/shared/effects/user-effects';
+import { userReducer } from 'src/shared/model/redux/user-reducer';
 
 
 @NgModule({
@@ -56,8 +58,8 @@ import { CollViewComponent } from './configs/component/coll-view/coll-view.compo
     LayoutModule,
     ApiModule.forRoot(() => new Configuration({ basePath: "http://localhost:8889" })),
     HttpClientModule,
-    StoreModule.forRoot({ diary: diaryReducer, kek: diaryReducer }),
-    EffectsModule.forRoot([DiaryEffects]),
+    StoreModule.forRoot({ diary: diaryReducer, user: userReducer }),
+    EffectsModule.forRoot([DiaryEffects, UserEffects]),
     FormsModule,
     MaterialModule
 
