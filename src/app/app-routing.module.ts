@@ -27,7 +27,7 @@ const routes: Routes = [
       ]
     },
     {
-      path: "diary-collaboration-settings", component: CollViewComponent
+      path: "diary-collaboration-settings", component: CollViewComponent, resolve: { null: PageTitleResolver }, data: { title: "Tagebücher-Verwaltung" }
     }
     ]
   }
@@ -38,4 +38,4 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule {
- }
+}

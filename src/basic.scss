@@ -78,6 +78,10 @@ $candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-
     }
   }
 
+  .link-activated {
+    background: mat-color(map-get($candy-app-theme, primary),100);
+  }
+
   .link-deactivated {
     opacity: 0.4;
   }

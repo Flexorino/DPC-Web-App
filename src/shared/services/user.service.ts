@@ -48,5 +48,5 @@ export class UserService {
                 return grants;
             })
         );
-    }
+    } 
 }

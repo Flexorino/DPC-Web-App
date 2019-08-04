@@ -1,10 +1,15 @@
-
-    <mat-list>
-            <mat-list-item *ngFor="let ref of myDiaries">
-                {{ref.diaryId}}
-            </mat-list-item>
-        </mat-list>     
-
-<input type="text" [(ngModel)]="currentDiary" placeholder="select a diaryId">
-<label> confirm <input (click)="switchDiary()" type="button"> </label>
-{{test}}
+<mat-list>
+    <h3 mat-subheader>Meine Tagebücher</h3>
+    <mat-list-item [class.link-activated]="ref.diaryId==diarySelectionService.currentDiaryId$.getValue()"
+        (click)="switchDiary(ref.diaryId)" matRipple *ngFor="let ref of myDiaries">
+        {{ref.diaryName}}
+        <mat-divider></mat-divider>
+    </mat-list-item>
+    <h3 mat-subheader>Freigegebene Tagebücher</h3>
+    <mat-list-item
+        [class.link-activated]="grant.diaryReference.diaryId==diarySelectionService.currentDiaryId$.getValue()"
+        (click)="switchDiary(grant.diaryReference.diaryId)" matRipple *ngFor="let grant of myGrants">
+        {{grant.diaryReference.diaryName}}
+        <mat-divider></mat-divider>
+    </mat-list-item>
+</mat-list>
