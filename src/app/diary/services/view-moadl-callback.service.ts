@@ -4,4 +4,5 @@ import { Injectable } from "@angular/core";
 
 export class ModalCallbackService{
     public current: string = null;
+    public default: string = null;
 }
