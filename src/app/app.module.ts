@@ -25,7 +25,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { DiaryEffects } from 'src/shared/effects/entries-effects';
 import { StoreModule } from '@ngrx/store';
 import { diaryReducer } from 'src/shared/model/redux/Diary';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddEntryComponent } from './diary/components/add-entry/add-entry.component';
 import { MaterialModule } from './material-module';
 import { CollViewComponent } from './configs/component/coll-view/coll-view.component';
@@ -33,6 +33,7 @@ import { UserEffects } from 'src/shared/effects/user-effects';
 import { userReducer } from 'src/shared/model/redux/user-reducer';
 import { BaseFullScreenModalComponent } from 'src/shared/components/base-full-screen-modal/base-full-screen-modal.component';
 import { AddOverviewComponent } from './diary/components/add-overview/add-overview.component';
+import { AddIngestionComponent } from './diary/components/add-ingestion/add-ingestion.component';
 
 
 @NgModule({
@@ -53,9 +54,11 @@ import { AddOverviewComponent } from './diary/components/add-overview/add-overvi
     AddEntryComponent,
     CollViewComponent,
     BaseFullScreenModalComponent,
-    AddOverviewComponent
+    AddOverviewComponent,
+    AddIngestionComponent
   ],
   imports: [
+    ReactiveFormsModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,

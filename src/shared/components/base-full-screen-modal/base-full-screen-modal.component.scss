@@ -1,0 +1,9 @@
+:host {
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+}
+
+.content {
+    flex-grow: 1;
+}

@@ -1,0 +1,32 @@
+:host {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+}
+
+mat-horizontal-stepper{
+    flex-grow: 1;
+}
+
+mat-toolbar {
+    display: flex;
+}
+
+#back {
+    justify-self: flex-start;
+}
+
+#forward {
+    justify-self: end;
+}
+
+#l {
+    display: flex;
+    justify-content: flex-start;
+}
+
+#r {
+    display: flex;
+    flex-grow: 1;
+    justify-content: flex-end;
+}

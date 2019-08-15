@@ -1,3 +1,4 @@
+import { AddIngestionComponent } from './diary/components/add-ingestion/add-ingestion.component';
 import { state } from '@angular/animations';
 import { CallBackGuard } from './diary/services/callback-guard';
 
@@ -46,7 +47,8 @@ const routes: Routes = [
             path: ":diary-id", canActivateChild: [CanActivateDiaryViewGuard], children: [
               { path: "add", children: [
                 {path:"", pathMatch:"full", redirectTo:"overview"},
-                {path:"overview", component: AddOverviewComponent, resolve: { null: PageTitleResolver }, data: { title: "Eintrag hinzufügen" }}
+                {path:"overview", component: AddOverviewComponent, resolve: { null: PageTitleResolver }, data: { title: "Eintrag hinzufügen" }},
+                {path:"ingestion", component: AddIngestionComponent, resolve: { null: PageTitleResolver }, data: { title: "Essens-Einnahme hinzufügen" }}
               ] }
             ]
           }

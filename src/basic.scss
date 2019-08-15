@@ -86,4 +86,19 @@ $candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-
     opacity: 0.4;
   }
 
+  @mixin bottom-BottomToolbar-theme($theme) {
+    // Extract the palettes you need from the theme definition.
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+  
+    // Define any styles affected by the theme.
+    .BottomToolbar {
+      // Use mat-color to extract individual colors from a palette.
+      background-color: mat-color($primary,50) !important;
+      color: mat-color($primary, '50-contrast') !important;
+    }
+  }
+
+
 @include bottom-vavbar-theme($candy-app-theme);
+@include bottom-BottomToolbar-theme($candy-app-theme);
