@@ -34,6 +34,7 @@ import { userReducer } from 'src/shared/model/redux/user-reducer';
 import { BaseFullScreenModalComponent } from 'src/shared/components/base-full-screen-modal/base-full-screen-modal.component';
 import { AddOverviewComponent } from './diary/components/add-overview/add-overview.component';
 import { AddIngestionComponent } from './diary/components/add-ingestion/add-ingestion.component';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 
 @NgModule({
@@ -63,7 +64,7 @@ import { AddIngestionComponent } from './diary/components/add-ingestion/add-inge
     AppRoutingModule,
     BrowserAnimationsModule,
     LayoutModule,
-    ApiModule.forRoot(() => new Configuration({ basePath: "http://localhost:8889" })),
+    ApiModule.forRoot(() => new Configuration({ basePath: "http://192.168.2.111:8889" })),
     HttpClientModule,
     StoreModule.forRoot({ diary: diaryReducer, user: userReducer }),
     EffectsModule.forRoot([DiaryEffects, UserEffects]),
@@ -72,7 +73,7 @@ import { AddIngestionComponent } from './diary/components/add-ingestion/add-inge
     BrowserAnimationsModule
 
   ],
-  providers: [BloodSugarPipe, CarbsPipe],
+  providers: [BloodSugarPipe, CarbsPipe,{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}],
   bootstrap: [AppComponent],
   entryComponents: [AddEntryComponent]
 })

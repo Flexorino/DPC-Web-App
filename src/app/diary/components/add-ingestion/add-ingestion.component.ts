@@ -60,9 +60,13 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-
+    let cur: Date = new Date();
+    let time =  cur.getHours() + ":" + cur.getMinutes();
+    let curdate = cur.toISOString().slice(0, 10);
     this.firstFormGroup = this._formBuilder.group({
-      firstCtrl: ['', Validators.required]
+      time: [time, Validators.required],
+      date: [curdate, Validators.required],
+      bs: ['']
     });
     this.secondFormGroup = this._formBuilder.group({
       secondCtrl: ['', Validators.required]
