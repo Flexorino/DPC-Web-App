@@ -16,7 +16,7 @@
         <div class="material-icons">show_chart</div>
         Liste
     </div>
-    <div matRipple id="add" class="nav_entry" (click)="openAddEntryDialog()">
+    <div matRipple id="add" class="nav_entry" routerLink="/diary/{{currentSelectedDiary$ | async}}/add">
         <div class="material-icons">add</div>
         Hinzufügen
     </div>

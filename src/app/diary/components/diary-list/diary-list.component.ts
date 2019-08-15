@@ -1,3 +1,4 @@
+import { DiaryViews } from './../../services/DiaryViews';
 import { CancelableAction } from './../../../../shared/actions/CancelableAction';
 import { CompletableAction } from './../../../../shared/actions/CompletableAction';
 import { BasicActionProps } from './../../../../shared/actions/basic-action-props';
@@ -12,6 +13,7 @@ import { map, tap, timestamp } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { DiaryListActions } from './diary-list.actions';
 import { Diary } from 'src/shared/model/diary/diary';
+import { CurrentDiaryViewSerivce } from '../../services/CurrentDiaryView.service';
 
 @Component({
   selector: 'app-diary-list',
@@ -52,7 +54,8 @@ export class DiaryListComponent implements OnInit, OnDestroy {
     this.entrySubscription = x;
   }
 
-  constructor(private entryService: EntryService, private store: Store<{ diary: Diary }>) { }
+  constructor(private entryService: EntryService, private store: Store<{ diary: Diary }>) {
+   }
 
 
 

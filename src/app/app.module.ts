@@ -31,6 +31,8 @@ import { MaterialModule } from './material-module';
 import { CollViewComponent } from './configs/component/coll-view/coll-view.component';
 import { UserEffects } from 'src/shared/effects/user-effects';
 import { userReducer } from 'src/shared/model/redux/user-reducer';
+import { BaseFullScreenModalComponent } from 'src/shared/components/base-full-screen-modal/base-full-screen-modal.component';
+import { AddOverviewComponent } from './diary/components/add-overview/add-overview.component';
 
 
 @NgModule({
@@ -49,7 +51,9 @@ import { userReducer } from 'src/shared/model/redux/user-reducer';
     BSTendencyPipe,
     BloodSugarPipe,
     AddEntryComponent,
-    CollViewComponent
+    CollViewComponent,
+    BaseFullScreenModalComponent,
+    AddOverviewComponent
   ],
   imports: [
     BrowserModule,
@@ -61,7 +65,8 @@ import { userReducer } from 'src/shared/model/redux/user-reducer';
     StoreModule.forRoot({ diary: diaryReducer, user: userReducer }),
     EffectsModule.forRoot([DiaryEffects, UserEffects]),
     FormsModule,
-    MaterialModule
+    MaterialModule,
+    BrowserAnimationsModule
 
   ],
   providers: [BloodSugarPipe, CarbsPipe],
