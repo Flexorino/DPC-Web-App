@@ -56,7 +56,7 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
     CollViewComponent,
     BaseFullScreenModalComponent,
     AddOverviewComponent,
-    AddIngestionComponent 
+    AddIngestionComponent  
   ],
   imports: [
     ReactiveFormsModule,
