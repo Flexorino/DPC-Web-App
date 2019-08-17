@@ -35,6 +35,7 @@ import { BaseFullScreenModalComponent } from 'src/shared/components/base-full-sc
 import { AddOverviewComponent } from './diary/components/add-overview/add-overview.component';
 import { AddIngestionComponent } from './diary/components/add-ingestion/add-ingestion.component';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { MealSelectionComponent } from './diary/components/meal-selection/meal-selection.component';
 
 
 @NgModule({
@@ -56,15 +57,16 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
     CollViewComponent,
     BaseFullScreenModalComponent,
     AddOverviewComponent,
-    AddIngestionComponent  
+    AddIngestionComponent,
+    MealSelectionComponent  
   ],
   imports: [
     ReactiveFormsModule,
-    BrowserModule,
+    BrowserModule, 
     AppRoutingModule,
     BrowserAnimationsModule,
     LayoutModule,
-    ApiModule.forRoot(() => new Configuration({ basePath: "http://192.168.2.111:8889" })),
+    ApiModule.forRoot(() => new Configuration({ basePath: "http://localhost:8889" })),
     HttpClientModule,
     StoreModule.forRoot({ diary: diaryReducer, user: userReducer }),
     EffectsModule.forRoot([DiaryEffects, UserEffects]),

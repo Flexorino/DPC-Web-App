@@ -1,0 +1,25 @@
+.fullWidthInput {
+  width: 100%;
+}
+mat-divider {
+  margin-bottom: 10px;
+}
+.extras {
+  margin-top: 20px;
+}
+mat-card-header {
+  display: flex;
+  justify-content: flex-end;
+}
+:host {
+  margin-bottom: 10px;
+}
+mat-card {
+  margin-bottom: 10px;
+  position: relative;
+}
+#close {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+}

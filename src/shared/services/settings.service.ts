@@ -11,6 +11,8 @@ export class SettingsService {
   public defaultMealInsulin = '1';
   public defaultBasalInsulin = '1';
 
+  public carbsFactor = 1/10;
+
   public getBSUnit(): string {
     return 'mg/dl';
   }

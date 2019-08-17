@@ -1,0 +1,42 @@
+:host {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+mat-horizontal-stepper {
+  flex-grow: 1;
+}
+mat-toolbar {
+  display: flex;
+}
+#back {
+  justify-self: flex-start;
+}
+#forward {
+  justify-self: end;
+}
+#l {
+  display: flex;
+  justify-content: flex-start;
+}
+#r {
+  display: flex;
+  flex-grow: 1;
+  justify-content: flex-end;
+}
+.fullWidthInput {
+  width: 100%;
+}
+:host {
+  display: flex;
+  overflow: hidden;
+}
+#content {
+  height: calc(100%);
+  overflow: scroll;
+  margin-top: 10px;
+}
+h3 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
