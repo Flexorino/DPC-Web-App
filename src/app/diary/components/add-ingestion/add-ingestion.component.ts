@@ -1,9 +1,15 @@
+import { AddIngestionActions } from './add-ingestion.actions';
+import { FullScreenModalCloser } from './../../../../shared/components/base-full-screen-modal/full_screen_closer.service';
+import { SettingsService } from 'src/shared/services/settings.service';
+import { BSUnit } from './../../../../shared/services/BSUnit';
 import { pipe } from 'rxjs';
 import { ActivatedRouteSnapshot, ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { MatStepper, MatStep } from '@angular/material/stepper';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
+import { Store } from '@ngrx/store';
+import { CompletableAction } from 'src/shared/actions/CompletableAction';
 
 @Component({
   selector: 'app-add-ingestion',
@@ -16,6 +22,9 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
   currentStep = 0;
   step: MatStep;
   sum = 0;
+  bsUnit: BSUnit;
+  delayedBolus = false;
+  ready = false;
 
   private handleFragmentNavigationStuff() {
     this.fragmentSubscription = this.currentRoute.fragment.subscribe(z => {
@@ -58,14 +67,22 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
   isLinear = false;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
+  mainFormGroup: FormGroup;
   private fragmentSubscription;
 
-  constructor(private _formBuilder: FormBuilder, private currentRoute: ActivatedRoute, private router: Router) {
+  constructor(
+    private _formBuilder: FormBuilder,
+    private currentRoute: ActivatedRoute,
+    private router: Router,
+    private settings: SettingsService,
+    private closer: FullScreenModalCloser,
+    private store: Store<any>
+  ) {
 
-
+    this.bsUnit = settings.bsUnitSetting;
   }
 
-  ngOnInit() {
+  private initializeForms(): void {
     let cur: Date = new Date();
     let time = cur.getHours() + ":" + cur.getMinutes();
     let curdate = cur.toISOString().slice(0, 10);
@@ -77,7 +94,16 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
     this.secondFormGroup = this._formBuilder.group({
       meals: this._formBuilder.array([])
     });
+    this.mainFormGroup = this._formBuilder.group({ timeAndBs: this.firstFormGroup, mealForm: this.secondFormGroup });
     this.addMeal();
+  }
+
+  ngOnInit() {
+    this.initializeForms();
+    let action = AddIngestionActions.OPENED(new CompletableAction(this));
+    this.store.dispatch(action);
+    action.then(x => this.ready = true);
+
 
   }
 
@@ -118,5 +144,9 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
   remove(i: number) {
     this.meals.removeAt(i);
     this.calculateMealSum();
+  }
+
+  submit() {
+    this.closer.close();
   }
 }

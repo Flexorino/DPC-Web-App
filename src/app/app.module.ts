@@ -1,3 +1,4 @@
+
 import { BASE_PATH } from './../web-api/variables';
 import { ApiModule } from './../web-api/api.module';
 import { BrowserModule } from '@angular/platform-browser';
@@ -36,6 +37,7 @@ import { AddOverviewComponent } from './diary/components/add-overview/add-overvi
 import { AddIngestionComponent } from './diary/components/add-ingestion/add-ingestion.component';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MealSelectionComponent } from './diary/components/meal-selection/meal-selection.component';
+import { AddIngestionEffects } from 'src/shared/effects/add-ingestion-effects';
 
 
 @NgModule({
@@ -69,7 +71,7 @@ import { MealSelectionComponent } from './diary/components/meal-selection/meal-s
     ApiModule.forRoot(() => new Configuration({ basePath: "http://localhost:8889" })),
     HttpClientModule,
     StoreModule.forRoot({ diary: diaryReducer, user: userReducer }),
-    EffectsModule.forRoot([DiaryEffects, UserEffects]),
+    EffectsModule.forRoot([DiaryEffects, UserEffects, AddIngestionEffects]),
     FormsModule,
     MaterialModule,
     BrowserAnimationsModule

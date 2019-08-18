@@ -2,6 +2,7 @@
     display: flex;
     flex-flow: column;
     height: 100%;
+    position: relative;
 }
 
 mat-horizontal-stepper{
@@ -50,4 +51,20 @@ h3 {
     margin-top: 0;
     margin-bottom: 0;
 }
+
+.delayedBolus {
+    max-height: 20px;
+    padding: 5px;
+    overflow: hidden;
+    transition: max-height 0.2s;
+}
+
+.delayedBolusExpanded {
+    max-height: 80px;
+}
+
+button {
+    margin-bottom: 10px;
+}
+
 

@@ -2,6 +2,7 @@ import { FormBuilder, Validators, FormGroup, FormControl, FormGroupDirective, Ng
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { SettingsService } from 'src/shared/services/settings.service';
+import { stringify } from '@angular/compiler/src/util';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -36,8 +37,13 @@ export class MealSelectionComponent implements OnInit {
 
   calculateKE() {
     if (this.mealCalcHelpForm.valid) {
+
+      let u = { kek: "kekorino" };
+      let Z = { 1: u, 2: u };
+      alert(JSON.stringify(Z));
+
       try {
-        let res = Number.parseFloat(this.mealCalcHelpForm.get("amount").value) * Number.parseFloat(this.mealCalcHelpForm.get("carbsFactor").value)* 0.01 * this.carbsFactor;
+        let res = Number.parseFloat(this.mealCalcHelpForm.get("amount").value) * Number.parseFloat(this.mealCalcHelpForm.get("carbsFactor").value) * 0.01 * this.carbsFactor;
         res = Math.round(res);
         this.formGroup.get("KE").setValue(res);
       }

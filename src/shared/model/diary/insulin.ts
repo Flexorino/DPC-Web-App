@@ -1,3 +1,11 @@
+export enum InsulinEffect {
+    SLOW, MEDIUM, FAST
+}
+
 export class Insulin {
-    constructor(public readonly id: string, public readonly name: string, public readonly description: string) { }
+    public name: string; 
+    public description?: string; 
+    public insulinEffect?: InsulinEffect;
+
+    constructor(public readonly id: string) { }
 }

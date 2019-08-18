@@ -12,3 +12,22 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
         padding: 0;
     }
 }
+
+.full-screen-loader {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+    background: rgba(255, 255, 255, 0.5);
+    z-index: 90;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    mat-spinner {
+        width: 60%;
+        height: auto;
+    }
+
+}
