@@ -16,8 +16,5 @@
         <div class="material-icons">show_chart</div>
         Liste
     </div>
-    <div matRipple id="add" class="nav_entry" routerLink="/diary/{{currentSelectedDiary$ | async}}/add">
-        <div class="material-icons">add</div>
-        Hinzufügen
-    </div>
 </div>
+<button mat-fab color="primary" routerLink="/diary/{{currentSelectedDiary$ | async}}/add" id = "add"><mat-icon>add</mat-icon></button>
