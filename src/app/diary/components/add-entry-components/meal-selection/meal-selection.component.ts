@@ -5,6 +5,9 @@ import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild }
 import { ErrorStateMatcher } from '@angular/material/core';
 import { SettingsService } from 'src/shared/services/settings.service';
 import { stringify } from '@angular/compiler/src/util';
+import { Patcherino } from 'src/shared/services/patcherino/patcherino';
+import { Patch } from 'src/shared/services/patcherino/patch';
+import { JJ } from 'src/shared/test';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -27,7 +30,7 @@ export class MealSelectionComponent implements OnInit {
   carbsFactor;
   @Input('group') formGroup: FormGroup;
   @Output('close') close = new EventEmitter<void>();
-  @ViewChild("mealSel",{static: false}) ref : ElementRef;
+  @ViewChild("mealSel", { static: false }) ref: ElementRef;
 
   constructor(private fb: FormBuilder, private settings: SettingsService, private dialog: MatDialog) {
     this.mealCalcHelpForm = this.fb.group({
@@ -40,10 +43,6 @@ export class MealSelectionComponent implements OnInit {
   calculateKE() {
     if (this.mealCalcHelpForm.valid) {
 
-      let u = { kek: "kekorino" };
-      let Z = { 1: u, 2: u };
-      alert(JSON.stringify(Z));
-
       try {
         let res = Number.parseFloat(this.mealCalcHelpForm.get("amount").value) * Number.parseFloat(this.mealCalcHelpForm.get("carbsFactor").value) * 0.01 * this.carbsFactor;
         res = Math.round(res);
@@ -53,6 +52,27 @@ export class MealSelectionComponent implements OnInit {
 
       }
 
+
+      let z: any = { id: "0" };
+      z.kek = { id: "1", u: z, array: [{ id: "arr1" }], kk: { id: "2", asd: { id: "3", rel: z } } };
+      z.self = z; 
+
+      let TestObj: any = { id: "0", kek: { id: "1", jj: { id: "0" } } };
+      TestObj.self = TestObj;
+      let patch = new Patch([], [{ id: "0", jj: [{id:"arrayNeu"},{id:"0"}] }, { id: "1", asd: { id: "999" } }]);
+      Patcherino.applyOn(z, patch);
+      console.log("reeeady");
+
+      let kek = new JJ();
+      kek.id = "asd";
+      kek.test = "tt";
+      kek.u = "u";
+      for (let k in kek) {
+        console.log("PROP: " + k);
+      }
+      let zuzu = new Patch([{ id: "asd", u: "lel" }], [])
+      Patcherino.applyOn(kek, zuzu);
+      console.log("öööö");
     }
   }
 
@@ -67,7 +87,7 @@ export class MealSelectionComponent implements OnInit {
     const dialogRef = this.dialog.open(FoodPickerComponent, {
       width: '80%',
       height: '600px',
-      data: {  }, panelClass: "full_screen_dialog"
+      data: {}, panelClass: "full_screen_dialog"
     });
     event.preventDefault();
     event.stopPropagation();
