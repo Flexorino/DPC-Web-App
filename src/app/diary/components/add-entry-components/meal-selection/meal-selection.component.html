@@ -4,8 +4,8 @@
     <div> 
         <div [formGroup]="formGroup">
             <div>
-                <mat-form-field class="fullWidthInput">
-                    <input class="fullWidthInput" matInput placeholder="Nahrung" type="text">
+                <mat-form-field class="fullWidthInput" (click)="openDialog($event)">
+                    <input #mealSel  class="fullWidthInput" matInput placeholder="Nahrung" type="text">
                 </mat-form-field>
             </div>
             <div>

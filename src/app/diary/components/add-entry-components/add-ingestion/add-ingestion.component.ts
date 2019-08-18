@@ -1,7 +1,5 @@
 import { AddIngestionActions } from './add-ingestion.actions';
-import { FullScreenModalCloser } from './../../../../shared/components/base-full-screen-modal/full_screen_closer.service';
 import { SettingsService } from 'src/shared/services/settings.service';
-import { BSUnit } from './../../../../shared/services/BSUnit';
 import { pipe } from 'rxjs';
 import { ActivatedRouteSnapshot, ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
@@ -10,6 +8,8 @@ import { MatStepper, MatStep } from '@angular/material/stepper';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { Store } from '@ngrx/store';
 import { CompletableAction } from 'src/shared/actions/CompletableAction';
+import { BSUnit } from 'src/shared/services/BSUnit';
+import { FullScreenModalCloser } from 'src/shared/components/base-full-screen-modal/full_screen_closer.service';
 
 @Component({
   selector: 'app-add-ingestion',
@@ -18,6 +18,7 @@ import { CompletableAction } from 'src/shared/actions/CompletableAction';
 })
 export class AddIngestionComponent implements OnInit, AfterViewInit {
 
+  // util:
   isLastStep: boolean = false;
   currentStep = 0;
   step: MatStep;
@@ -25,6 +26,25 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
   bsUnit: BSUnit;
   delayedBolus = false;
   ready = false;
+
+  isLinear = false;
+  firstFormGroup: FormGroup;
+  secondFormGroup: FormGroup;
+  mainFormGroup: FormGroup;
+
+  private fragmentSubscription;
+
+  constructor(
+    private _formBuilder: FormBuilder,
+    private currentRoute: ActivatedRoute,
+    private router: Router,
+    private settings: SettingsService,
+    private closer: FullScreenModalCloser,
+    private store: Store<any>
+  ) {
+    this.bsUnit = settings.bsUnitSetting;
+  }
+
 
   private handleFragmentNavigationStuff() {
     this.fragmentSubscription = this.currentRoute.fragment.subscribe(z => {
@@ -64,23 +84,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
 
   @ViewChild("stepper", { static: false }) private stepper: MatStepper;
 
-  isLinear = false;
-  firstFormGroup: FormGroup;
-  secondFormGroup: FormGroup;
-  mainFormGroup: FormGroup;
-  private fragmentSubscription;
 
-  constructor(
-    private _formBuilder: FormBuilder,
-    private currentRoute: ActivatedRoute,
-    private router: Router,
-    private settings: SettingsService,
-    private closer: FullScreenModalCloser,
-    private store: Store<any>
-  ) {
-
-    this.bsUnit = settings.bsUnitSetting;
-  }
 
   private initializeForms(): void {
     let cur: Date = new Date();

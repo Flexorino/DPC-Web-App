@@ -27,17 +27,18 @@ import { DiaryEffects } from 'src/shared/effects/entries-effects';
 import { StoreModule } from '@ngrx/store';
 import { diaryReducer } from 'src/shared/model/redux/Diary';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AddEntryComponent } from './diary/components/add-entry/add-entry.component';
+import { AddEntryComponent } from './diary/components/add-entry-components/add-entry/add-entry.component';
 import { MaterialModule } from './material-module';
 import { CollViewComponent } from './configs/component/coll-view/coll-view.component';
 import { UserEffects } from 'src/shared/effects/user-effects';
 import { userReducer } from 'src/shared/model/redux/user-reducer';
 import { BaseFullScreenModalComponent } from 'src/shared/components/base-full-screen-modal/base-full-screen-modal.component';
 import { AddOverviewComponent } from './diary/components/add-overview/add-overview.component';
-import { AddIngestionComponent } from './diary/components/add-ingestion/add-ingestion.component';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
-import { MealSelectionComponent } from './diary/components/meal-selection/meal-selection.component';
 import { AddIngestionEffects } from 'src/shared/effects/add-ingestion-effects';
+import { MealSelectionComponent } from './diary/components/add-entry-components/meal-selection/meal-selection.component';
+import { AddIngestionComponent } from './diary/components/add-entry-components/add-ingestion/add-ingestion.component';
+import { FoodPickerComponent } from './diary/components/add-entry-components/food-picker/food-picker.component';
 
 
 @NgModule({
@@ -60,7 +61,8 @@ import { AddIngestionEffects } from 'src/shared/effects/add-ingestion-effects';
     BaseFullScreenModalComponent,
     AddOverviewComponent,
     AddIngestionComponent,
-    MealSelectionComponent  
+    MealSelectionComponent,
+    FoodPickerComponent  
   ],
   imports: [
     ReactiveFormsModule,
@@ -79,6 +81,6 @@ import { AddIngestionEffects } from 'src/shared/effects/add-ingestion-effects';
   ],
   providers: [BloodSugarPipe, CarbsPipe,{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}],
   bootstrap: [AppComponent],
-  entryComponents: [AddEntryComponent]
+  entryComponents: [AddEntryComponent, FoodPickerComponent]
 })
 export class AppModule { }

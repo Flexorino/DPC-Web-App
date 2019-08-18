@@ -2,7 +2,7 @@ import { DiaryNavigationService } from './../../../shared/services/diary.navigat
 import { Subscription } from 'rxjs';
 import { PageTitleService } from './../../../shared/services/title.service';
 import { DiaryNavActions } from './diary-nav.actions';
-import { AddEntryComponent } from './../components/add-entry/add-entry.component';
+import { AddEntryComponent } from '../components/add-entry-components/add-entry/add-entry.component';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store, select } from '@ngrx/store';
@@ -18,7 +18,7 @@ export class DiaryNavComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if(this.navigationSubscription){
       this.navigationSubscription.unsubscribe();
-    }
+    } 
   }
   
   public currentSelectedDiary$;

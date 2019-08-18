@@ -1,5 +1,5 @@
 
-import { BasicActionProps } from './../../../../../shared/actions/basic-action-props';
+import { BasicActionProps } from '../../../../../../shared/actions/basic-action-props';
 import { AddEntryComponent } from '../add-entry.component';
 import { CompletableAction } from 'src/shared/actions/CompletableAction';
 import { EntryInputData } from '../entry-input-data';

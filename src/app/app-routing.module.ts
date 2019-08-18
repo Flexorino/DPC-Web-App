@@ -1,4 +1,4 @@
-import { AddIngestionComponent } from './diary/components/add-ingestion/add-ingestion.component';
+
 import { state } from '@angular/animations';
 import { CallBackGuard } from './diary/services/callback-guard';
 
@@ -15,6 +15,8 @@ import { DiaryNavComponent } from './diary/diary-nav/diary-nav.component';
 import { DiaryStatisticsComponent } from './diary/components/diary-statistics/diary-statistics.component';
 import { DiaryListComponent } from './diary/components/diary-list/diary-list.component';
 import { AddOverviewComponent } from './diary/components/add-overview/add-overview.component';
+import { AddIngestionComponent } from './diary/components/add-entry-components/add-ingestion/add-ingestion.component';
+
 
 
 const routes: Routes = [

@@ -1,4 +1,4 @@
-import { AddEntryActions } from './../../../app/diary/components/add-entry/add-entry.actions';
+import { AddEntryActions } from '../../../app/diary/components/add-entry-components/add-entry/add-entry.actions';
 import { Entry } from '../diary/entry/entry';
 import { createReducer, on } from '@ngrx/store';
 import { state } from '@angular/animations';

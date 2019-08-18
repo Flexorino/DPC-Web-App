@@ -1,6 +1,6 @@
 import { DiaryNavActions } from './../../app/diary/diary-nav/diary-nav.actions';
 import { Action } from 'rxjs/internal/scheduler/Action';
-import { AddEntryActions } from './../../app/diary/components/add-entry/add-entry.actions';
+import { AddEntryActions } from '../../app/diary/components/add-entry-components/add-entry/add-entry.actions';
 import { DiaryListActions } from './../../app/diary/components/diary-list/diary-list.actions';
 import { Store } from '@ngrx/store';
 import { Entry } from 'src/shared/model/diary/entry/entry';

@@ -1,7 +1,7 @@
 import { CompletableAction } from 'src/shared/actions/CompletableAction';
-import { BasicActionProps } from './../../../../shared/actions/basic-action-props';
+import { BasicActionProps } from '../../../../../shared/actions/basic-action-props';
 import { AddEntryConfrimProps } from './custom-actions/AddEntryConfirmProps';
-import { SettingsService } from './../../../../shared/services/settings.service';
+import { SettingsService } from '../../../../../shared/services/settings.service';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';

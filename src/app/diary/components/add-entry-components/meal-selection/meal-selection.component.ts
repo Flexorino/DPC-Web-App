@@ -1,5 +1,7 @@
+import { FoodPickerComponent } from './../food-picker/food-picker.component';
+import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder, Validators, FormGroup, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { SettingsService } from 'src/shared/services/settings.service';
 import { stringify } from '@angular/compiler/src/util';
@@ -25,9 +27,9 @@ export class MealSelectionComponent implements OnInit {
   carbsFactor;
   @Input('group') formGroup: FormGroup;
   @Output('close') close = new EventEmitter<void>();
+  @ViewChild("mealSel",{static: false}) ref : ElementRef;
 
-
-  constructor(private fb: FormBuilder, private settings: SettingsService) {
+  constructor(private fb: FormBuilder, private settings: SettingsService, private dialog: MatDialog) {
     this.mealCalcHelpForm = this.fb.group({
       carbsFactor: ['', [Validators.required, Validators.max(100), Validators.min(1)]],
       amount: ['', [Validators.required, Validators.min(1)]]
@@ -59,6 +61,21 @@ export class MealSelectionComponent implements OnInit {
 
   closeThis() {
     this.close.next(null);
+  }
+
+  openDialog(event: Event): void {
+    const dialogRef = this.dialog.open(FoodPickerComponent, {
+      width: '250px',
+      data: {  }
+    });
+    event.preventDefault();
+    event.stopPropagation();
+    this.ref.nativeElement.blur();
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.ref.nativeElement.blur();
+    });
+
   }
 
 }

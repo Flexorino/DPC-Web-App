@@ -1,4 +1,4 @@
-import { BasicActionProps } from './../../../../shared/actions/basic-action-props';
+
 import { state } from '@angular/animations';
 import { createAction, props } from '@ngrx/store';
 import { CompletableAction } from 'src/shared/actions/CompletableAction';

@@ -1,4 +1,4 @@
-import { BasicActionProps } from './../../../../shared/actions/basic-action-props';
+import { BasicActionProps } from '../../../../../shared/actions/basic-action-props';
 import { AddEntryConfrimProps } from './custom-actions/AddEntryConfirmProps';
 import { state } from '@angular/animations';
 import { createAction, props } from '@ngrx/store';
