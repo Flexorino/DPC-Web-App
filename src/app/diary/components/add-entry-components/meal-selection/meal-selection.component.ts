@@ -65,8 +65,9 @@ export class MealSelectionComponent implements OnInit {
 
   openDialog(event: Event): void {
     const dialogRef = this.dialog.open(FoodPickerComponent, {
-      width: '250px',
-      data: {  }
+      width: '80%',
+      height: '600px',
+      data: {  }, panelClass: "full_screen_dialog"
     });
     event.preventDefault();
     event.stopPropagation();

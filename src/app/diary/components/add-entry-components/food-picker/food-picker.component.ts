@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-food-picker',
@@ -6,10 +7,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./food-picker.component.scss']
 })
 export class FoodPickerComponent implements OnInit {
-
-  constructor() { }
+  searchSnippet : string;
+  constructor(
+    public dialogRef: MatDialogRef<FoodPickerComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any) {}
 
   ngOnInit() {
   } 
-
+  onNoClick() {
+    this.dialogRef.close();
+  }
 }

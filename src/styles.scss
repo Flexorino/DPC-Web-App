@@ -3,13 +3,10 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .full_screen_dialog {
-    width: 100% !important;
-    height: 100% !important;
     max-width: 100% !important;
 
     mat-dialog-container {
-        border-radius: 0 !important;
-        padding: 0;
+        padding: 10px;
     }
 }
 
@@ -30,4 +27,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
         height: auto;
     }
 
+
+    .cdk-overlay-pane {
+        max-width: 100% !important;
+    }
 }

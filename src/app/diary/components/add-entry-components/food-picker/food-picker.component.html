@@ -1,1 +1,15 @@
-asdasd
+<h1 mat-dialog-title>Nahrung auswählen</h1>
+<div id="modalBody">
+
+    <mat-tab-group mat-stretch-tabs>
+        <mat-tab label="Gespeichert">
+            <input class="fullWidthInput" [(ngModel)]="searchSnippet" [ngModelOptions]="{standalone: true}"
+                placeholder="Suche">
+        </mat-tab>
+        <mat-tab label="Manuell"> Content 2 </mat-tab>
+    </mat-tab-group>
+</div>
+<div mat-dialog-actions id="mat-dialog-actions">
+    <button mat-button (click)="onNoClick()" mat-stroked-button color="warn">Abbrechen</button>
+    <button mat-button [mat-dialog-close]="" cdkFocusInitial mat-stroked-button color="primary">OK</button>
+</div>
