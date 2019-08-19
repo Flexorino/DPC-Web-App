@@ -1,6 +1,9 @@
 import { filter, map } from 'rxjs/operators';
 import { Patch } from './patch';
 import { IdentifierArray } from './id_patch_array';
+import { Entry } from 'src/shared/model/diary/entry/entry';
+import { ReferenceAst } from '@angular/compiler';
+import { type } from 'os';
 export class Patcherino {
 
     public static applyOn(anchor: any, patch: Patch) {
@@ -50,27 +53,53 @@ export class Patcherino {
     private static createObjectMap(anchor: any, patch: Patch) {
         let objects = this.deepSearch(anchor, []);
         let set = new Set();
-        patch.patches.forEach(x => this.getRefsOfPatchObjects(x).forEach(y => set.add(y)));
-        patch.puts.forEach(x => this.getRefsOfPatchObjects(x).forEach(y => set.add(y)));
+        let typeDefs = {};
+        patch.patches.forEach(x => {
+            let refRes = this.getRefsOfPatchObjects(x);
+            refRes.ids.forEach(y => set.add(y));
+            typeDefs = { ...typeDefs, ...refRes.typeDefs };
+        });
+        patch.puts.forEach(x => {
+            let refRes = this.getRefsOfPatchObjects(x);
+            refRes.ids.forEach(y => set.add(y));
+            typeDefs = { ...typeDefs, ...refRes.typeDefs };
+        });
         console.log("set:");
         set.forEach(x => console.log(x));
         let toCreate = [];
         Array.from(set).filter(x => !Object.keys(objects).includes(x)).forEach(element => {
             toCreate.push(element);
         });
-        toCreate.forEach(x => objects[x] = { id: x });
+        toCreate.forEach(x => {
+            if (typeDefs[x]) {
+                objects[x] = new typeDefs[x](x);
+            } else {
+                objects[x] = { id: x };
+            }
+        });
         return objects;
     }
 
     private static getRefsOfPatchObjects(obj: any) {
         let ids = [];
+        let typeDef = {};
         ids.push(obj["id"]);
+        if (obj.constructor !== Object) {
+            typeDef[obj.id] = obj.constructor;
+        } else if (obj._type) {
+            typeDef[obj.id] = obj._type;
+        }
         for (let prop in obj) {
             let propValue = obj[prop];
             let z = typeof (propValue);
             if (typeof (propValue) === 'object') {
                 if (propValue["id"] && !ids.includes(propValue["id"])) {
                     ids.push(propValue["id"]);
+                    if (propValue.constructor !== Object) {
+                        typeDef[propValue.id] = propValue.constructor;
+                    } else if (propValue._type) {
+                        typeDef[propValue.id] = propValue._type;
+                    }
                 }
             }
             if (Array.isArray(propValue)) {
@@ -78,12 +107,17 @@ export class Patcherino {
                     if (typeof (x) === 'object') {
                         if (x["id"] && !ids.includes(x["id"])) {
                             ids.push(x["id"]);
+                            if (x.constructor !== Object) {
+                                typeDef[x.id] = x.constructor;
+                            } else if (x._type) {
+                                typeDef[x.id] = x._type;
+                            }
                         }
                     }
                 });
             }
         }
-        return ids;
+        return { ids: ids, typeDefs: typeDef };
     }
 
     private static deepSearch(node: any, alreadyVisited: Array<any>): any {
