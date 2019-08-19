@@ -3,7 +3,6 @@ import { Patch } from './patch';
 import { IdentifierArray } from './id_patch_array';
 import { Entry } from 'src/shared/model/diary/entry/entry';
 import { ReferenceAst } from '@angular/compiler';
-import { type } from 'os';
 export class Patcherino {
 
     public static applyOn(anchor: any, patch: Patch) {
