@@ -3,8 +3,15 @@
 
     <mat-tab-group mat-stretch-tabs>
         <mat-tab label="Gespeichert">
-            <input class="fullWidthInput" [(ngModel)]="searchSnippet" [ngModelOptions]="{standalone: true}"
-                placeholder="Suche">
+            <mat-form-field class="fullWidthInput">
+                <input (ngModelChange)="searchChanged($event)" matInput [(ngModel)]="searchSnippet"
+                    [ngModelOptions]="{standalone: true}" placeholder="Suche">
+            </mat-form-field>
+            <div id="food-List">
+                <mat-list role="list">
+                    <mat-list-item matRipple *ngFor="let foodItem of food | async"> {{foodItem.name}}</mat-list-item>
+                </mat-list>
+            </div>
         </mat-tab>
         <mat-tab label="Manuell"> Content 2 </mat-tab>
     </mat-tab-group>
