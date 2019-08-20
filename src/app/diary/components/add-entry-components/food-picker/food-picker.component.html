@@ -9,7 +9,23 @@
             </mat-form-field>
             <div id="food-List">
                 <mat-list role="list">
-                    <mat-list-item matRipple *ngFor="let foodItem of food | async"> {{foodItem.name}}</mat-list-item>
+                    <mat-accordion [multi]="false">
+                        <mat-expansion-panel *ngFor="let foodItem of food | async" #panel>
+                            <mat-expansion-panel-header [ngClass]="{'selected-item': foodItem.id === currentSelectedFoodId }" matRipple (click)="panel.toggle(); selectFood(foodItem.id)" class="expansion-header">
+                                <mat-panel-title>
+                                    {{foodItem.name}}
+                                </mat-panel-title>
+                                <div class="invisibleExpandHandler" (click)="panel.toggle();$event.stopPropagation();" (mousedown)="$event.stopPropagation();">
+                                    
+                                </div>
+
+                            </mat-expansion-panel-header>
+                            <div class="descr-row"><div class="descr-content">KH pro 100g: </div><div class="descr-content">{{foodItem.carbsFactor? foodItem.carbsFactor * 100 +"g": "/"}}</div></div>
+                            <div class="descr-row"><div class="descr-content">Resorption: </div><div class="descr-content">{{foodItem.absorption? foodItem.absorption : "/"}}</div></div>
+                            <div>Beschreibung:</div>
+                            <div>{{foodItem.description? foodItem.description : "/"}}</div>
+                        </mat-expansion-panel>
+                    </mat-accordion>
                 </mat-list>
             </div>
         </mat-tab>
@@ -18,5 +34,5 @@
 </div>
 <div mat-dialog-actions id="mat-dialog-actions">
     <button mat-button (click)="onNoClick()" mat-stroked-button color="warn">Abbrechen</button>
-    <button mat-button [mat-dialog-close]="" cdkFocusInitial mat-stroked-button color="primary">OK</button>
+    <button mat-button [disabled]="!isValid" [mat-dialog-close]="" cdkFocusInitial mat-stroked-button color="primary">OK</button>
 </div>

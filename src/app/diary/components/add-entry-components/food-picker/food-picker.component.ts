@@ -7,16 +7,29 @@ import { Diary } from 'src/shared/model/diary/diary';
 import { Observable, Subscription, Subject, BehaviorSubject } from 'rxjs';
 import { Food } from 'src/shared/model/diary/food';
 
+
+enum PickMode {
+  DB, CUSTOM
+}
+
 @Component({
   selector: 'app-food-picker',
   templateUrl: './food-picker.component.html',
   styleUrls: ['./food-picker.component.scss']
 })
+
+
 export class FoodPickerComponent implements OnInit, OnDestroy {
 
-  searchSnippet: string = "";
+  searchSnippet: string = ""
   food: Observable<Array<Food>>;
   private searchChange: BehaviorSubject<String> = new BehaviorSubject("");
+  private mode: PickMode = PickMode.DB;
+  private currentSelectedFoodId: string = null;
+
+  get isValid(): boolean {
+    return this.mode === PickMode.DB && this.currentSelectedFoodId !== null ? true : false;
+  }
 
   constructor(
     public dialogRef: MatDialogRef<FoodPickerComponent>,
@@ -43,5 +56,9 @@ export class FoodPickerComponent implements OnInit, OnDestroy {
   searchChanged(newValue) {
     console.log("change");
     this.searchChange.next(newValue);
+  }
+
+  selectFood(id: string){
+    this.currentSelectedFoodId = id;
   }
 }

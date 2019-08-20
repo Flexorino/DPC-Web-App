@@ -1,0 +1,54 @@
+.fullWidthInput {
+  width: 100%;
+}
+:host {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+#modalBody {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+  overflow: hidden;
+}
+#content {
+  height: 100%;
+}
+h1 {
+  margin: 0;
+}
+#mat-dialog-actions {
+  margin: 0;
+  display: flex;
+  padding: 0;
+}
+#mat-dialog-actions button {
+  flex-basis: 40%;
+  flex-grow: 1;
+}
+#food-List {
+  height: 60%;
+  overflow: scroll;
+}
+mat-expansion-panel {
+  box-shadow: none !important;
+}
+.expansion-header {
+  position: relative;
+}
+.invisibleExpandHandler {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 2rem;
+  z-index: 50;
+}
+.descr-row {
+  display: flex;
+}
+.descr-content {
+  flex-basis: 49%;
+  flex-grow: 1;
+}
