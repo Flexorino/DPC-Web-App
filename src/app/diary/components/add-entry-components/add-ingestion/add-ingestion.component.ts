@@ -1,3 +1,4 @@
+import { AddEntryActionsProps } from './../sharedActionsProps.ts/add-entry-props';
 import { AddIngestionActions } from './add-ingestion.actions';
 import { SettingsService } from 'src/shared/services/settings.service';
 import { pipe } from 'rxjs';
@@ -10,6 +11,7 @@ import { Store } from '@ngrx/store';
 import { CompletableAction } from 'src/shared/actions/CompletableAction';
 import { BSUnit } from 'src/shared/services/BSUnit';
 import { FullScreenModalCloser } from 'src/shared/components/base-full-screen-modal/full_screen_closer.service';
+import { Entry } from 'src/shared/model/diary/entry/entry';
 
 @Component({
   selector: 'app-add-ingestion',
@@ -25,7 +27,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
   sum = 0;
   bsUnit: BSUnit;
   delayedBolus = false;
-  ready = false;
+  loading = true;
 
   isLinear = false;
   firstFormGroup: FormGroup;
@@ -110,7 +112,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
     this.initializeForms();
     let action = AddIngestionActions.OPENED(new CompletableAction(this));
     this.store.dispatch(action);
-    action.then(x => this.ready = true);
+    action.then(x => this.loading = false);
 
 
   }
@@ -160,6 +162,12 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
   }
 
   submit() {
-    this.closer.close();
+    let action = new AddEntryActionsProps(this, new Entry(123));
+    this.store.dispatch(AddIngestionActions.CONFIRM(action));
+    this.loading = true;
+    action.then(x => this.closer.close()).catch(err => {
+      alert("Ein Fehler ist aufgetreten. Bitte versuchen Sie es päter erneut");
+      this.closer.close();
+    })
   }
 }
