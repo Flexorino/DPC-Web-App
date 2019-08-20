@@ -54,17 +54,21 @@ h3 {
 
 .delayedBolus {
     max-height: 20px;
-    padding: 5px;
     overflow: hidden;
-    transition: max-height 0.2s;
+    transition: max-height 0.4s;
+    margin-bottom: 5px;
 }
 
 .delayedBolusExpanded {
-    max-height: 80px;
+    max-height: 320px;
 }
 
 button {
     margin-bottom: 10px;
+}
+
+.delayedBolusContent {
+    margin-top: 20px;
 }
 
 

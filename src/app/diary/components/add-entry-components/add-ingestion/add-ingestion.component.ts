@@ -30,6 +30,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
   isLinear = false;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
+  thirdFormGroup: FormGroup;
   mainFormGroup: FormGroup;
 
   private fragmentSubscription;
@@ -98,6 +99,9 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
     this.secondFormGroup = this._formBuilder.group({
       meals: this._formBuilder.array([])
     });
+    this.thirdFormGroup = this._formBuilder.group({
+      mealBolus: []
+    });
     this.mainFormGroup = this._formBuilder.group({ timeAndBs: this.firstFormGroup, mealForm: this.secondFormGroup });
     this.addMeal();
   }
@@ -109,6 +113,11 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
     action.then(x => this.ready = true);
 
 
+  }
+
+  get mealBolusValue() {
+    let z = this.thirdFormGroup.get('mealBolus').value;
+    return z ? z : 0;
   }
 
   get meals() {
