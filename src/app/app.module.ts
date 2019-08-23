@@ -43,6 +43,9 @@ import { AddEntryTimestampPickerComponent } from './diary/components/add-entry-c
 import { BsAddEntryMeasureInputComponent } from './diary/components/add-entry-components/inputs/components/bs-add-entry-measure-input/bs-add-entry-measure-input.component';
 import { AddEntryFoodPickerComponent } from './diary/components/add-entry-components/inputs/components/add-entry-food-picker/add-entry-food-picker.component';
 import { FoodIntakeSummationComponent } from './diary/components/add-entry-components/misc/food-intake-summation/food-intake-summation.component';
+import { ListFoodPickerComponent } from 'src/shared/components/list-food-picker/list-food-picker.component';
+import { FoodEditorComponent } from 'src/shared/components/food-editor/food-editor.component';
+
 
 
 
@@ -71,7 +74,9 @@ import { FoodIntakeSummationComponent } from './diary/components/add-entry-compo
     AddEntryTimestampPickerComponent,
     BsAddEntryMeasureInputComponent,
     AddEntryFoodPickerComponent,
-    FoodIntakeSummationComponent  
+    FoodIntakeSummationComponent,
+    ListFoodPickerComponent,
+    FoodEditorComponent  
   ],
   imports: [
     ReactiveFormsModule,
