@@ -24,7 +24,7 @@ export class BsAddEntryMeasureInputComponent implements OnInit, IEntryBSPicker {
 
   ngOnInit() {
     this.group.addControl("bsMeasure", this.fb.control('', [Validators.min(1 * this.bsUnit.factor), Validators.max(30 * this.bsUnit.factor)]))
-    this.group.valueChanges.subscribe(x => this.group.valid ? this.bs.next(this.group.get("bsMeasure").value as number) : null);
+    this.group.valueChanges.subscribe(x => this.group.valid ? this.group.get("bsMeasure").value ? this.bs.next(this.group.get("bsMeasure").value as number / this.bsUnit.factor) : this.bs.next(null) : null);
   }
 
 }
