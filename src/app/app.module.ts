@@ -42,6 +42,8 @@ import { FoodPickerComponent } from './diary/components/add-entry-components/foo
 import { AddEntryTimestampPickerComponent } from './diary/components/add-entry-components/inputs/components/add-entry-timestamp-picker/add-entry-timestamp-picker.component';
 import { BsAddEntryMeasureInputComponent } from './diary/components/add-entry-components/inputs/components/bs-add-entry-measure-input/bs-add-entry-measure-input.component';
 import { AddEntryFoodPickerComponent } from './diary/components/add-entry-components/inputs/components/add-entry-food-picker/add-entry-food-picker.component';
+import { FoodIntakeSummationComponent } from './diary/components/add-entry-components/misc/food-intake-summation/food-intake-summation.component';
+
 
 
 @NgModule({
@@ -68,7 +70,8 @@ import { AddEntryFoodPickerComponent } from './diary/components/add-entry-compon
     FoodPickerComponent,
     AddEntryTimestampPickerComponent,
     BsAddEntryMeasureInputComponent,
-    AddEntryFoodPickerComponent  
+    AddEntryFoodPickerComponent,
+    FoodIntakeSummationComponent  
   ],
   imports: [
     ReactiveFormsModule,
