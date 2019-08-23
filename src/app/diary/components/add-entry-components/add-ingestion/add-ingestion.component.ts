@@ -13,6 +13,7 @@ import { CompletableAction } from 'src/shared/actions/CompletableAction';
 import { FullScreenModalCloser } from 'src/shared/components/base-full-screen-modal/full_screen_closer.service';
 import { Entry } from 'src/shared/model/diary/entry/entry';
 import { IEntryTimestampPicker } from '../inputs/interfaces/IEntryTimestampPicker';
+import { IEntryFoodIntakeListPicker } from '../inputs/interfaces/IEntryFoodIntakeListPicker';
 
 @Component({
   selector: 'app-add-ingestion',
@@ -33,6 +34,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
   bsMeasureFormGroup: FormGroup = new FormGroup({});
   @ViewChild("bsMeasure", { static: false }) bsMeasurePicker: IEntryBSPicker;
   foodPickerFormGroup: FormGroup = new FormGroup({});
+  @ViewChild("foodIntakeListPicker", { static: false }) foodIntakeListPicker: IEntryFoodIntakeListPicker;
 
   // subscriptions
   private contextSubscription: Subscription;
@@ -58,6 +60,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
     this.handleFragmentNavigationStuff();
     this.timeStampPicker.timestamp.subscribe(x => console.log(new Date(x * 1000).toISOString()))
     this.bsMeasurePicker.bs.subscribe(x => console.log("BS: " + x));
+    this.foodIntakeListPicker.foodArray.subscribe(x => console.log("CHANGE: " + JSON.stringify(x)))
 
   }
 

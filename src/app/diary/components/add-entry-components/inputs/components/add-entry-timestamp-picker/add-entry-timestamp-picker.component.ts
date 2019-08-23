@@ -23,13 +23,15 @@ export class AddEntryTimestampPickerComponent implements OnInit, IEntryTimestamp
     this.group.addControl("time", this.fb.control(time, Validators.required));
     this.group.addControl("date", this.fb.control(curdate, Validators.required));
     this.group.valueChanges.subscribe((y) => {
-      let timestamp = 0;
-      let secondsString: string = this.group.get("time").value;
-      timestamp += 60 * Number.parseInt(secondsString.split(':')[0]);
-      timestamp += Number.parseInt(secondsString.split(':')[1]);
-      let date: Date = new Date(<string>this.group.get("date").value);
-      timestamp += +date/1000;
-      this.timestamp.next(timestamp);
+      if (this.group.valid) {
+        let timestamp = 0;
+        let secondsString: string = this.group.get("time").value;
+        timestamp += 60 * Number.parseInt(secondsString.split(':')[0]);
+        timestamp += Number.parseInt(secondsString.split(':')[1]);
+        let date: Date = new Date(<string>this.group.get("date").value);
+        timestamp += +date / 1000;
+        this.timestamp.next(timestamp);
+      }
     });
   }
 

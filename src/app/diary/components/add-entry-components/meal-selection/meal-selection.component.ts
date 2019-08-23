@@ -40,7 +40,7 @@ export class MealSelectionComponent implements OnInit, IEntryFoodIntakePicker {
 
   mealCalcHelpForm: FormGroup;
   extrasMatcher = new MyErrorStateMatcher();
-  keFactor : number;
+  keFactor: number;
   currentSelectedFood: Food;
 
 
@@ -67,11 +67,9 @@ export class MealSelectionComponent implements OnInit, IEntryFoodIntakePicker {
   }
 
   ngOnInit() {
-    this.formGroup.addControl('KE',this.fb.control(''))
+    this.formGroup.addControl('KE', this.fb.control(''))
     this.formGroup.get("KE").valueChanges.subscribe(x => {
-      if(this.formGroup.valid){
-        this.foodIntake.next({food: null, amount: Number.parseInt(x)});
-      }
+      this.foodIntake.next({ food: null, amount: Number.parseInt(x) });
     })
   }
 

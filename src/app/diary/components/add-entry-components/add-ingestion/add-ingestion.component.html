@@ -5,7 +5,7 @@
     <div>
         <mat-horizontal-stepper [linear]="isLinear" #stepper [formGroup]="mainFormGroup">
             <mat-step [stepControl]="firstFormGroup">
-                <div formGroupName="timeAndBs">
+                <div>
                     <ng-template matStepLabel>Zeit & <br> Blutzucker</ng-template>
                     <h3>Zeitpunkt:</h3>
                     <app-add-entry-timestamp-picker #timeStamp [group]="timestampFormGroup">
@@ -15,11 +15,11 @@
                     </app-bs-add-entry-measure-input>
                 </div>
             </mat-step>
-            <mat-step>
-                <div formGroupName="mealForm">
+            <mat-step [stepControl]="secondFormGroup">
+                <div>
                     <ng-template matStepLabel>Nahrung</ng-template>
                     <h3>Nahrung</h3>
-                    <app-add-entry-food-picker #foodPicker [group]="foodPickerFormGroup"> </app-add-entry-food-picker>
+                    <app-add-entry-food-picker #foodIntakeListPicker [group]="foodPickerFormGroup"> </app-add-entry-food-picker>
                 </div>
             </mat-step>
             <mat-step>
