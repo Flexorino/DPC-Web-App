@@ -46,7 +46,11 @@ export class FoodPickerComponent implements OnInit, OnDestroy, IEntryFoodPicker 
     this.filteredFood = searchRes.pipe(map(x => {
       let food: Array<Food> = x[0];
       let filter: string = x[1];
-      return food.filter(x => x.name.toLowerCase().includes(filter.toLowerCase()));
+      return food.filter(x => x.name.toLowerCase().includes(filter.toLowerCase())).sort((a, b) => {
+        if (a.name < b.name) { return -1; }
+        if (a.name > b.name) { return 1; }
+        return 0;
+      });
     }));
   }
   onNoClick() {
