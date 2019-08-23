@@ -10,10 +10,8 @@ import { MatStepper, MatStep } from '@angular/material/stepper';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { Store } from '@ngrx/store';
 import { CompletableAction } from 'src/shared/actions/CompletableAction';
-import { BSUnit } from 'src/shared/services/BSUnit';
 import { FullScreenModalCloser } from 'src/shared/components/base-full-screen-modal/full_screen_closer.service';
 import { Entry } from 'src/shared/model/diary/entry/entry';
-import { DiaryContext } from 'src/shared/model/diary/context/diary-context';
 import { IEntryTimestampPicker } from '../inputs/interfaces/IEntryTimestampPicker';
 
 @Component({
@@ -23,33 +21,32 @@ import { IEntryTimestampPicker } from '../inputs/interfaces/IEntryTimestampPicke
 })
 export class AddIngestionComponent implements OnInit, AfterViewInit {
 
-  // util:
-  isLastStep: boolean = false;
-  currentStep = 0;
-  step: MatStep;
-  delayedBolus = false;
-  loading = true;
-
-  isLinear = false;
+  // main form groups
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
   thirdFormGroup: FormGroup;
   mainFormGroup: FormGroup;
-  context: DiaryContext;
 
-  // subFormGroups
+  // sub form groups
   timestampFormGroup: FormGroup = new FormGroup({});
   @ViewChild("timeStamp", { static: false }) timeStampPicker: IEntryTimestampPicker;
   bsMeasureFormGroup: FormGroup = new FormGroup({});
   @ViewChild("bsMeasure", { static: false }) bsMeasurePicker: IEntryBSPicker;
   foodPickerFormGroup: FormGroup = new FormGroup({});
 
+  // subscriptions
   private contextSubscription: Subscription;
-
   private fragmentSubscription;
 
+  // misc:
+  isLastStep: boolean = false;
+  currentStep = 0;
+  delayedBolus = false;
+  loading = true;
+  @ViewChild("stepper", { static: false }) private stepper: MatStepper;
+
   constructor(
-    private _formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private currentRoute: ActivatedRoute,
     private router: Router,
     private settings: SettingsService,
@@ -57,6 +54,19 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
     private store: Store<any>
   ) { }
 
+  ngAfterViewInit(): void {
+    this.handleFragmentNavigationStuff();
+    this.timeStampPicker.timestamp.subscribe(x => console.log(new Date(x * 1000).toISOString()))
+    this.bsMeasurePicker.bs.subscribe(x => console.log("BS: " + x));
+
+  }
+
+  ngOnInit() {
+    this.initializeForms();
+    let action = AddIngestionActions.OPENED(new CompletableAction(this));
+    this.store.dispatch(action);
+    action.then(x => this.loading = false);
+  }
 
   private handleFragmentNavigationStuff() {
     this.fragmentSubscription = this.currentRoute.fragment.subscribe(z => {
@@ -84,52 +94,22 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
     }
     );
     this.stepper.selectionChange.subscribe((z: StepperSelectionEvent) => {
-      console.log("kek");
       this.router.navigate([], { fragment: z.selectedIndex + "" });
     });
   }
 
-  ngAfterViewInit(): void {
-    this.handleFragmentNavigationStuff();
-    this.timeStampPicker.timestamp.subscribe(x => console.log(new Date(x * 1000).toISOString()))
-    this.bsMeasurePicker.bs.subscribe(x => console.log("BS: " + x));
-
-  }
-
-  @ViewChild("stepper", { static: false }) private stepper: MatStepper;
-
-
-
   private initializeForms(): void {
-    this.firstFormGroup = this._formBuilder.group({
+    this.firstFormGroup = this.fb.group({
       timestamp: this.timestampFormGroup,
       bs: this.bsMeasureFormGroup
     });
-    this.secondFormGroup = this._formBuilder.group({
+    this.secondFormGroup = this.fb.group({
       meals: this.foodPickerFormGroup
     });
-    this.thirdFormGroup = this._formBuilder.group({
+    this.thirdFormGroup = this.fb.group({
       mealBolus: []
     });
-    this.mainFormGroup = this._formBuilder.group({ timeAndBs: this.firstFormGroup, mealForm: this.secondFormGroup });
-  }
-
-  ngOnInit() {
-    this.initializeForms();
-    let action = AddIngestionActions.OPENED(new CompletableAction(this));
-    this.store.dispatch(action);
-    action.then(x => this.loading = false);
-
-
-  }
-
-  get mealBolusValue() {
-    let z = this.thirdFormGroup.get('mealBolus').value;
-    return z ? z : 0;
-  }
-
-  next() {
-    this.stepper.selectedIndex += 1;
+    this.mainFormGroup = this.fb.group({ timeAndBs: this.firstFormGroup, mealForm: this.secondFormGroup });
   }
 
   submit() {

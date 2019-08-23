@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
-import { IEntryFoodPickker } from '../../interfaces/IEntryFoodPicker';
+import { IEntryFoodIntakeListPicker } from '../../interfaces/IEntryFoodIntakeListPicker';
 import { BehaviorSubject } from 'rxjs';
 import { Food } from 'src/shared/model/diary/food';
 import { FoodIntakeAttribute } from 'src/shared/model/diary/entry/attributes/food-intake-attribute';
@@ -10,7 +10,7 @@ import { FoodIntakeAttribute } from 'src/shared/model/diary/entry/attributes/foo
   templateUrl: './add-entry-food-picker.component.html',
   styleUrls: ['./add-entry-food-picker.component.scss']
 })
-export class AddEntryFoodPickerComponent implements OnInit, IEntryFoodPickker {
+export class AddEntryFoodPickerComponent implements OnInit, IEntryFoodIntakeListPicker {
   foodArray: BehaviorSubject<FoodIntakeAttribute[]> = new BehaviorSubject([]);
 
   @Input('group') group: FormGroup;
