@@ -42,21 +42,16 @@ export class MealSelectionComponent implements OnInit, IEntryFoodIntakePicker {
   extrasMatcher = new MyErrorStateMatcher();
   keFactor: number;
   currentSelectedFood: Food;
-
+  carbsFactor: number;
 
   constructor(private fb: FormBuilder, private settings: SettingsService, private dialog: MatDialog, private store: Store<{ diary: Diary }>) {
-    // this form is only for intern help usage!
-    this.mealCalcHelpForm = this.fb.group({
-      carbsFactor: ['', [Validators.required, Validators.max(100), Validators.min(1)]],
-      amount: ['', [Validators.required, Validators.min(1)]]
-    });
-    this.keFactor = settings.carbsFactorSubj.getValue();
+    this.keFactor = this.settings.carbsFactorSubj.getValue();
   }
 
   calculateKE() {
     if (this.mealCalcHelpForm.valid) {
       try {
-        let res = Number.parseFloat(this.mealCalcHelpForm.get("amount").value) * Number.parseFloat(this.mealCalcHelpForm.get("carbsFactor").value) * 0.01 * this.keFactor;
+        let res = Number.parseFloat(this.mealCalcHelpForm.get("amount").value) * this.carbsFactor * this.keFactor;
         res = Math.round(res);
         this.formGroup.get("KE").setValue(res);
       }
@@ -70,7 +65,19 @@ export class MealSelectionComponent implements OnInit, IEntryFoodIntakePicker {
     this.formGroup.addControl('KE', this.fb.control(''))
     this.formGroup.get("KE").valueChanges.subscribe(x => {
       this.foodIntake.next({ food: null, amount: Number.parseInt(x) });
-    })
+    });
+    // this form is only for intern help usage!
+    this.mealCalcHelpForm = this.fb.group({
+      carbsFactor: ['', [Validators.required, Validators.max(100), Validators.min(1)]],
+      amount: ['', [Validators.required, Validators.min(1)]]
+    });
+    this.mealCalcHelpForm.get('carbsFactor').valueChanges.subscribe(x => {
+      if (this.mealCalcHelpForm.get('carbsFactor').valid) {
+        this.carbsFactor = Number.parseFloat(this.mealCalcHelpForm.get("carbsFactor").value) * 0.01;
+      }
+    });
+
+
   }
 
   closeThis() {
@@ -85,7 +92,14 @@ export class MealSelectionComponent implements OnInit, IEntryFoodIntakePicker {
     });
     event.preventDefault();
     event.stopPropagation();
-    dialogRef.componentInstance.food.subscribe(x => this.currentSelectedFood = x);
+    dialogRef.componentInstance.food.subscribe(x => {
+      this.currentSelectedFood = x;
+      if (x) {
+        this.mealCalcHelpForm.get("carbsFactor").setValue(x.carbsFactor ? (x.carbsFactor*100).toFixed(1) : null);
+        this.carbsFactor = x.carbsFactor;
+      }
+      setTimeout(x => this.ref.nativeElement.blur(), 100);
+    });
   }
 
 }
