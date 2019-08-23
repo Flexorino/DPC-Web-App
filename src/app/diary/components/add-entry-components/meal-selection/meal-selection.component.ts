@@ -36,13 +36,14 @@ export class MealSelectionComponent implements OnInit, IEntryFoodIntakePicker {
   @Input('group') formGroup: FormGroup;
   @ViewChild("mealSel", { static: false }) ref: ElementRef;
 
-  foodIntake: BehaviorSubject<FoodIntakeAttribute> = new BehaviorSubject(null);
+  foodIntake: BehaviorSubject<FoodIntakeAttribute> = new BehaviorSubject({ food: null, amount: null });
 
   mealCalcHelpForm: FormGroup;
   extrasMatcher = new MyErrorStateMatcher();
   keFactor: number;
-  currentSelectedFood: Food;
+  currentSelectedFood: Food = null;
   carbsFactor: number;
+  eatenCarbs: number;
 
   constructor(private fb: FormBuilder, private settings: SettingsService, private dialog: MatDialog, private store: Store<{ diary: Diary }>) {
     this.keFactor = this.settings.carbsFactorSubj.getValue();
@@ -64,7 +65,13 @@ export class MealSelectionComponent implements OnInit, IEntryFoodIntakePicker {
   ngOnInit() {
     this.formGroup.addControl('KE', this.fb.control(''))
     this.formGroup.get("KE").valueChanges.subscribe(x => {
-      this.foodIntake.next({ food: null, amount: Number.parseInt(x) });
+      try {
+        this.eatenCarbs = Number.parseInt(x) / this.keFactor;
+        this.foodIntake.next({ food: this.currentSelectedFood, amount: this.eatenCarbs });
+
+      } catch (e) {
+        console.error("err");
+      }
     });
     // this form is only for intern help usage!
     this.mealCalcHelpForm = this.fb.group({
@@ -88,15 +95,16 @@ export class MealSelectionComponent implements OnInit, IEntryFoodIntakePicker {
     const dialogRef = this.dialog.open(FoodPickerComponent, {
       width: '80%',
       height: '600px',
-      data: {}, panelClass: "full_screen_dialog"
+      data: this.currentSelectedFood, panelClass: "full_screen_dialog"
     });
     event.preventDefault();
     event.stopPropagation();
     dialogRef.componentInstance.food.subscribe(x => {
       this.currentSelectedFood = x;
       if (x) {
-        this.mealCalcHelpForm.get("carbsFactor").setValue(x.carbsFactor ? (x.carbsFactor*100).toFixed(1) : null);
+        this.mealCalcHelpForm.get("carbsFactor").setValue(x.carbsFactor ? (x.carbsFactor * 100).toFixed(1) : null);
         this.carbsFactor = x.carbsFactor;
+        this.foodIntake.next({ food: x, amount: this.eatenCarbs })
       }
       setTimeout(x => this.ref.nativeElement.blur(), 100);
     });

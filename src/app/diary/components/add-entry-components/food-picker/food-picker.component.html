@@ -1,7 +1,7 @@
 <h1 mat-dialog-title>Nahrung auswählen</h1>
 <div id="modalBody">
 
-    <mat-tab-group mat-stretch-tabs>
+    <mat-tab-group mat-stretch-tabs [selectedIndex]="selectedTabIndex">
         <mat-tab label="Gespeichert">
             <mat-form-field class="fullWidthInput">
                 <input (ngModelChange)="searchChanged($event)" matInput [(ngModel)]="searchSnippet"

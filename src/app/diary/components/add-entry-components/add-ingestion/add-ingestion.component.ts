@@ -60,7 +60,10 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
     this.handleFragmentNavigationStuff();
     this.timeStampPicker.timestamp.subscribe(x => console.log(new Date(x * 1000).toISOString()))
     this.bsMeasurePicker.bs.subscribe(x => console.log("BS: " + x));
-    this.foodIntakeListPicker.foodArray.subscribe(x => console.log("CHANGE: " + JSON.stringify(x)))
+    this.foodIntakeListPicker.foodArray.subscribe(x => 
+      {
+        console.log("CHANGE: " + JSON.stringify(x));}
+        );
 
   }
 

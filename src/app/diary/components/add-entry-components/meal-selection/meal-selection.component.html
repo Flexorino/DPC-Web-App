@@ -4,9 +4,10 @@
     <div>
         <div [formGroup]="formGroup">
             <div>
-                <mat-form-field class="fullWidthInput" (click)="openDialog($event)">
+                <mat-form-field id="foodField" class="fullWidthInput" (click)="openDialog($event)">
                     <input #mealSel [value]="currentSelectedFood?.name" class="fullWidthInput" matInput
                         placeholder="Nahrung" type="text">
+                    <mat-icon id="removeFood" (click)="removeFood()">close</mat-icon>
                 </mat-form-field>
             </div>
             <div>
@@ -20,8 +21,8 @@
         <div [formGroup]="mealCalcHelpForm" class="extras">
             <div>
                 <mat-form-field class="fullWidthInput">
-                    <input  [errorStateMatcher]="extrasMatcher" class="fullWidthInput"
-                        matInput placeholder="KH-Anteil" formControlName="carbsFactor" type="number">
+                    <input [errorStateMatcher]="extrasMatcher" class="fullWidthInput" matInput placeholder="KH-Anteil"
+                        formControlName="carbsFactor" type="number">
                     <span matSuffix>Gramm pro 100 Gramm</span>
                 </mat-form-field>
             </div>

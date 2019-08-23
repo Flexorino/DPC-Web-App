@@ -20,6 +20,14 @@ mat-card {
 }
 #close {
   position: absolute;
-  top: 3px; 
-  right: 3px; 
+  top: 3px;
+  right: 3px;
+}
+#foodField {
+  position: relative;
+}
+#removeFood {
+  position: absolute;
+  height: 100%;
+  right: 2px;
 }
