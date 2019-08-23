@@ -1,26 +1,27 @@
 <mat-card>
-        <mat-icon id="close" (click)="closeThis()">close</mat-icon>
+    <mat-icon id="close" (click)="closeThis()">close</mat-icon>
 
-    <div> 
+    <div>
         <div [formGroup]="formGroup">
             <div>
                 <mat-form-field class="fullWidthInput" (click)="openDialog($event)">
-                    <input #mealSel  class="fullWidthInput" matInput placeholder="Nahrung" type="text">
+                    <input #mealSel [value]="currentSelectedFoodName | async" class="fullWidthInput" matInput
+                        placeholder="Nahrung" type="text">
                 </mat-form-field>
             </div>
             <div>
                 <mat-form-field class="fullWidthInput">
                     <input class="fullWidthInput" matInput placeholder="Menge in KE" formControlName="KE" type="number">
                     <span matSuffix>{{1/carbsFactor}}Gramm KH = 1KE</span>
-                </mat-form-field> 
+                </mat-form-field>
             </div>
         </div>
         <mat-divider></mat-divider>
         <div [formGroup]="mealCalcHelpForm" class="extras">
             <div>
                 <mat-form-field class="fullWidthInput">
-                    <input [errorStateMatcher]="extrasMatcher" class="fullWidthInput" matInput placeholder="KH-Anteil"
-                        formControlName="carbsFactor" type="number">
+                    <input [value]="carbPortionFactor | async"  [errorStateMatcher]="extrasMatcher" class="fullWidthInput"
+                        matInput placeholder="KH-Anteil" formControlName="carbsFactor" type="number">
                     <span matSuffix>Gramm pro 100 Gramm</span>
                 </mat-form-field>
             </div>

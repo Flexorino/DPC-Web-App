@@ -12,6 +12,14 @@ enum PickMode {
   DB, CUSTOM
 }
 
+export class DBFoodSelectedResult {
+  constructor(public readonly id: string) { }
+}
+
+export class CustomFoodSelectedResult {
+  constructor(public readonly id: string) { }
+}
+
 @Component({
   selector: 'app-food-picker',
   templateUrl: './food-picker.component.html',
@@ -58,7 +66,11 @@ export class FoodPickerComponent implements OnInit, OnDestroy {
     this.searchChange.next(newValue);
   }
 
-  selectFood(id: string){
+  selectFood(id: string) {
     this.currentSelectedFoodId = id;
+  }
+
+  onSubmit() {
+    this.dialogRef.close(new DBFoodSelectedResult(this.currentSelectedFoodId));
   }
 }

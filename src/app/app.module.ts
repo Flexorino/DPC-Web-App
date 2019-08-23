@@ -39,6 +39,7 @@ import { AddIngestionEffects } from 'src/shared/effects/add-ingestion-effects';
 import { MealSelectionComponent } from './diary/components/add-entry-components/meal-selection/meal-selection.component';
 import { AddIngestionComponent } from './diary/components/add-entry-components/add-ingestion/add-ingestion.component';
 import { FoodPickerComponent } from './diary/components/add-entry-components/food-picker/food-picker.component';
+import { AddEntryTimestampPickerComponent } from './diary/components/add-entry-components/add-entry-timestamp-picker/add-entry-timestamp-picker.component';
 
 
 @NgModule({
@@ -62,7 +63,8 @@ import { FoodPickerComponent } from './diary/components/add-entry-components/foo
     AddOverviewComponent,
     AddIngestionComponent,
     MealSelectionComponent,
-    FoodPickerComponent  
+    FoodPickerComponent,
+    AddEntryTimestampPickerComponent  
   ],
   imports: [
     ReactiveFormsModule,

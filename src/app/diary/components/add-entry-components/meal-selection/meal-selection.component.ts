@@ -1,4 +1,6 @@
-import { FoodPickerComponent } from './../food-picker/food-picker.component';
+import { Observable, Subject, pipe } from 'rxjs';
+import { Food } from 'src/shared/model/diary/food';
+import { FoodPickerComponent, DBFoodSelectedResult } from './../food-picker/food-picker.component';
 import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder, Validators, FormGroup, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
@@ -8,6 +10,9 @@ import { stringify } from '@angular/compiler/src/util';
 import { Patcherino } from 'src/shared/services/patcherino/patcherino';
 import { Patch } from 'src/shared/services/patcherino/patch';
 import { JJ } from 'src/shared/test';
+import { Store, select } from '@ngrx/store';
+import { Diary } from 'src/web-api';
+import { withLatestFrom, map, filter, tap } from 'rxjs/operators';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -28,16 +33,40 @@ export class MealSelectionComponent implements OnInit {
   mealCalcHelpForm: FormGroup;
   extrasMatcher = new MyErrorStateMatcher();
   carbsFactor;
+  carbPortionFactor: Observable<number | string>;
+
+
   @Input('group') formGroup: FormGroup;
   @Output('close') close = new EventEmitter<void>();
   @ViewChild("mealSel", { static: false }) ref: ElementRef;
 
-  constructor(private fb: FormBuilder, private settings: SettingsService, private dialog: MatDialog) {
+  currentSelectedFood: Observable<Food> = null;
+
+  currentSelectedFoodName;
+
+  foodPickerAnswer: Subject<any> = new Subject();
+
+
+  constructor(private fb: FormBuilder, private settings: SettingsService, private dialog: MatDialog, private store: Store<{ diary: Diary }>) {
     this.mealCalcHelpForm = this.fb.group({
       carbsFactor: ['', [Validators.required, Validators.max(100), Validators.min(1)]],
       amount: ['', [Validators.required, Validators.min(1)]]
     });
     this.carbsFactor = settings.carbsFactor;
+    let unfilteredFood = this.store.pipe(select('diary'), select('food'));
+    this.currentSelectedFood = this.foodPickerAnswer.pipe(withLatestFrom(unfilteredFood), map(
+      x => {
+        let pickerAnswer = x[0];
+        let food: Array<Food> = x[1];
+        if (pickerAnswer instanceof DBFoodSelectedResult) {
+          return food.find(x => x.id === pickerAnswer.id);
+        }
+      }
+
+    ));
+    this.carbPortionFactor = this.currentSelectedFood.pipe(map((x: Food) => x.carbsFactor ? Math.floor(x.carbsFactor * 100) : ''),
+      tap(x => this.mealCalcHelpForm.get("carbsFactor").setValue(x)));
+    this.currentSelectedFoodName = this.currentSelectedFood.pipe(map(x => x.name));
   }
 
   calculateKE() {
@@ -51,28 +80,6 @@ export class MealSelectionComponent implements OnInit {
       catch (e) {
 
       }
-
-
-      let z: any = { id: "0" };
-      z.kek = { id: "1", u: z, array: [{ id: "arr1" }], kk: { id: "2", asd: { id: "3", rel: z } } };
-      z.self = z; 
-
-      let TestObj: any = { id: "0", kek: { id: "1", jj: { id: "0" } } };
-      TestObj.self = TestObj;
-      let patch = new Patch([], [{ id: "0", jj: [{id:"arrayNeu"},{id:"0"}] }, { id: "1", asd: { id: "999" } }]);
-      Patcherino.applyOn(z, patch);
-      console.log("reeeady");
-
-      let kek = new JJ();
-      kek.id = "asd";
-      kek.test = "tt";
-      kek.u = "u";
-      for (let k in kek) {
-        console.log("PROP: " + k);
-      }
-      let zuzu = new Patch([{ id: "asd", u: "lel" }], [])
-      Patcherino.applyOn(kek, zuzu);
-      console.log("öööö");
     }
   }
 
@@ -91,10 +98,11 @@ export class MealSelectionComponent implements OnInit {
     });
     event.preventDefault();
     event.stopPropagation();
-    this.ref.nativeElement.blur();
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      this.ref.nativeElement.blur();
+      if (result) {
+        this.foodPickerAnswer.next(result);
+      }
+      setTimeout(() => this.ref.nativeElement.blur(), 10);
     });
 
   }

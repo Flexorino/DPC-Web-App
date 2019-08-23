@@ -1,0 +1,14 @@
+<h3>Zeitpunkt:</h3>
+<div [formGroup]="group">
+    <mat-form-field class="fullWidthInput">
+        <input class="fullWidthInput" matInput placeholder="Zeit" formControlName="time" required
+            [ngxTimepicker]="picker" [format]="24">
+        <ngx-material-timepicker #picker [ngxMaterialTimepickerTheme]="$candy-app-theme">
+        </ngx-material-timepicker>
+    </mat-form-field>
+    <mat-form-field class="fullWidthInput">
+        <input class="fullWidthInput" matInput placeholder="Datum" formControlName="date" type="date"
+            required>
+
+    </mat-form-field>
+</div>

@@ -34,5 +34,5 @@
 </div>
 <div mat-dialog-actions id="mat-dialog-actions">
     <button mat-button (click)="onNoClick()" mat-stroked-button color="warn">Abbrechen</button>
-    <button mat-button [disabled]="!isValid" [mat-dialog-close]="" cdkFocusInitial mat-stroked-button color="primary">OK</button>
+    <button mat-button [disabled]="!isValid" (click)="onSubmit()"  mat-stroked-button color="primary">OK</button>
 </div>

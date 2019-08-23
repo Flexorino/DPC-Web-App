@@ -152,8 +152,4 @@ export class Patcherino {
         }
         return erg;
     }
-
-    private static checkNode() {
-
-    }
 }

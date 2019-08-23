@@ -1,3 +1,4 @@
+import { DiaryContext } from './../model/diary/context/diary-context';
 import { AddIngestionComponent } from './../../app/diary/components/add-entry-components/add-ingestion/add-ingestion.component';
 
 import { CompletableAction } from 'src/shared/actions/CompletableAction';
@@ -17,6 +18,9 @@ import { AddEntryComponent } from 'src/app/diary/components/add-entry-components
 import { Action } from '@ngrx/store';
 import { EffectsUtil } from './effects-util';
 import { when } from 'q';
+import { DiaryCorrectionFactors } from '../model/diary/context/diary-correction-factors';
+import { DiaryContextKEFactors } from '../model/diary/context/diary-context-KE-factors';
+import { DiaryContextFrameValues } from '../model/diary/context/diary-context-frame-values';
 
 @Injectable()
 export class AddIngestionEffects {
@@ -41,9 +45,22 @@ export class AddIngestionEffects {
         ];
         let insulins: any = [{ id: "asdasddds", name: "Insulin 1", insulinEffect: InsulinEffect.MEDIUM, description: "asdad" },
         { id: "asdasddds2", name: "Insulin 2", insulinEffect: InsulinEffect.FAST, description: "asdad" }];
+
+        let context: DiaryContext = new DiaryContext("contextID");
+        let correctionFactors: DiaryCorrectionFactors = new DiaryCorrectionFactors("correctionFactorsId");
+        correctionFactors.dialyCorrectionFactors = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
+        let keFactors: DiaryContextKEFactors = new DiaryContextKEFactors("adsasdasd");
+        keFactors.dialyKeFactors = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
+        let frameValues: DiaryContextFrameValues = new DiaryContextFrameValues("frame values");
+        frameValues.staticBSGoalValue = 100;
+        context.validFrom = 1553334757;
+        context.correctionFactors = correctionFactors;
+        context.keFactor = keFactors;
+        context.frameValue = frameValues;
+
         return of(GeneralEffectActions.PatchReady({
-            patch: new Patch(insulins.concat(food), [{
-                food: food, insulins: insulins
+            patch: new Patch(insulins.concat(food).concat([context, context.correctionFactors, context.frameValue, context.keFactor]), [{
+                food: food, insulins: insulins, contexts: [context]
             }])
         })).pipe(delay(1000), tap(x => props.resolve(null)));
 
@@ -54,7 +71,7 @@ export class AddIngestionEffects {
     ) {
         this.openedListener$ = util.when(AddIngestionActions.OPENED).do(this.handleOpened);
         this.confirmListener$ = util.when(AddIngestionActions.CONFIRM).do(x => {
-            return EMPTY.pipe().pipe(delay(2000),finalize(() => x.resolve(null)));
+            return EMPTY.pipe().pipe(delay(2000), finalize(() => x.resolve(null)));
         });
-     }
+    }
 }

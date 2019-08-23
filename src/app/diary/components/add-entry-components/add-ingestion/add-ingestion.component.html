@@ -7,19 +7,8 @@
             <mat-step [stepControl]="firstFormGroup">
                 <div formGroupName="timeAndBs">
                     <ng-template matStepLabel>Zeit & <br> Blutzucker</ng-template>
-                    <h3>Zeitpunkt:</h3>
-                    <mat-form-field class="fullWidthInput">
-                        <input class="fullWidthInput" matInput placeholder="Zeit" formControlName="time" required
-                            [ngxTimepicker]="picker" [format]="24">
-                        <ngx-material-timepicker #picker [ngxMaterialTimepickerTheme]="$candy-app-theme">
-                        </ngx-material-timepicker>
-                    </mat-form-field>
-                    <mat-form-field class="fullWidthInput">
-                        <input [matDatepicker]="date_picker" class="fullWidthInput" matInput placeholder="Datum"
-                            formControlName="date" required>
-                        <mat-datepicker-toggle matSuffix [for]="date_picker"></mat-datepicker-toggle>
-                        <mat-datepicker #date_picker></mat-datepicker>
-                    </mat-form-field>
+                    <app-add-entry-timestamp-picker #timeStamp [group]="timestampFormGroup">
+                    </app-add-entry-timestamp-picker>
                     <h3>Blutzucker</h3>
                     <mat-form-field class="fullWidthInput">
                         <input class="fullWidthInput" matInput placeholder="Blutzucker" formControlName="bs"
@@ -55,17 +44,13 @@
                         [ngModelOptions]="{standalone: true}">Verzögerte Bolus</mat-checkbox>
                     <div class="delayedBolusContent">
                         <div>Wie viele Einheiten sollen verzögert abgebeben werden?</div>
-                        <mat-slider class="fullWidthInput"
-                        [max]="mealBolusValue"
-                        [min]="0"
-                        [step]="1"
-                        
-                        >
+                        <mat-slider class="fullWidthInput" [max]="mealBolusValue" [min]="0" [step]="1">
 
                         </mat-slider>
                         {{mealBolusValue}}
                         <mat-form-field class="fullWidthInput">
-                            <input class="fullWidthInput" matInput placeholder="Fixer verzögerte Bolus Anteil" type="number">
+                            <input class="fullWidthInput" matInput placeholder="Fixer verzögerte Bolus Anteil"
+                                type="number">
                             <span matSuffix>IE</span>
                         </mat-form-field>
                         <mat-form-field class="fullWidthInput">

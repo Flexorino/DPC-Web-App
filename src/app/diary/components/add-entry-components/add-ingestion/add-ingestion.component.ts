@@ -1,7 +1,7 @@
 import { AddEntryActionsProps } from './../sharedActionsProps.ts/add-entry-props';
 import { AddIngestionActions } from './add-ingestion.actions';
 import { SettingsService } from 'src/shared/services/settings.service';
-import { pipe } from 'rxjs';
+import { pipe, Subscription } from 'rxjs';
 import { ActivatedRouteSnapshot, ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup, FormArray } from '@angular/forms';
@@ -12,6 +12,8 @@ import { CompletableAction } from 'src/shared/actions/CompletableAction';
 import { BSUnit } from 'src/shared/services/BSUnit';
 import { FullScreenModalCloser } from 'src/shared/components/base-full-screen-modal/full_screen_closer.service';
 import { Entry } from 'src/shared/model/diary/entry/entry';
+import { DiaryContext } from 'src/shared/model/diary/context/diary-context';
+import { IEntryTimestampPicker } from '../IEntryTimestampPicker';
 
 @Component({
   selector: 'app-add-ingestion',
@@ -34,6 +36,14 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
   secondFormGroup: FormGroup;
   thirdFormGroup: FormGroup;
   mainFormGroup: FormGroup;
+  context: DiaryContext;
+
+  // subFormGroups
+  timestampFormGroup: FormGroup = new FormGroup({});
+  @ViewChild("timeStamp", { static: false }) timeStampPicker: IEntryTimestampPicker;
+
+
+  private contextSubscription: Subscription;
 
   private fragmentSubscription;
 
@@ -82,6 +92,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.handleFragmentNavigationStuff();
+    this.timeStampPicker.timestamp.subscribe(x => console.log(new Date(x*1000).toISOString()))
 
   }
 
@@ -90,12 +101,8 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
 
 
   private initializeForms(): void {
-    let cur: Date = new Date();
-    let time = cur.getHours() + ":" + cur.getMinutes();
-    let curdate = cur.toISOString().slice(0, 10);
     this.firstFormGroup = this._formBuilder.group({
-      time: [time, Validators.required],
-      date: [curdate, Validators.required],
+      timestamp: this._formBuilder.group(this.timestampFormGroup),
       bs: ['']
     });
     this.secondFormGroup = this._formBuilder.group({
