@@ -91,6 +91,11 @@ export class MealSelectionComponent implements OnInit, IEntryFoodIntakePicker {
     this.close.next(null);
   }
 
+  removeFood() {
+    this.currentSelectedFood = null;
+    this.foodIntake.next({ food: this.currentSelectedFood, amount: this.eatenCarbs });
+  }
+
   openDialog(event: Event): void {
     const dialogRef = this.dialog.open(FoodPickerComponent, {
       width: '80%',
@@ -106,7 +111,7 @@ export class MealSelectionComponent implements OnInit, IEntryFoodIntakePicker {
         this.carbsFactor = x.carbsFactor;
         this.foodIntake.next({ food: x, amount: this.eatenCarbs })
       }
-      setTimeout(x => this.ref.nativeElement.blur(), 100);
+      setTimeout(x => this.ref.nativeElement.blur(), 300);
     });
   }
 
