@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddEntryTimestampPickerComponent } from '../diary/components/add-entry-components/add-entry-timestamp-picker/add-entry-timestamp-picker.component';
+import { AddEntryTimestampPickerComponent } from '../diary/components/add-entry-components/inputs/components/add-entry-timestamp-picker/add-entry-timestamp-picker.component';
 
 describe('AddEntryTimestampPickerComponent', () => {
   let component: AddEntryTimestampPickerComponent;

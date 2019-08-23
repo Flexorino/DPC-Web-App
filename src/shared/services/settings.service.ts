@@ -1,3 +1,4 @@
+import { BehaviorSubject } from 'rxjs';
 import { BSUnits, BSUnit } from './BSUnit';
 import { Injectable } from '@angular/core';
 
@@ -12,7 +13,7 @@ export class SettingsService {
   public defaultMealInsulin = '1';
   public defaultBasalInsulin = '1';
   public bsUnitSetting : BSUnit = BSUnits.MG_PER_DL;
-
+  public bsUnitSettingSubj : BehaviorSubject<BSUnit> = new BehaviorSubject(BSUnits.MG_PER_DL);
 
   public carbsFactor = 1/10;
 

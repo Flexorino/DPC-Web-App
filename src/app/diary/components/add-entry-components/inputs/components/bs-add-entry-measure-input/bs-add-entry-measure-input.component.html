@@ -1,0 +1,6 @@
+<div [formGroup]="group">
+    <mat-form-field class="fullWidthInput">
+        <input class="fullWidthInput" matInput placeholder="Blutzucker" formControlName="bsMeasure" type="number">
+        <span matSuffix>{{bsUnit.identifier}}</span>
+    </mat-form-field>
+</div>

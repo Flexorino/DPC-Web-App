@@ -1,3 +1,4 @@
+import { IEntryBSPicker } from './../inputs/interfaces/IEntryBSPicker';
 import { AddEntryActionsProps } from './../sharedActionsProps.ts/add-entry-props';
 import { AddIngestionActions } from './add-ingestion.actions';
 import { SettingsService } from 'src/shared/services/settings.service';
@@ -13,7 +14,7 @@ import { BSUnit } from 'src/shared/services/BSUnit';
 import { FullScreenModalCloser } from 'src/shared/components/base-full-screen-modal/full_screen_closer.service';
 import { Entry } from 'src/shared/model/diary/entry/entry';
 import { DiaryContext } from 'src/shared/model/diary/context/diary-context';
-import { IEntryTimestampPicker } from '../IEntryTimestampPicker';
+import { IEntryTimestampPicker } from '../inputs/interfaces/IEntryTimestampPicker';
 
 @Component({
   selector: 'app-add-ingestion',
@@ -41,7 +42,8 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
   // subFormGroups
   timestampFormGroup: FormGroup = new FormGroup({});
   @ViewChild("timeStamp", { static: false }) timeStampPicker: IEntryTimestampPicker;
-
+  bsMeasureFormGroup: FormGroup = new FormGroup({});
+  @ViewChild("bsMeasure", { static: false }) bsMeasurePicker: IEntryBSPicker;
 
   private contextSubscription: Subscription;
 
@@ -92,7 +94,8 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.handleFragmentNavigationStuff();
-    this.timeStampPicker.timestamp.subscribe(x => console.log(new Date(x*1000).toISOString()))
+    this.timeStampPicker.timestamp.subscribe(x => console.log(new Date(x * 1000).toISOString()))
+    this.bsMeasurePicker.bs.subscribe(x => console.log("BS: " + x));
 
   }
 
@@ -103,7 +106,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
   private initializeForms(): void {
     this.firstFormGroup = this._formBuilder.group({
       timestamp: this._formBuilder.group(this.timestampFormGroup),
-      bs: ['']
+      bs: this.bsMeasureFormGroup
     });
     this.secondFormGroup = this._formBuilder.group({
       meals: this._formBuilder.array([])

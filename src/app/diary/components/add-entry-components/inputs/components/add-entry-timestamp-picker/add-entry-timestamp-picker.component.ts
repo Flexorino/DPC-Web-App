@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { IEntryTimestampPicker } from '../IEntryTimestampPicker';
+import { IEntryTimestampPicker } from '../../interfaces/IEntryTimestampPicker';
 import { BehaviorSubject } from 'rxjs';
 
 @Component({
