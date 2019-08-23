@@ -1,3 +1,4 @@
+
 import { filter, map, merge, } from 'rxjs/operators';
 import { combineLatest } from 'rxjs';
 import { Store, select } from '@ngrx/store';
@@ -5,19 +6,12 @@ import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Diary } from 'src/shared/model/diary/diary';
 import { Observable, Subscription, Subject, BehaviorSubject } from 'rxjs';
+import { IEntryFoodPicker } from '../inputs/interfaces/IEntryFoodPicker';
 import { Food } from 'src/shared/model/diary/food';
 
 
 enum PickMode {
   DB, CUSTOM
-}
-
-export class DBFoodSelectedResult {
-  constructor(public readonly id: string) { }
-}
-
-export class CustomFoodSelectedResult {
-  constructor(public readonly id: string) { }
 }
 
 @Component({
@@ -27,16 +21,17 @@ export class CustomFoodSelectedResult {
 })
 
 
-export class FoodPickerComponent implements OnInit, OnDestroy {
+export class FoodPickerComponent implements OnInit, OnDestroy, IEntryFoodPicker {
+  food: BehaviorSubject<Food> = new BehaviorSubject(null);
 
   searchSnippet: string = ""
-  food: Observable<Array<Food>>;
+  filteredFood: Observable<Array<Food>>;
   private searchChange: BehaviorSubject<String> = new BehaviorSubject("");
   private mode: PickMode = PickMode.DB;
-  private currentSelectedFoodId: string = null;
+  private currentSelectedFood: Food = null;
 
   get isValid(): boolean {
-    return this.mode === PickMode.DB && this.currentSelectedFoodId !== null ? true : false;
+    return this.mode === PickMode.DB && this.currentSelectedFood !== null ? true : false;
   }
 
   constructor(
@@ -48,7 +43,7 @@ export class FoodPickerComponent implements OnInit, OnDestroy {
   ngOnInit() {
     let unfilteredFood = this.store.pipe(select('diary'), select('food'));
     let searchRes: Observable<any> = combineLatest(unfilteredFood, this.searchChange);
-    this.food = searchRes.pipe(map(x => {
+    this.filteredFood = searchRes.pipe(map(x => {
       let food: Array<Food> = x[0];
       let filter: string = x[1];
       return food.filter(x => x.name.toLowerCase().includes(filter.toLowerCase()));
@@ -56,6 +51,7 @@ export class FoodPickerComponent implements OnInit, OnDestroy {
   }
   onNoClick() {
     this.dialogRef.close();
+    this.food.complete();
   }
 
   ngOnDestroy(): void {
@@ -66,11 +62,13 @@ export class FoodPickerComponent implements OnInit, OnDestroy {
     this.searchChange.next(newValue);
   }
 
-  selectFood(id: string) {
-    this.currentSelectedFoodId = id;
+  selectFood(food: Food) {
+    this.currentSelectedFood = food;
   }
 
   onSubmit() {
-    this.dialogRef.close(new DBFoodSelectedResult(this.currentSelectedFoodId));
+    this.dialogRef.close();
+    this.food.next(this.currentSelectedFood);
+    this.food.complete();
   }
 }

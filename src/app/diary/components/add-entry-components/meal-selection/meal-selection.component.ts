@@ -1,6 +1,7 @@
-import { Observable, Subject, pipe } from 'rxjs';
+import { FoodIntakeAttribute } from './../../../../../shared/model/diary/entry/attributes/food-intake-attribute';
+import { IEntryFoodIntakePicker } from './../inputs/interfaces/IEntryFoodIntakePicker';
+import { Observable, Subject, pipe, BehaviorSubject } from 'rxjs';
 import { Food } from 'src/shared/model/diary/food';
-import { FoodPickerComponent, DBFoodSelectedResult } from './../food-picker/food-picker.component';
 import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder, Validators, FormGroup, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
@@ -13,6 +14,7 @@ import { JJ } from 'src/shared/test';
 import { Store, select } from '@ngrx/store';
 import { Diary } from 'src/web-api';
 import { withLatestFrom, map, filter, tap } from 'rxjs/operators';
+import { FoodPickerComponent } from '../food-picker/food-picker.component';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -28,62 +30,49 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   templateUrl: './meal-selection.component.html',
   styleUrls: ['./meal-selection.component.scss']
 })
-export class MealSelectionComponent implements OnInit {
+export class MealSelectionComponent implements OnInit, IEntryFoodIntakePicker {
+
+  @Output("close") close = new EventEmitter();
+  @Input('group') formGroup: FormGroup;
+  @ViewChild("mealSel", { static: false }) ref: ElementRef;
+
+  foodIntake: BehaviorSubject<FoodIntakeAttribute> = new BehaviorSubject(null);
 
   mealCalcHelpForm: FormGroup;
   extrasMatcher = new MyErrorStateMatcher();
-  carbsFactor;
-  carbPortionFactor: Observable<number | string>;
-
-
-  @Input('group') formGroup: FormGroup;
-  @Output('close') close = new EventEmitter<void>();
-  @ViewChild("mealSel", { static: false }) ref: ElementRef;
-
-  currentSelectedFood: Observable<Food> = null;
-
-  currentSelectedFoodName;
-
-  foodPickerAnswer: Subject<any> = new Subject();
+  keFactor : number;
+  currentSelectedFood: Food;
 
 
   constructor(private fb: FormBuilder, private settings: SettingsService, private dialog: MatDialog, private store: Store<{ diary: Diary }>) {
+    // this form is only for intern help usage!
     this.mealCalcHelpForm = this.fb.group({
       carbsFactor: ['', [Validators.required, Validators.max(100), Validators.min(1)]],
       amount: ['', [Validators.required, Validators.min(1)]]
     });
-    this.carbsFactor = settings.carbsFactor;
-    let unfilteredFood = this.store.pipe(select('diary'), select('food'));
-    this.currentSelectedFood = this.foodPickerAnswer.pipe(withLatestFrom(unfilteredFood), map(
-      x => {
-        let pickerAnswer = x[0];
-        let food: Array<Food> = x[1];
-        if (pickerAnswer instanceof DBFoodSelectedResult) {
-          return food.find(x => x.id === pickerAnswer.id);
-        }
-      }
-
-    ));
-    this.carbPortionFactor = this.currentSelectedFood.pipe(map((x: Food) => x.carbsFactor ? Math.floor(x.carbsFactor * 100) : ''),
-      tap(x => this.mealCalcHelpForm.get("carbsFactor").setValue(x)));
-    this.currentSelectedFoodName = this.currentSelectedFood.pipe(map(x => x.name));
+    this.keFactor = settings.carbsFactorSubj.getValue();
   }
 
   calculateKE() {
     if (this.mealCalcHelpForm.valid) {
-
       try {
-        let res = Number.parseFloat(this.mealCalcHelpForm.get("amount").value) * Number.parseFloat(this.mealCalcHelpForm.get("carbsFactor").value) * 0.01 * this.carbsFactor;
+        let res = Number.parseFloat(this.mealCalcHelpForm.get("amount").value) * Number.parseFloat(this.mealCalcHelpForm.get("carbsFactor").value) * 0.01 * this.keFactor;
         res = Math.round(res);
         this.formGroup.get("KE").setValue(res);
       }
       catch (e) {
-
+        console.error("Fehler beim Berechnen der KE!")
       }
     }
   }
 
   ngOnInit() {
+    this.formGroup.addControl('KE',this.fb.control(''))
+    this.formGroup.get("KE").valueChanges.subscribe(x => {
+      if(this.formGroup.valid){
+        this.foodIntake.next({food: null, amount: Number.parseInt(x)});
+      }
+    })
   }
 
   closeThis() {
@@ -98,13 +87,7 @@ export class MealSelectionComponent implements OnInit {
     });
     event.preventDefault();
     event.stopPropagation();
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.foodPickerAnswer.next(result);
-      }
-      setTimeout(() => this.ref.nativeElement.blur(), 10);
-    });
-
+    dialogRef.componentInstance.food.subscribe(x => this.currentSelectedFood = x);
   }
 
 }

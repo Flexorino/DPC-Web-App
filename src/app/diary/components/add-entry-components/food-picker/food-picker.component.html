@@ -10,8 +10,8 @@
             <div id="food-List">
                 <mat-list role="list">
                     <mat-accordion [multi]="false">
-                        <mat-expansion-panel *ngFor="let foodItem of food | async" #panel>
-                            <mat-expansion-panel-header [ngClass]="{'selected-item': foodItem.id === currentSelectedFoodId }" matRipple (click)="panel.toggle(); selectFood(foodItem.id)" class="expansion-header">
+                        <mat-expansion-panel *ngFor="let foodItem of filteredFood | async" #panel>
+                            <mat-expansion-panel-header [ngClass]="{'selected-item': foodItem.id === currentSelectedFood.id }" matRipple (click)="panel.toggle(); selectFood(foodItem)" class="expansion-header">
                                 <mat-panel-title>
                                     {{foodItem.name}}
                                 </mat-panel-title>
