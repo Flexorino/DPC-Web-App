@@ -1,3 +1,4 @@
+import { FoodPickerComponentInput } from './../food-picker/food-picker.component';
 import { FoodIntakeAttribute } from './../../../../../shared/model/diary/entry/attributes/food-intake-attribute';
 import { IEntryFoodIntakePicker } from './../inputs/interfaces/IEntryFoodIntakePicker';
 import { Observable, Subject, pipe, BehaviorSubject } from 'rxjs';
@@ -45,6 +46,8 @@ export class MealSelectionComponent implements OnInit, IEntryFoodIntakePicker {
   carbsFactor: number;
   eatenCarbs: number;
 
+  foodFormGroup: FormGroup = new FormGroup({});
+
   constructor(private fb: FormBuilder, private settings: SettingsService, private dialog: MatDialog, private store: Store<{ diary: Diary }>) {
     this.keFactor = this.settings.carbsFactorSubj.getValue();
   }
@@ -63,7 +66,8 @@ export class MealSelectionComponent implements OnInit, IEntryFoodIntakePicker {
   }
 
   ngOnInit() {
-    this.formGroup.addControl('KE', this.fb.control(''))
+    this.formGroup.addControl('KE', this.fb.control(''));
+    this.formGroup.addControl('foodForm', this.foodFormGroup);
     this.formGroup.get("KE").valueChanges.subscribe(x => {
       try {
         this.eatenCarbs = Number.parseInt(x) / this.keFactor;
@@ -100,7 +104,7 @@ export class MealSelectionComponent implements OnInit, IEntryFoodIntakePicker {
     const dialogRef = this.dialog.open(FoodPickerComponent, {
       width: '80%',
       height: '600px',
-      data: this.currentSelectedFood, panelClass: "full_screen_dialog"
+      data: new FoodPickerComponentInput(this.currentSelectedFood, this.foodFormGroup), panelClass: "full_screen_dialog"
     });
     event.preventDefault();
     event.stopPropagation();

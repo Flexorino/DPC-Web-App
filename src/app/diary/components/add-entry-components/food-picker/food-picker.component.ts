@@ -1,3 +1,4 @@
+import { FormGroup } from '@angular/forms';
 
 import { filter, map, merge, } from 'rxjs/operators';
 import { combineLatest } from 'rxjs';
@@ -12,6 +13,10 @@ import { Food } from 'src/shared/model/diary/food';
 
 enum PickMode {
   DB, CUSTOM
+}
+
+export class FoodPickerComponentInput {
+  constructor(public readonly food: Food, public readonly: FormGroup){}
 }
 
 @Component({
@@ -37,16 +42,16 @@ export class FoodPickerComponent implements OnInit, OnDestroy, IEntryFoodPicker 
 
   constructor(
     public dialogRef: MatDialogRef<FoodPickerComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: Food,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: FoodPickerComponentInput,
     private store: Store<{ diary: Diary }>
   ) {
   }
 
   ngOnInit() {
-    if (this.data && !this.data.id) {
+    if (this.data && !this.data.food.id) {
       this.selectedTabIndex = 1;
-    } else if (this.data && this.data.id) {
-      this.currentSelectedFood = this.data;
+    } else if (this.data && this.data.food.id) {
+      this.currentSelectedFood = this.data.food;
     }
     let unfilteredFood = this.store.pipe(select('diary'), select('food'));
     let searchRes: Observable<any> = combineLatest(unfilteredFood, this.searchChange);
