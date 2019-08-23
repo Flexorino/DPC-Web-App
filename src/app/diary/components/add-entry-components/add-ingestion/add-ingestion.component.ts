@@ -27,8 +27,6 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
   isLastStep: boolean = false;
   currentStep = 0;
   step: MatStep;
-  sum = 0;
-  bsUnit: BSUnit;
   delayedBolus = false;
   loading = true;
 
@@ -44,6 +42,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
   @ViewChild("timeStamp", { static: false }) timeStampPicker: IEntryTimestampPicker;
   bsMeasureFormGroup: FormGroup = new FormGroup({});
   @ViewChild("bsMeasure", { static: false }) bsMeasurePicker: IEntryBSPicker;
+  foodPickerFormGroup: FormGroup = new FormGroup({});
 
   private contextSubscription: Subscription;
 
@@ -56,9 +55,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
     private settings: SettingsService,
     private closer: FullScreenModalCloser,
     private store: Store<any>
-  ) {
-    this.bsUnit = settings.bsUnitSetting;
-  }
+  ) { }
 
 
   private handleFragmentNavigationStuff() {
@@ -105,17 +102,16 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
 
   private initializeForms(): void {
     this.firstFormGroup = this._formBuilder.group({
-      timestamp: this._formBuilder.group(this.timestampFormGroup),
+      timestamp: this.timestampFormGroup,
       bs: this.bsMeasureFormGroup
     });
     this.secondFormGroup = this._formBuilder.group({
-      meals: this._formBuilder.array([])
+      meals: this.foodPickerFormGroup
     });
     this.thirdFormGroup = this._formBuilder.group({
       mealBolus: []
     });
     this.mainFormGroup = this._formBuilder.group({ timeAndBs: this.firstFormGroup, mealForm: this.secondFormGroup });
-    this.addMeal();
   }
 
   ngOnInit() {
@@ -132,43 +128,8 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
     return z ? z : 0;
   }
 
-  get meals() {
-    let z = this.secondFormGroup.get('meals') as FormArray;
-    return z;
-  }
-
   next() {
     this.stepper.selectedIndex += 1;
-  }
-
-  addMeal() {
-    let grp: FormGroup = this._formBuilder.group({ KE: [], });
-    grp.get("KE").valueChanges.subscribe(x => {
-      this.calculateMealSum();
-    });
-    this.meals.push(grp);
-  }
-
-  private calculateMealSum() {
-    if (this.meals.controls.length === 0) {
-      this.sum = 0;
-    } else {
-      this.sum = this.meals.controls.map(element => {
-        try {
-          if (!element.get("KE").value) {
-            return 0;
-          }
-          return Number.parseFloat(element.get("KE").value);
-        } catch (e) {
-          return 0;
-        }
-      }).reduce((x, y) => x + y);
-    }
-  }
-
-  remove(i: number) {
-    this.meals.removeAt(i);
-    this.calculateMealSum();
   }
 
   submit() {

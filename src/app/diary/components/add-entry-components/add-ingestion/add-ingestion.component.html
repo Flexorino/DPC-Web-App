@@ -19,14 +19,8 @@
                 <div formGroupName="mealForm">
                     <ng-template matStepLabel>Nahrung</ng-template>
                     <h3>Nahrung</h3>
-                    <div formArrayName="meals">
-                        <div *ngFor="let meal of meals.controls; let i=index">
-                            <app-meal-selection (close)="remove(i)" [group]="meal"></app-meal-selection>
-                        </div>
-                    </div>
+                    <app-add-entry-food-picker #foodPicker [group]="foodPickerFormGroup"> </app-add-entry-food-picker>
                 </div>
-                <button class="fullWidthInput" mat-raised-button color="primary" (click)="addMeal()">Füge Nahrung
-                    hinzu</button>
             </mat-step>
             <mat-step>
                 <ng-template matStepLabel>Bolus etc.</ng-template>
