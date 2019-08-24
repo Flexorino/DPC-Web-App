@@ -1,1 +1,21 @@
-<p>list-food-picker works!</p>
+<div id="food-List">
+    <mat-list role="list">
+        <mat-accordion [multi]="false">
+            <mat-expansion-panel *ngFor="let foodItem of filteredFood | async" #panel>
+                <mat-expansion-panel-header [ngClass]="{'selected-item': foodItem.id === currentSelectedFood?.id }" matRipple (click)="panel.toggle(); selectFood(foodItem)" class="expansion-header">
+                    <mat-panel-title>
+                        {{foodItem.name}}
+                    </mat-panel-title>
+                    <div class="invisibleExpandHandler" (click)="panel.toggle();$event.stopPropagation();" (mousedown)="$event.stopPropagation();">
+                        
+                    </div>
+
+                </mat-expansion-panel-header>
+                <div class="descr-row"><div class="descr-content">KH pro 100g: </div><div class="descr-content">{{foodItem.carbsFactor? foodItem.carbsFactor * 100 +"g": "/"}}</div></div>
+                <div class="descr-row"><div class="descr-content">Resorption: </div><div class="descr-content">{{foodItem.absorption? foodItem.absorption : "/"}}</div></div>
+                <div>Beschreibung:</div>
+                <div>{{foodItem.description? foodItem.description : "/"}}</div>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </mat-list>
+</div>

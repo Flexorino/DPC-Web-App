@@ -1,3 +1,5 @@
+import { AddEntryBSPicker } from './diary/components/add-entry-components/inputs/components/add-entry-bs-picker/add-entry-bs-picker.component';
+
 
 import { BASE_PATH } from './../web-api/variables';
 import { ApiModule } from './../web-api/api.module';
@@ -36,11 +38,10 @@ import { BaseFullScreenModalComponent } from 'src/shared/components/base-full-sc
 import { AddOverviewComponent } from './diary/components/add-overview/add-overview.component';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { AddIngestionEffects } from 'src/shared/effects/add-ingestion-effects';
-import { MealSelectionComponent } from './diary/components/add-entry-components/meal-selection/meal-selection.component';
+import { MealSelectionComponent } from './diary/components/add-entry-components/inputs/components/meal-selection/meal-selection.component';
 import { AddIngestionComponent } from './diary/components/add-entry-components/add-ingestion/add-ingestion.component';
-import { FoodPickerComponent } from './diary/components/add-entry-components/food-picker/food-picker.component';
+import { FoodPickerComponent } from './diary/components/add-entry-components/inputs/components/food-picker/food-picker.component';
 import { AddEntryTimestampPickerComponent } from './diary/components/add-entry-components/inputs/components/add-entry-timestamp-picker/add-entry-timestamp-picker.component';
-import { BsAddEntryMeasureInputComponent } from './diary/components/add-entry-components/inputs/components/bs-add-entry-measure-input/bs-add-entry-measure-input.component';
 import { AddEntryFoodPickerComponent } from './diary/components/add-entry-components/inputs/components/add-entry-food-picker/add-entry-food-picker.component';
 import { FoodIntakeSummationComponent } from './diary/components/add-entry-components/misc/food-intake-summation/food-intake-summation.component';
 import { ListFoodPickerComponent } from 'src/shared/components/list-food-picker/list-food-picker.component';
@@ -72,7 +73,7 @@ import { FoodEditorComponent } from 'src/shared/components/food-editor/food-edit
     MealSelectionComponent,
     FoodPickerComponent,
     AddEntryTimestampPickerComponent,
-    BsAddEntryMeasureInputComponent,
+    AddEntryBSPicker,
     AddEntryFoodPickerComponent,
     FoodIntakeSummationComponent,
     ListFoodPickerComponent,

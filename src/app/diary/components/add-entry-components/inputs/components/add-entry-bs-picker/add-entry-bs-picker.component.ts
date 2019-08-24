@@ -7,11 +7,11 @@ import { IEntryBSPicker } from '../../interfaces/IEntryBSPicker';
 import { BehaviorSubject } from 'rxjs';
 
 @Component({
-  selector: 'app-bs-add-entry-measure-input',
-  templateUrl: './bs-add-entry-measure-input.component.html',
-  styleUrls: ['./bs-add-entry-measure-input.component.scss']
+  selector: 'add-entry-bs-picker',
+  templateUrl: './add-entry-bs-picker.component.html',
+  styleUrls: ['./add-entry-bs-picker.component.scss']
 })
-export class BsAddEntryMeasureInputComponent implements OnInit, IEntryBSPicker {
+export class AddEntryBSPicker implements OnInit, IEntryBSPicker {
 
   @Input('group') group: FormGroup;
 

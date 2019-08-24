@@ -7,7 +7,7 @@ import { Component, OnInit, Inject, OnDestroy, Optional } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Diary } from 'src/shared/model/diary/diary';
 import { Observable, Subscription, Subject, BehaviorSubject } from 'rxjs';
-import { IEntryFoodPicker } from '../inputs/interfaces/IEntryFoodPicker';
+import { IEntryFoodPicker } from '../../interfaces/IEntryFoodPicker';
 import { Food } from 'src/shared/model/diary/food';
 
 
@@ -48,9 +48,9 @@ export class FoodPickerComponent implements OnInit, OnDestroy, IEntryFoodPicker 
   }
 
   ngOnInit() {
-    if (this.data && !this.data.food.id) {
+    if (this.data.food && !this.data.food.id) {
       this.selectedTabIndex = 1;
-    } else if (this.data && this.data.food.id) {
+    } else if (this.data.food && this.data.food.id) {
       this.currentSelectedFood = this.data.food;
     }
     let unfilteredFood = this.store.pipe(select('diary'), select('food'));

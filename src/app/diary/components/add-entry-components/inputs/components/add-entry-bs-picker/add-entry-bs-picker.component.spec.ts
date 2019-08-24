@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BsAddEntryMeasureInputComponent } from './bs-add-entry-measure-input.component';
+import { BsAddEntryMeasureInputComponent } from './add-entry-bs-picker.component';
 
 describe('BsAddEntryMeasureInputComponent', () => {
   let component: BsAddEntryMeasureInputComponent;

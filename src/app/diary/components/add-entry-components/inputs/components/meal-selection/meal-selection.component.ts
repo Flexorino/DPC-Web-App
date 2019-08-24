@@ -1,6 +1,6 @@
-import { FoodPickerComponentInput } from './../food-picker/food-picker.component';
-import { FoodIntakeAttribute } from './../../../../../shared/model/diary/entry/attributes/food-intake-attribute';
-import { IEntryFoodIntakePicker } from './../inputs/interfaces/IEntryFoodIntakePicker';
+import { FoodPickerComponentInput } from '../food-picker/food-picker.component';
+import { FoodIntakeAttribute } from '../../../../../../../shared/model/diary/entry/attributes/food-intake-attribute';
+import { IEntryFoodIntakePicker } from '../../interfaces/IEntryFoodIntakePicker';
 import { Observable, Subject, pipe, BehaviorSubject } from 'rxjs';
 import { Food } from 'src/shared/model/diary/food';
 import { MatDialog } from '@angular/material/dialog';

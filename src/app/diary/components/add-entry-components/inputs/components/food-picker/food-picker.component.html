@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>Nahrung auswählen</h1>
+<div id="modalBody">
+
+    <mat-tab-group mat-stretch-tabs [selectedIndex]="selectedTabIndex">
+        <mat-tab label="Gespeichert">
+            <mat-form-field class="fullWidthInput">
+                <input (ngModelChange)="searchChanged($event)" matInput [(ngModel)]="searchSnippet"
+                    [ngModelOptions]="{standalone: true}" placeholder="Suche">
+            </mat-form-field>
+
+        </mat-tab>
+        <mat-tab label="Manuell"> Content 2 </mat-tab>
+    </mat-tab-group>
+</div>
+<div mat-dialog-actions id="mat-dialog-actions">
+    <button mat-button (click)="onNoClick()" mat-stroked-button color="warn">Abbrechen</button>
+    <button mat-button [disabled]="!isValid" (click)="onSubmit()"  mat-stroked-button color="primary">OK</button>
+</div>
