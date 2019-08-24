@@ -7,11 +7,11 @@ import { IEntryFoodIntakePicker } from '../../interfaces/IEntryFoodIntakePicker'
 import { IEntryFoodIntakeListPicker } from '../../interfaces/IEntryFoodIntakeListPicker';
 
 @Component({
-  selector: 'app-add-entry-food-picker',
-  templateUrl: './add-entry-food-picker.component.html',
-  styleUrls: ['./add-entry-food-picker.component.scss']
+  selector: 'add-entry-food-intake-list-picker',
+  templateUrl: './add-entry-food-intake-list-picker.component.html',
+  styleUrls: ['./add-entry-food-intake-list-picker.component.scss']
 })
-export class AddEntryFoodPickerComponent implements OnInit, IEntryFoodIntakeListPicker, AfterViewInit {
+export class AddEnetryFoodIntakeListPicker implements OnInit, IEntryFoodIntakeListPicker, AfterViewInit {
 
   @ViewChildren("foodyMcFoodStone") foodIntakeInputs: QueryList<IEntryFoodIntakePicker>;
   @Input('group') group: FormGroup;
