@@ -34,6 +34,7 @@ export class AddEntryFoodSelectionDecider implements OnInit, OnDestroy, IEntryFo
   private preselectedDBFood: Food = null;
   private preselectedCustoMFood: Food = null;
   selectedTabIndex: number;
+  customFoodFormGroup: FormGroup = new FormGroup({});
 
   @ViewChild('listFoodPicker', { static: false }) listFoodPicker: IEntryFoodPicker;
 

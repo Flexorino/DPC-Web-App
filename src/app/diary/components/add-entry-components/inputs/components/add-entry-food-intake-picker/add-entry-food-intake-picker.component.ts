@@ -109,8 +109,8 @@ export class AddEntryFoodIntakePicker implements OnInit, IEntryFoodIntakePicker 
         this.carbsFactor = x.carbsFactor;
         this.foodIntake.next({ food: x, amount: this.eatenCarbs })
       }
-      setTimeout(x => this.ref.nativeElement.blur(), 300);
     });
+    dialogRef.afterClosed().subscribe(x =>       setTimeout(x => this.ref.nativeElement.blur(), 1));
   }
 
 }
