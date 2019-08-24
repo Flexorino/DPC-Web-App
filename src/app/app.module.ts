@@ -1,3 +1,4 @@
+
 import { AddEntryFoodSelectionDecider } from './diary/components/add-entry-components/inputs/components/add-entry-food-selection-decider/add-entry-food-selection-decider.component';
 import { AddEnetryFoodIntakeListPicker } from './diary/components/add-entry-components/inputs/components/add-entry-food-intake-list-picker/add-entry-food-intake-list-picker.component';
 import { AddEntryBSPicker } from './diary/components/add-entry-components/inputs/components/add-entry-bs-picker/add-entry-bs-picker.component';
@@ -40,12 +41,12 @@ import { BaseFullScreenModalComponent } from 'src/shared/components/base-full-sc
 import { AddOverviewComponent } from './diary/components/add-overview/add-overview.component';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { AddIngestionEffects } from 'src/shared/effects/add-ingestion-effects';
-import { MealSelectionComponent } from './diary/components/add-entry-components/inputs/components/meal-selection/meal-selection.component';
 import { AddIngestionComponent } from './diary/components/add-entry-components/add-ingestion/add-ingestion.component';
 import { AddEntryTimestampPickerComponent } from './diary/components/add-entry-components/inputs/components/add-entry-timestamp-picker/add-entry-timestamp-picker.component';
 import { FoodIntakeSummationComponent } from './diary/components/add-entry-components/misc/food-intake-summation/food-intake-summation.component';
 import { ListFoodPickerComponent } from 'src/shared/components/list-food-picker/list-food-picker.component';
 import { FoodEditorComponent } from 'src/shared/components/food-editor/food-editor.component';
+import { AddEntryFoodIntakePicker } from './diary/components/add-entry-components/inputs/components/add-entry-food-intake-picker/add-entry-food-intake-picker.component';
 
 
 
@@ -70,7 +71,7 @@ import { FoodEditorComponent } from 'src/shared/components/food-editor/food-edit
     BaseFullScreenModalComponent,
     AddOverviewComponent,
     AddIngestionComponent,
-    MealSelectionComponent,
+    AddEntryFoodIntakePicker,
     AddEntryFoodSelectionDecider,
     AddEntryTimestampPickerComponent,
     AddEntryBSPicker,

@@ -1,4 +1,4 @@
-import { AddEntryFoodSelectionDecider, AddEntryFoodSelectionDeciderInput } from './../add-entry-food-selection-decider/add-entry-food-selection-decider.component';
+import { AddEntryFoodSelectionDecider, AddEntryFoodSelectionDeciderInput } from '../add-entry-food-selection-decider/add-entry-food-selection-decider.component';
 import { IEntryFoodIntakePicker } from '../../interfaces/IEntryFoodIntakePicker';
 import { BehaviorSubject } from 'rxjs';
 import { Food } from 'src/shared/model/diary/food';
@@ -21,11 +21,11 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 }
 
 @Component({
-  selector: 'app-meal-selection',
-  templateUrl: './meal-selection.component.html',
-  styleUrls: ['./meal-selection.component.scss']
-})
-export class MealSelectionComponent implements OnInit, IEntryFoodIntakePicker {
+  selector: 'add-entry-food-intake-picker',
+  templateUrl: './add-entry-food-intake-picker.component.html',
+  styleUrls: ['./add-entry-food-intake-picker.component.scss']
+}) 
+export class AddEntryFoodIntakePicker implements OnInit, IEntryFoodIntakePicker {
 
   @Output("close") close = new EventEmitter();
   @Input('group') formGroup: FormGroup;
