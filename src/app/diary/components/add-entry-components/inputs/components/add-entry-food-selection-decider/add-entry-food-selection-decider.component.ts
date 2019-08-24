@@ -38,6 +38,7 @@ export class AddEntryFoodSelectionDecider implements OnInit, OnDestroy, IEntryFo
   customFoodFormGroup: FormGroup = new FormGroup({});
 
   @ViewChild('listFoodPicker', { static: false }) listFoodPicker: IEntryFoodPicker;
+  @ViewChild('customFoodPicker', { static: false }) customFoodPicker: IEntryFoodPicker;
 
   get isValid(): boolean {
     if (!this.listFoodPicker) {
@@ -56,6 +57,7 @@ export class AddEntryFoodSelectionDecider implements OnInit, OnDestroy, IEntryFo
   ngOnInit() {
     if (this.data.food && !this.data.food.id) {
       this.preselectedCustoMFood = this.data.food
+      this.mode = PickMode.CUSTOM;
       this.selectedTabIndex = 1;
     } else if (this.data.food && this.data.food.id) {
       this.preselectedDBFood = this.data.food;
@@ -73,12 +75,13 @@ export class AddEntryFoodSelectionDecider implements OnInit, OnDestroy, IEntryFo
     this.dialogRef.close();
     if (this.mode === PickMode.DB) {
       this.food.next(this.listFoodPicker.food.getValue());
+    } else {
+      this.food.next(this.customFoodPicker.food.getValue());
     }
     this.food.complete();
   }
 
   ngAfterViewInit(): void {
-
   }
 
   tabClick(event: MatTabChangeEvent) {

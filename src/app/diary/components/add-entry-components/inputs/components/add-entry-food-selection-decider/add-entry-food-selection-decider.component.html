@@ -6,7 +6,7 @@
             <app-list-food-picker #listFoodPicker [currentlySelecteFood]="preselectedDBFood"></app-list-food-picker>
         </mat-tab>
         <mat-tab label="Manuell">
-            <app-food-editor [form]="customFoodFormGroup" #customFoodPicker> </app-food-editor>
+            <app-food-editor #customFoodPicker [form]="customFoodFormGroup" [preselected]="preselectedCustoMFood" #customFoodPicker> </app-food-editor>
         </mat-tab>
     </mat-tab-group>
 </div>
