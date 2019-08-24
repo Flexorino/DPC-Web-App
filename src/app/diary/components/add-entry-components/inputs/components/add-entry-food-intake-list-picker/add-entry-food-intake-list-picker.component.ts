@@ -36,7 +36,7 @@ export class AddEnetryFoodIntakeListPicker implements OnInit, IEntryFoodIntakeLi
 
 
   addMeal() {
-    let grp: FormGroup = this.fb.group({ KE: ['',[Validators.required, Validators.min(1), Validators.max(999)]] });
+    let grp: FormGroup = this.fb.group({ KE: ['', [Validators.required, Validators.min(1), Validators.max(999)]] });
     this.meals.push(grp);
   }
 
@@ -49,11 +49,13 @@ export class AddEnetryFoodIntakeListPicker implements OnInit, IEntryFoodIntakeLi
       this.foodIntakeSubscriptions.push(x.foodIntake.subscribe(x => {
         let intakes: FoodIntakeAttribute[] = [];
         this.foodIntakeSubjects.map(x => x.getValue()).filter(x => x).forEach(x => intakes.push(x));
-        console.log("event");
         this.foodArray.next(intakes);
       }));
     })
-
+    console.log("update");
+    let intakes: FoodIntakeAttribute[] = [];
+    this.foodIntakeSubjects.map(x => x.getValue()).filter(x => x).forEach(x => intakes.push(x));
+    this.foodArray.next(intakes);
   }
 
   remove(i: number) {

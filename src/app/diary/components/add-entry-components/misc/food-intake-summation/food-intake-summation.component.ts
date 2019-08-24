@@ -3,7 +3,7 @@ import { FoodIntakeAttribute } from './../../../../../../shared/model/diary/entr
 import { Component, OnInit, Input, AfterViewInit } from '@angular/core';
 import { IEntryFoodIntakeListPicker } from '../../inputs/interfaces/IEntryFoodIntakeListPicker';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-food-intake-summation',
@@ -22,7 +22,14 @@ export class FoodIntakeSummationComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.sum = this.foodIntakes.foodArray.pipe(map((x: FoodIntakeAttribute[]) => x.map(x => x.amount ? x.amount * this.settings.carbsFactorSubj.getValue() : 0).reduce((x, y) => x + y)));
+    this.sum = this.foodIntakes.foodArray.pipe(delay(0),map(
+      (x: FoodIntakeAttribute[]) => {
+        if (x.length) {
+          return x.map(x => x.amount ? x.amount * this.settings.carbsFactorSubj.getValue() : 0).reduce((x, y) => x + y);
+        } else {
+          return 0;
+        }
+      }));
   }
 
 }
