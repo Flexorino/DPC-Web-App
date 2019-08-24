@@ -40,7 +40,7 @@ export class FoodEditorComponent implements OnInit, IEntryFoodPicker {
     this.form.valueChanges.subscribe(x => {
       this.foodInModification.name = nameControl.value ? nameControl.value : null;
       try {
-        this.foodInModification.carbsFactor = carbsFactorControl.value ? Number.parseFloat(carbsFactorControl.value) * 0.001 : null;
+        this.foodInModification.carbsFactor = carbsFactorControl.value ? Number.parseFloat(carbsFactorControl.value) * 0.01 : null;
       } catch (e) {
       }
       this.foodInModification.absorption = resorptionControl.value ? resorptionControl.value === 's' ? Absorption.SLOW : resorptionControl.value === 'm' ? Absorption.MEDIUM : Absorption.FAST : null;

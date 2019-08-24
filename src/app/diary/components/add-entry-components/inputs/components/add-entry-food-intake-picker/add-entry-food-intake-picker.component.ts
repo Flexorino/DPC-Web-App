@@ -24,7 +24,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   selector: 'add-entry-food-intake-picker',
   templateUrl: './add-entry-food-intake-picker.component.html',
   styleUrls: ['./add-entry-food-intake-picker.component.scss']
-}) 
+})
 export class AddEntryFoodIntakePicker implements OnInit, IEntryFoodIntakePicker {
 
   @Output("close") close = new EventEmitter();
@@ -103,14 +103,14 @@ export class AddEntryFoodIntakePicker implements OnInit, IEntryFoodIntakePicker 
     event.preventDefault();
     event.stopPropagation();
     dialogRef.componentInstance.food.subscribe(x => {
-      this.currentSelectedFood = x;
       if (x) {
+        this.currentSelectedFood = x;
         this.mealCalcHelpForm.get("carbsFactor").setValue(x.carbsFactor ? (x.carbsFactor * 100).toFixed(1) : null);
         this.carbsFactor = x.carbsFactor;
         this.foodIntake.next({ food: x, amount: this.eatenCarbs })
       }
     });
-    dialogRef.afterClosed().subscribe(x =>       setTimeout(x => this.ref.nativeElement.blur(), 1));
+    dialogRef.afterClosed().subscribe(x => setTimeout(x => this.ref.nativeElement.blur(), 1));
   }
 
 }
