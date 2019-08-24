@@ -9,6 +9,7 @@ import { Diary } from 'src/shared/model/diary/diary';
 import { Observable, Subscription, Subject, BehaviorSubject } from 'rxjs';
 import { Food } from 'src/shared/model/diary/food';
 import { IEntryFoodPicker } from 'src/shared/components/interfaces/IEntryFoodPicker';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 
 enum PickMode {
@@ -39,10 +40,10 @@ export class AddEntryFoodSelectionDecider implements OnInit, OnDestroy, IEntryFo
   @ViewChild('listFoodPicker', { static: false }) listFoodPicker: IEntryFoodPicker;
 
   get isValid(): boolean {
-    if(!this.listFoodPicker){
+    if (!this.listFoodPicker) {
       return false;
     }
-    return this.mode === PickMode.DB && this.listFoodPicker.food.getValue() ? true : false;
+    return this.mode === PickMode.DB ? this.listFoodPicker.food.getValue() ? true : false : this.customFoodFormGroup.valid;
   }
 
   constructor(
@@ -78,5 +79,13 @@ export class AddEntryFoodSelectionDecider implements OnInit, OnDestroy, IEntryFo
 
   ngAfterViewInit(): void {
 
+  }
+
+  tabClick(event: MatTabChangeEvent) {
+    if (event.index === 0) {
+      this.mode = PickMode.DB;
+    } else {
+      this.mode = PickMode.CUSTOM;
+    }
   }
 }

@@ -3,8 +3,16 @@
         <input class="fullWidthInput" matInput placeholder="Name" formControlName="name" type="text">
     </mat-form-field>
     <mat-form-field class="fullWidthInput">
-        <input class="fullWidthInput" matInput placeholder="KH-Anteil"
-            formControlName="carbsFactor" type="number">
+        <input class="fullWidthInput" matInput placeholder="KH-Anteil" formControlName="carbsFactor" type="number">
         <span matSuffix>Gramm pro 100 Gramm</span>
+    </mat-form-field>
+    <mat-form-field class="fullWidthInput">
+        <mat-label>Resorption</mat-label>
+        <mat-select formControlName="resorption">
+            <mat-option value="">keine Angabe</mat-option>
+            <mat-option value="s">langsam</mat-option>
+            <mat-option value="m">mittel</mat-option>
+            <mat-option value="f">schnell</mat-option>
+        </mat-select>
     </mat-form-field>
 </div>
