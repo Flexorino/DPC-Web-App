@@ -14,6 +14,7 @@ import { FullScreenModalCloser } from 'src/shared/components/base-full-screen-mo
 import { Entry } from 'src/shared/model/diary/entry/entry';
 import { IEntryTimestampPicker } from '../inputs/interfaces/IEntryTimestampPicker';
 import { IEntryFoodIntakeListPicker } from '../inputs/interfaces/IEntryFoodIntakeListPicker';
+import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-add-ingestion',
@@ -75,7 +76,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
   }
 
   private handleFragmentNavigationStuff() {
-    this.fragmentSubscription = this.currentRoute.fragment.subscribe(z => {
+    this.fragmentSubscription = this.currentRoute.fragment.pipe(delay(0)).subscribe(z => {
       if (z) {
         try {
           if (Number.parseInt(z) !== this.stepper.selectedIndex) {
