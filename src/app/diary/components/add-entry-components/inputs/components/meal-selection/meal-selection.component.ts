@@ -1,21 +1,15 @@
-import { FoodPickerComponentInput } from '../food-picker/food-picker.component';
-import { FoodIntakeAttribute } from '../../../../../../../shared/model/diary/entry/attributes/food-intake-attribute';
+import { AddEntryFoodSelectionDecider, AddEntryFoodSelectionDeciderInput } from './../add-entry-food-selection-decider/add-entry-food-selection-decider.component';
 import { IEntryFoodIntakePicker } from '../../interfaces/IEntryFoodIntakePicker';
-import { Observable, Subject, pipe, BehaviorSubject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { Food } from 'src/shared/model/diary/food';
 import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder, Validators, FormGroup, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { SettingsService } from 'src/shared/services/settings.service';
-import { stringify } from '@angular/compiler/src/util';
-import { Patcherino } from 'src/shared/services/patcherino/patcherino';
-import { Patch } from 'src/shared/services/patcherino/patch';
-import { JJ } from 'src/shared/test';
 import { Store, select } from '@ngrx/store';
 import { Diary } from 'src/web-api';
-import { withLatestFrom, map, filter, tap } from 'rxjs/operators';
-import { FoodPickerComponent } from '../food-picker/food-picker.component';
+import { FoodIntakeAttribute } from 'src/shared/model/diary/entry/attributes/food-intake-attribute';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -101,10 +95,10 @@ export class MealSelectionComponent implements OnInit, IEntryFoodIntakePicker {
   }
 
   openDialog(event: Event): void {
-    const dialogRef = this.dialog.open(FoodPickerComponent, {
+    const dialogRef = this.dialog.open(AddEntryFoodSelectionDecider, {
       width: '80%',
       height: '600px',
-      data: new FoodPickerComponentInput(this.currentSelectedFood, this.foodFormGroup), panelClass: "full_screen_dialog"
+      data: new AddEntryFoodSelectionDeciderInput(this.currentSelectedFood, this.foodFormGroup), panelClass: "full_screen_dialog"
     });
     event.preventDefault();
     event.stopPropagation();

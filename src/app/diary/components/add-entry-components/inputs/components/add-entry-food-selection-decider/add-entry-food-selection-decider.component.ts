@@ -15,18 +15,18 @@ enum PickMode {
   DB, CUSTOM
 }
 
-export class FoodPickerComponentInput {
+export class AddEntryFoodSelectionDeciderInput {
   constructor(public readonly food: Food, public readonly: FormGroup){}
 }
 
 @Component({
-  selector: 'app-food-picker',
-  templateUrl: './food-picker.component.html',
-  styleUrls: ['./food-picker.component.scss']
+  selector: 'add-entry-food-selection-decider',
+  templateUrl: './add-entry-food-selection-decider.component.html',
+  styleUrls: ['./add-entry-food-selection-decider.component.scss']
 })
 
 
-export class FoodPickerComponent implements OnInit, OnDestroy, IEntryFoodPicker {
+export class AddEntryFoodSelectionDecider implements OnInit, OnDestroy, IEntryFoodPicker {
   food: BehaviorSubject<Food> = new BehaviorSubject(null);
 
   searchSnippet: string = ""
@@ -41,8 +41,8 @@ export class FoodPickerComponent implements OnInit, OnDestroy, IEntryFoodPicker 
   }
 
   constructor(
-    public dialogRef: MatDialogRef<FoodPickerComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: FoodPickerComponentInput,
+    public dialogRef: MatDialogRef<AddEntryFoodSelectionDeciderInput>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: AddEntryFoodSelectionDeciderInput,
     private store: Store<{ diary: Diary }>
   ) {
   }
