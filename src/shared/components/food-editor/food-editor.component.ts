@@ -16,7 +16,6 @@ export class FoodEditorComponent implements OnInit, IEntryFoodPicker {
   @Input("form") form: FormGroup;
   @Input("preselected") preselected: Food;
   foodInModification: Food = new Food(null);
-  bsUnit: BSUnit;
 
 
   constructor(private fb: FormBuilder, private settings: SettingsService) { }
@@ -27,8 +26,8 @@ export class FoodEditorComponent implements OnInit, IEntryFoodPicker {
       this.foodInModification = this.preselected;
       name = this.preselected.name;
     }
-    this.form.addControl("name", this.fb.control(name,[Validators.maxLength(30)]));
-    this.bsUnit = this.settings.bsUnitSettingSubj.getValue();
+    this.form.addControl("name", this.fb.control(name, [Validators.maxLength(30)]));
+    this.form.addControl("carbsFactor", this.fb.control('carbsFactor', [Validators.max(100), Validators.min(1)]));
   }
 
 }

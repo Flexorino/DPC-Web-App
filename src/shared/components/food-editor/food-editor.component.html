@@ -1,7 +1,10 @@
 <div [formGroup]="form">
     <mat-form-field class="fullWidthInput">
-        <input class="fullWidthInput" matInput placeholder="Blutzucker" formControlName="name" type="text">
-        <span matSuffix>{{bsUnit.identifier}}</span>
+        <input class="fullWidthInput" matInput placeholder="Name" formControlName="name" type="text">
+    </mat-form-field>
+    <mat-form-field class="fullWidthInput">
+        <input class="fullWidthInput" matInput placeholder="KH-Anteil"
+            formControlName="carbsFactor" type="number">
+        <span matSuffix>Gramm pro 100 Gramm</span>
     </mat-form-field>
 </div>
-sadasd
