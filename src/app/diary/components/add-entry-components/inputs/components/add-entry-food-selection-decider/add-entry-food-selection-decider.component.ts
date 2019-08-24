@@ -1,14 +1,14 @@
 import { FormGroup } from '@angular/forms';
 
-import { filter, map, merge, } from 'rxjs/operators';
+import { filter, map, merge, retry, } from 'rxjs/operators';
 import { combineLatest } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { Component, OnInit, Inject, OnDestroy, Optional } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy, Optional, ViewChild, AfterViewInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Diary } from 'src/shared/model/diary/diary';
 import { Observable, Subscription, Subject, BehaviorSubject } from 'rxjs';
-import { IEntryFoodPicker } from '../../interfaces/IEntryFoodPicker';
 import { Food } from 'src/shared/model/diary/food';
+import { IEntryFoodPicker } from 'src/shared/components/interfaces/IEntryFoodPicker';
 
 
 enum PickMode {
@@ -16,7 +16,7 @@ enum PickMode {
 }
 
 export class AddEntryFoodSelectionDeciderInput {
-  constructor(public readonly food: Food, public readonly: FormGroup){}
+  constructor(public readonly food: Food, public readonly: FormGroup) { }
 }
 
 @Component({
@@ -26,18 +26,22 @@ export class AddEntryFoodSelectionDeciderInput {
 })
 
 
-export class AddEntryFoodSelectionDecider implements OnInit, OnDestroy, IEntryFoodPicker {
+export class AddEntryFoodSelectionDecider implements OnInit, OnDestroy, IEntryFoodPicker, AfterViewInit {
+
   food: BehaviorSubject<Food> = new BehaviorSubject(null);
 
-  searchSnippet: string = ""
-  filteredFood: Observable<Array<Food>>;
-  private searchChange: BehaviorSubject<String> = new BehaviorSubject("");
   private mode: PickMode = PickMode.DB;
-  private currentSelectedFood: Food = null;
+  private preselectedDBFood: Food = null;
+  private preselectedCustoMFood: Food = null;
   selectedTabIndex: number;
 
+  @ViewChild('listFoodPicker', { static: false }) listFoodPicker: IEntryFoodPicker;
+
   get isValid(): boolean {
-    return this.mode === PickMode.DB && this.currentSelectedFood !== null ? true : false;
+    if(!this.listFoodPicker){
+      return false;
+    }
+    return this.mode === PickMode.DB && this.listFoodPicker.food.getValue() ? true : false;
   }
 
   constructor(
@@ -49,21 +53,11 @@ export class AddEntryFoodSelectionDecider implements OnInit, OnDestroy, IEntryFo
 
   ngOnInit() {
     if (this.data.food && !this.data.food.id) {
+      this.preselectedCustoMFood = this.data.food
       this.selectedTabIndex = 1;
     } else if (this.data.food && this.data.food.id) {
-      this.currentSelectedFood = this.data.food;
+      this.preselectedDBFood = this.data.food;
     }
-    let unfilteredFood = this.store.pipe(select('diary'), select('food'));
-    let searchRes: Observable<any> = combineLatest(unfilteredFood, this.searchChange);
-    this.filteredFood = searchRes.pipe(map(x => {
-      let food: Array<Food> = x[0];
-      let filter: string = x[1];
-      return food.filter(x => x.name.toLowerCase().includes(filter.toLowerCase())).sort((a, b) => {
-        if (a.name < b.name) { return -1; }
-        if (a.name > b.name) { return 1; }
-        return 0;
-      });
-    }));
   }
   onNoClick() {
     this.dialogRef.close();
@@ -73,18 +67,15 @@ export class AddEntryFoodSelectionDecider implements OnInit, OnDestroy, IEntryFo
   ngOnDestroy(): void {
   }
 
-  searchChanged(newValue) {
-    console.log("change");
-    this.searchChange.next(newValue);
-  }
-
-  selectFood(food: Food) {
-    this.currentSelectedFood = food;
-  }
-
   onSubmit() {
     this.dialogRef.close();
-    this.food.next(this.currentSelectedFood);
+    if (this.mode === PickMode.DB) {
+      this.food.next(this.listFoodPicker.food.getValue());
+    }
     this.food.complete();
+  }
+
+  ngAfterViewInit(): void {
+
   }
 }

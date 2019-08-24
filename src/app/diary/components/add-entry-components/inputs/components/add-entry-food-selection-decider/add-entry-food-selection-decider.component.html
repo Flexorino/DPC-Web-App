@@ -3,11 +3,7 @@
 
     <mat-tab-group mat-stretch-tabs [selectedIndex]="selectedTabIndex">
         <mat-tab label="Gespeichert">
-            <mat-form-field class="fullWidthInput">
-                <input (ngModelChange)="searchChanged($event)" matInput [(ngModel)]="searchSnippet"
-                    [ngModelOptions]="{standalone: true}" placeholder="Suche">
-            </mat-form-field>
-
+            <app-list-food-picker #listFoodPicker [currentlySelecteFood]="preselectedDBFood"></app-list-food-picker>
         </mat-tab>
         <mat-tab label="Manuell"> Content 2 </mat-tab>
     </mat-tab-group>
