@@ -1,3 +1,4 @@
+import { BaseInsulinIntakeSemantics } from './../../../../../../../shared/model/diary/entry/attributes/insulin-attribute';
 import { SimpleInsulinIntake } from 'src/shared/model/diary/entry/attributes/simple-Insulin-intake';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Component, OnInit, Input } from '@angular/core';
@@ -21,7 +22,7 @@ export class AddEntrySimpleFoodBolusPickerComponent implements OnInit, IEntrySim
   ngOnInit() {
     this.insulinAttribute = new SimpleInsulinIntake();
     this.insulinAttribute.insulin = null;
-    this.insulinAttribute.semanticIdentifier = "FOOD_BOLUS";
+    this.insulinAttribute.semanticIdentifier = BaseInsulinIntakeSemantics.FOOD_BOLUS;
     let control = this.fb.control(null, [Validators.min(1), Validators.max(50)]);
     this.group.addControl('bolus', control);
     control.valueChanges.subscribe(x => {
