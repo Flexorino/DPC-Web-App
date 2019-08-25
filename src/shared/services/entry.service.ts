@@ -73,18 +73,16 @@ export class EntryService {
             newEntry.carbs = webEntry.mealUnits;
         }
         if (webEntry.basal) {
-            newEntry.basal = new InsulinAttribute(webEntry.basal.insulin, webEntry.basal.insulinName, webEntry.basal.units);
+            newEntry.basal = new InsulinAttribute();
         }
         if (webEntry.comment) {
             newEntry.comment = webEntry.comment;
         }
         if (webEntry.correctionBolus) {
-            newEntry.correctionBolus = new InsulinAttribute(webEntry.correctionBolus.insulin, webEntry.correctionBolus.insulinName,
-                webEntry.correctionBolus.units);
+            newEntry.correctionBolus = new InsulinAttribute();
         }
         if (webEntry.mealBolus) {
-            newEntry.mealBolus = new InsulinAttribute(webEntry.mealBolus.insulin, webEntry.mealBolus.insulinName,
-                webEntry.mealBolus.units);
+            newEntry.mealBolus = new InsulinAttribute();
         }
         if (webEntry.tempBasalChange) {
             newEntry.tempBasalChange = new TempBasalChangeAttribute(webEntry.tempBasalChange.duration, webEntry.tempBasalChange.percentage);
@@ -106,7 +104,7 @@ export class EntryService {
         }
         if (entry.basal) {
             webEntry.basal = {};
-            webEntry.basal.insulin = entry.basal.insulinId;
+           // webEntry.basal.insulin = entry.basal.insulinId;
             webEntry.basal.units = entry.basal.units;
         }
         if (entry.comment) {
@@ -114,12 +112,12 @@ export class EntryService {
         }
         if (entry.correctionBolus) {
             webEntry.correctionBolus = {};
-            webEntry.correctionBolus.insulin = entry.correctionBolus.insulinId;
+        //    webEntry.correctionBolus.insulin = entry.correctionBolus.insulinId;
             webEntry.correctionBolus.units = entry.correctionBolus.units;
         }
         if (entry.mealBolus) {
             webEntry.mealBolus = {};
-            webEntry.mealBolus.insulin = entry.mealBolus.insulinId;
+          //  webEntry.mealBolus.insulin = entry.mealBolus.insulinId;
             webEntry.mealBolus.units = entry.mealBolus.units;
         }
         if (entry.tempBasalChange) {

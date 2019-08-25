@@ -47,7 +47,9 @@ import { FoodIntakeSummationComponent } from './diary/components/add-entry-compo
 import { ListFoodPickerComponent } from 'src/shared/components/list-food-picker/list-food-picker.component';
 import { FoodEditorComponent } from 'src/shared/components/food-editor/food-editor.component';
 import { AddEntryFoodIntakePicker } from './diary/components/add-entry-components/inputs/components/add-entry-food-intake-picker/add-entry-food-intake-picker.component';
-
+import { FoodInfoShowerComponent } from '../shared/components/food-info-shower/food-info-shower.component';
+import { FoodInfoShowerPopupwrapperComponent } from 'src/shared/components/food-info-shower-popupwrapper/food-info-shower-popupwrapper.component';
+import { AddEntrySimpleFoodBolusPickerComponent } from './diary/components/add-entry-components/inputs/components/add-entry-simple-food-bolus-picker/add-entry-simple-food-bolus-picker.component';
 
 
 
@@ -78,7 +80,10 @@ import { AddEntryFoodIntakePicker } from './diary/components/add-entry-component
     AddEnetryFoodIntakeListPicker,
     FoodIntakeSummationComponent,
     ListFoodPickerComponent,
-    FoodEditorComponent  
+    FoodEditorComponent,
+    FoodInfoShowerComponent,
+    FoodInfoShowerPopupwrapperComponent,
+    AddEntrySimpleFoodBolusPickerComponent  
   ],
   imports: [
     ReactiveFormsModule,
@@ -97,6 +102,6 @@ import { AddEntryFoodIntakePicker } from './diary/components/add-entry-component
   ],
   providers: [BloodSugarPipe, CarbsPipe,{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}],
   bootstrap: [AppComponent],
-  entryComponents: [AddEntryComponent, AddEntryFoodSelectionDecider]
+  entryComponents: [AddEntryComponent, AddEntryFoodSelectionDecider, FoodInfoShowerPopupwrapperComponent]
 })
 export class AppModule { }

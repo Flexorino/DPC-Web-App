@@ -25,10 +25,7 @@
             <mat-step>
                 <ng-template matStepLabel>Bolus etc.</ng-template>
                 <h3>Bolus berechnen</h3>
-                <mat-form-field class="fullWidthInput">
-                    <input class="fullWidthInput" matInput placeholder="Essens-Bolus" type="number">
-                    <span matSuffix>IE</span>
-                </mat-form-field>
+                <app-add-entry-simple-food-bolus-picker #foodBolus [group]="simpleFoodBolusForm"> </app-add-entry-simple-food-bolus-picker>
                 <mat-card class="delayedBolus" [ngClass]="{'delayedBolusExpanded': delayedBolus}">
 
                     <mat-checkbox class="fullWidthInput" [(ngModel)]="delayedBolus"

@@ -10,13 +10,15 @@ export class Entry {
     // attributes
     public bloodSuger?: number;
     public carbs?: number;
-    public mealBolus?: InsulinAttribute;
-    public correctionBolus?: InsulinAttribute;
-    public basal?: InsulinAttribute;
+    public insulinIntake?: InsulinAttribute[];
     public tempBasalChange?: TempBasalChangeAttribute;
     public tags?: Array<TagAttribute> =[];
     public comment?: string;
 
+    //TODO: ändere mich um!
+    public mealBolus?: InsulinAttribute;
+    public correctionBolus?: InsulinAttribute;
+    public basal?: InsulinAttribute;
     // ref
     public _selfId: string;
 

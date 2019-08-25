@@ -1,0 +1,5 @@
+<h1 mat-dialog-title>{{food.name? food.name : "Essen"}}</h1>
+<div id="content">
+<app-food-info-shower [food]="food"></app-food-info-shower>
+</div>
+<button id="ok" mat-button (click)="close()" mat-stroked-button color="primary">OK</button>

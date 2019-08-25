@@ -41,13 +41,13 @@ export class EntryInputConversionService {
             entry.tags = data.tags.map(x => new TagAttribute(x, null));
         }
         if (data.basal) {
-            entry.basal = new InsulinAttribute(this.settings.defaultBasalInsulin, null, data.basal);
+            entry.basal = new InsulinAttribute();
         }
         if (data.correctionBolus) {
-            entry.correctionBolus = new InsulinAttribute(this.settings.defaultCorrectionInsulin, null, data.correctionBolus);
+            entry.correctionBolus = new InsulinAttribute();
         }
         if (data.mealBolus) {
-            entry.mealBolus = new InsulinAttribute(this.settings.defaultMealInsulin, null, data.mealBolus);
+            entry.mealBolus = new InsulinAttribute();
         }
         return entry;
     }

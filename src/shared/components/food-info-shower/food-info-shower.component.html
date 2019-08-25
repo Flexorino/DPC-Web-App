@@ -1,0 +1,14 @@
+<div class="descr-row">
+    <div class="descr-content">Name</div>
+    <div class="descr-content">{{food?.name? food.name : "/"}}</div>
+</div>
+<div class="descr-row">
+    <div class="descr-content">KH pro 100g: </div>
+    <div class="descr-content">{{food?.carbsFactor? food.carbsFactor * 100 +"g": "/"}}</div>
+</div>
+<div class="descr-row">
+    <div class="descr-content">Resorption: </div>
+    <div class="descr-content">{{food?.absorption? food.absorption : "/"}}</div>
+</div>
+<div>Beschreibung:</div>
+<div>{{food?.description? food.description : "/"}}</div>

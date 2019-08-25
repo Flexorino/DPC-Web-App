@@ -15,6 +15,7 @@ import { Entry } from 'src/shared/model/diary/entry/entry';
 import { IEntryTimestampPicker } from '../inputs/interfaces/IEntryTimestampPicker';
 import { IEntryFoodIntakeListPicker } from '../inputs/interfaces/IEntryFoodIntakeListPicker';
 import { delay } from 'rxjs/operators';
+import { IEntryInsulinIntakePicker } from '../inputs/interfaces/IEntryInsulinIntakePicker';
 
 @Component({
   selector: 'app-add-ingestion',
@@ -36,6 +37,8 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
   @ViewChild("bsMeasure", { static: false }) bsMeasurePicker: IEntryBSPicker;
   foodPickerFormGroup: FormGroup = new FormGroup({});
   @ViewChild("foodIntakeListPicker", { static: false }) foodIntakeListPicker: IEntryFoodIntakeListPicker;
+  simpleFoodBolusForm: FormGroup = new FormGroup({});
+  @ViewChild("foodBolus", { static: false }) foodBolusPicker: IEntryInsulinIntakePicker;
 
   // subscriptions
   private contextSubscription: Subscription;
@@ -61,11 +64,11 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
     this.handleFragmentNavigationStuff();
     this.timeStampPicker.timestamp.subscribe(x => console.log(new Date(x * 1000).toISOString()))
     this.bsMeasurePicker.bs.subscribe(x => console.log("BS: " + x));
-    this.foodIntakeListPicker.foodArray.subscribe(x => 
-      {
-        console.log("CHANGE: " + JSON.stringify(x));}
-        );
-
+    this.foodIntakeListPicker.foodArray.subscribe(x => {
+      console.log("CHANGE: " + JSON.stringify(x));
+    }
+    );
+    this.foodBolusPicker.pickedIntake.subscribe(x => console.log("BOLUS: " + JSON.stringify(x)));
   }
 
   ngOnInit() {
@@ -114,9 +117,9 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
       meals: this.foodPickerFormGroup
     });
     this.thirdFormGroup = this.fb.group({
-      mealBolus: []
+      mealBolus: this.simpleFoodBolusForm
     });
-    this.mainFormGroup = this.fb.group({ timeAndBs: this.firstFormGroup, mealForm: this.secondFormGroup });
+    this.mainFormGroup = this.fb.group({ timeAndBs: this.firstFormGroup, mealForm: this.secondFormGroup, bolusEtc: this.thirdFormGroup });
   }
 
   submit() {

@@ -34,8 +34,11 @@ mat-card {
     position: relative;
 }
 
-#removeFood {
+#foodSideIcons {
     position: absolute;
     height: 100%;
     right: 2px;
+    display: flex;
+    align-content: center;
+    top: 6px;
 }

@@ -1,3 +1,5 @@
+import { FoodInfoShowerPopupwrapperComponentInput } from './../../../../../../../shared/components/food-info-shower-popupwrapper/food-info-shower-popupwrapper.component';
+import { FoodInfoShowerPopupwrapperComponent } from 'src/shared/components/food-info-shower-popupwrapper/food-info-shower-popupwrapper.component';
 import { AddEntryFoodSelectionDecider, AddEntryFoodSelectionDeciderInput } from '../add-entry-food-selection-decider/add-entry-food-selection-decider.component';
 import { IEntryFoodIntakePicker } from '../../interfaces/IEntryFoodIntakePicker';
 import { BehaviorSubject } from 'rxjs';
@@ -111,6 +113,13 @@ export class AddEntryFoodIntakePicker implements OnInit, IEntryFoodIntakePicker 
       }
     });
     dialogRef.afterClosed().subscribe(x => setTimeout(x => this.ref.nativeElement.blur(), 1));
+  }
+
+  showFoodInfo() {
+    const dialogRef = this.dialog.open(FoodInfoShowerPopupwrapperComponent, {
+      width: '80%',
+      data: new FoodInfoShowerPopupwrapperComponentInput(this.currentSelectedFood), panelClass: "full_screen_dialog"
+    });
   }
 
 }

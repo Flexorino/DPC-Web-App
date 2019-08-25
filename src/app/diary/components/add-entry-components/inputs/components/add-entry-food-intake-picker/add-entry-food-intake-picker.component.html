@@ -7,7 +7,10 @@
                 <mat-form-field id="foodField" class="fullWidthInput" (click)="openDialog($event)">
                     <input #mealSel [value]="currentSelectedFood?.name" class="fullWidthInput" matInput
                         placeholder="Nahrung" type="text">
-                    <mat-icon *ngIf="currentSelectedFood" id="removeFood" (click)="removeFood();$event.stopPropagation()">close</mat-icon>
+                    <div id="foodSideIcons" *ngIf="currentSelectedFood">
+                        <mat-icon (click)="showFoodInfo();$event.stopPropagation()">info</mat-icon>
+                        <mat-icon (click)="removeFood();$event.stopPropagation()">close</mat-icon>
+                    </div>
                 </mat-form-field>
             </div>
             <div>
