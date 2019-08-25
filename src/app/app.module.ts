@@ -50,6 +50,7 @@ import { AddEntryFoodIntakePicker } from './diary/components/add-entry-component
 import { FoodInfoShowerComponent } from '../shared/components/food-info-shower/food-info-shower.component';
 import { FoodInfoShowerPopupwrapperComponent } from 'src/shared/components/food-info-shower-popupwrapper/food-info-shower-popupwrapper.component';
 import { AddEntrySimpleFoodBolusPickerComponent } from './diary/components/add-entry-components/inputs/components/add-entry-simple-food-bolus-picker/add-entry-simple-food-bolus-picker.component';
+import { AddEntryIntervallFoodBolusPickerComponent } from './diary/components/add-entry-components/inputs/components/add-entry-intervall-food-bolus-picker/add-entry-intervall-food-bolus-picker.component';
 
 
 
@@ -83,7 +84,8 @@ import { AddEntrySimpleFoodBolusPickerComponent } from './diary/components/add-e
     FoodEditorComponent,
     FoodInfoShowerComponent,
     FoodInfoShowerPopupwrapperComponent,
-    AddEntrySimpleFoodBolusPickerComponent  
+    AddEntrySimpleFoodBolusPickerComponent,
+    AddEntryIntervallFoodBolusPickerComponent  
   ],
   imports: [
     ReactiveFormsModule,

@@ -1,6 +1,7 @@
+import { SimpleInsulinIntake } from 'src/shared/model/diary/entry/attributes/simple-Insulin-intake';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Component, OnInit, Input } from '@angular/core';
-import { IEntryInsulinIntakePicker } from '../../interfaces/IEntryInsulinIntakePicker';
+import { IEntrySimpleInsulinIntakePicker } from '../../interfaces/IEntryInsulinIntakePicker';
 import { InsulinAttribute } from 'src/shared/model/diary/entry/attributes/insulin-attribute';
 import { BehaviorSubject } from 'rxjs';
 
@@ -9,16 +10,16 @@ import { BehaviorSubject } from 'rxjs';
   templateUrl: './add-entry-simple-food-bolus-picker.component.html',
   styleUrls: ['./add-entry-simple-food-bolus-picker.component.scss']
 })
-export class AddEntrySimpleFoodBolusPickerComponent implements OnInit, IEntryInsulinIntakePicker {
+export class AddEntrySimpleFoodBolusPickerComponent implements OnInit, IEntrySimpleInsulinIntakePicker {
   pickedIntake: BehaviorSubject<InsulinAttribute> = new BehaviorSubject(null);
-  insulinAttribute: InsulinAttribute;
+  insulinAttribute: SimpleInsulinIntake;
 
   constructor(private fb: FormBuilder) { }
 
   @Input("group") group: FormGroup;
 
   ngOnInit() {
-    this.insulinAttribute = new InsulinAttribute();
+    this.insulinAttribute = new SimpleInsulinIntake();
     this.insulinAttribute.insulin = null;
     this.insulinAttribute.semanticIdentifier = "FOOD_BOLUS";
     let control = this.fb.control(null, [Validators.min(1), Validators.max(50)]);

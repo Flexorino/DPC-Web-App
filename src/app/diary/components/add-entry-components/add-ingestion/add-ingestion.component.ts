@@ -15,7 +15,7 @@ import { Entry } from 'src/shared/model/diary/entry/entry';
 import { IEntryTimestampPicker } from '../inputs/interfaces/IEntryTimestampPicker';
 import { IEntryFoodIntakeListPicker } from '../inputs/interfaces/IEntryFoodIntakeListPicker';
 import { delay } from 'rxjs/operators';
-import { IEntryInsulinIntakePicker } from '../inputs/interfaces/IEntryInsulinIntakePicker';
+import { IEntrySimpleInsulinIntakePicker } from '../inputs/interfaces/IEntryInsulinIntakePicker';
 
 @Component({
   selector: 'app-add-ingestion',
@@ -38,7 +38,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
   foodPickerFormGroup: FormGroup = new FormGroup({});
   @ViewChild("foodIntakeListPicker", { static: false }) foodIntakeListPicker: IEntryFoodIntakeListPicker;
   simpleFoodBolusForm: FormGroup = new FormGroup({});
-  @ViewChild("foodBolus", { static: false }) foodBolusPicker: IEntryInsulinIntakePicker;
+  @ViewChild("foodBolus", { static: false }) foodBolusPicker: IEntrySimpleInsulinIntakePicker;
 
   // subscriptions
   private contextSubscription: Subscription;
