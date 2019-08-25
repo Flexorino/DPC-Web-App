@@ -39,6 +39,8 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
   @ViewChild("foodIntakeListPicker", { static: false }) foodIntakeListPicker: IEntryFoodIntakeListPicker;
   simpleFoodBolusForm: FormGroup = new FormGroup({});
   @ViewChild("foodBolus", { static: false }) foodBolusPicker: IEntrySimpleInsulinIntakePicker;
+  intervallFoodBolusForm: FormGroup = new FormGroup({});
+  @ViewChild("intervallFoodBolus", { static: false }) intervallFoodBolus: IEntrySimpleInsulinIntakePicker;
 
   // subscriptions
   private contextSubscription: Subscription;
@@ -117,7 +119,8 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
       meals: this.foodPickerFormGroup
     });
     this.thirdFormGroup = this.fb.group({
-      mealBolus: this.simpleFoodBolusForm
+      mealBolus: this.simpleFoodBolusForm,
+      intervallFoodBolus: this.intervallFoodBolus
     });
     this.mainFormGroup = this.fb.group({ timeAndBs: this.firstFormGroup, mealForm: this.secondFormGroup, bolusEtc: this.thirdFormGroup });
   }

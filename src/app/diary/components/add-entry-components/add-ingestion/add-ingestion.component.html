@@ -26,28 +26,7 @@
                 <ng-template matStepLabel>Bolus etc.</ng-template>
                 <h3>Bolus berechnen</h3>
                 <app-add-entry-simple-food-bolus-picker #foodBolus [group]="simpleFoodBolusForm"> </app-add-entry-simple-food-bolus-picker>
-                <mat-card class="delayedBolus" [ngClass]="{'delayedBolusExpanded': delayedBolus}">
-
-                    <mat-checkbox class="fullWidthInput" [(ngModel)]="delayedBolus"
-                        [ngModelOptions]="{standalone: true}">Verzögerte Bolus</mat-checkbox>
-                    <div class="delayedBolusContent">
-                        <div>Wie viele Einheiten sollen verzögert abgebeben werden?</div>
-                        <mat-slider class="fullWidthInput" [max]="mealBolusValue" [min]="0" [step]="1">
-
-                        </mat-slider>
-                        {{mealBolusValue}}
-                        <mat-form-field class="fullWidthInput">
-                            <input class="fullWidthInput" matInput placeholder="Fixer verzögerte Bolus Anteil"
-                                type="number">
-                            <span matSuffix>IE</span>
-                        </mat-form-field>
-                        <mat-form-field class="fullWidthInput">
-                            <input class="fullWidthInput" matInput placeholder="Fixer verzögerte Bolus" type="time">
-                            <span matSuffix>IE</span>
-                        </mat-form-field>
-                        <div>Es werden X Einheiten über einen Zeitraum von X abgegeben. </div>
-                    </div>
-                </mat-card>
+                <app-add-entry-intervall-food-bolus-picker #intervallFoodBolus [group]="intervallFoodBolusForm"> </app-add-entry-intervall-food-bolus-picker>
                 <mat-form-field class="fullWidthInput">
                     <input class="fullWidthInput" matInput placeholder="Korrektur-Bolus" type="number">
                     <span matSuffix>IE</span>

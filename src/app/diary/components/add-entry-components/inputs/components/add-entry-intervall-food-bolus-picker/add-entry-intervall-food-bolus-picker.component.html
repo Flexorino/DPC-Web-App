@@ -1,1 +1,24 @@
-<p>add-entry-intervall-food-bolus-picker works!</p>
+<div [formGroup]="group" >
+    <mat-expansion-panel #panel hideToggle>
+        <mat-expansion-panel-header matRipple (click)="panel.toggle();" class="expansion-header">
+            <mat-panel-title>
+                Abgabe des Bolus über Zeitraum
+            </mat-panel-title>
+            <div class="expandHandler" (click)="$event.stopPropagation();">
+                <mat-checkbox (click)="panel.toggle()"></mat-checkbox>
+            </div>
+
+        </mat-expansion-panel-header>
+        <div>Wie viele Einheiten sollen verzögert abgebeben werden?</div>
+        <mat-slider class="fullWidthInput" [max]="selectedNormalBolus" [min]="0" [step]="1"> </mat-slider>
+        <mat-form-field class="fullWidthInput">
+            <input class="fullWidthInput" matInput placeholder="Fixer verzögerte Bolus Anteil" type="number">
+            <span matSuffix>IE</span>
+        </mat-form-field>
+        <mat-form-field class="fullWidthInput">
+            <input class="fullWidthInput" matInput placeholder="Fixer verzögerte Bolus" type="time">
+            <span matSuffix>IE</span>
+        </mat-form-field>
+        <div>Es werden X Einheiten über einen Zeitraum von X abgegeben. </div>
+    </mat-expansion-panel>
+</div>

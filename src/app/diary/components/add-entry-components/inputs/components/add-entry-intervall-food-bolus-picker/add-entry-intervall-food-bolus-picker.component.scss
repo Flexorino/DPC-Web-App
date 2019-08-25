@@ -1,0 +1,15 @@
+.fullWidthInput {
+    width: 100%;
+}
+
+.expandHandler {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 2rem;
+    z-index: 50;
+    display: flex;
+    justify-items: center;
+    align-items: center;
+  }
