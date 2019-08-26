@@ -1,6 +1,6 @@
 import { BaseInsulinIntakeSemantics } from './../../../../../../../shared/model/diary/entry/attributes/insulin-attribute';
 import { SimpleInsulinIntake } from 'src/shared/model/diary/entry/attributes/simple-Insulin-intake';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Component, OnInit, Input } from '@angular/core';
 import { IEntrySimpleInsulinIntakePicker } from '../../interfaces/IEntryInsulinIntakePicker';
 import { InsulinAttribute } from 'src/shared/model/diary/entry/attributes/insulin-attribute';
@@ -14,7 +14,7 @@ import { BehaviorSubject } from 'rxjs';
 export class AddEntrySimpleFoodBolusPickerComponent implements OnInit, IEntrySimpleInsulinIntakePicker {
   pickedIntake: BehaviorSubject<InsulinAttribute> = new BehaviorSubject(null);
   insulinAttribute: SimpleInsulinIntake;
-
+  control: FormControl;
   constructor(private fb: FormBuilder) { }
 
   @Input("group") group: FormGroup;
@@ -24,6 +24,7 @@ export class AddEntrySimpleFoodBolusPickerComponent implements OnInit, IEntrySim
     this.insulinAttribute.insulin = null;
     this.insulinAttribute.semanticIdentifier = BaseInsulinIntakeSemantics.FOOD_BOLUS;
     let control = this.fb.control(null, [Validators.min(1), Validators.max(50)]);
+    this.control = control;
     this.group.addControl('bolus', control);
     control.valueChanges.subscribe(x => {
       if (control.value) {
@@ -38,5 +39,7 @@ export class AddEntrySimpleFoodBolusPickerComponent implements OnInit, IEntrySim
       }
     });
   }
-
+  setUnits(units: number) {
+    this.control.setValue(units);
+  }
 }

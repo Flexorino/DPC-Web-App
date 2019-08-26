@@ -11,6 +11,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./add-entry-simple-correction-bolus-picker.component.scss']
 })
 export class AddEntrySimpleCorrectionBolusPickerComponent implements OnInit, IEntrySimpleInsulinIntakePicker {
+  setUnits(units: number) {
+    throw new Error("Method not implemented.");
+  }
 
   pickedIntake: BehaviorSubject<InsulinAttribute> = new BehaviorSubject(null);
   insulinAttribute: SimpleInsulinIntake;

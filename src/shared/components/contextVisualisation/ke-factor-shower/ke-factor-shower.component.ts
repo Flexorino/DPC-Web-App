@@ -1,3 +1,4 @@
+import { BSUnit } from './../../../services/BSUnit';
 
 ;
 import { DiaryContextKEFactors } from '../../../model/diary/context/diary-context-KE-factors';
@@ -9,6 +10,7 @@ import { Observable, merge, combineLatest } from 'rxjs';
 import { withLatestFrom, map, filter } from 'rxjs/operators';
 import { DiaryContext } from 'src/shared/model/diary/context/diary-context';
 import { getLatestContextObservable } from '../selectors';
+import { SettingsService } from 'src/shared/services/settings.service';
 
 @Component({
   selector: 'app-ke-factor-shower',
@@ -21,8 +23,11 @@ export class KeFactorShowerComponent implements OnInit {
 
   currentKEFactorAttribut: DiaryContextKEFactors = null;
 
+  bsunit : BSUnit;
+
   constructor(
-    private store: Store<{ diary: Diary }>
+    private store: Store<{ diary: Diary }>,
+    private settings : SettingsService
   ) {
   }
 
@@ -30,6 +35,7 @@ export class KeFactorShowerComponent implements OnInit {
     getLatestContextObservable(this.currentTimestamp, this.store).subscribe((x:DiaryContext) => {
       this.currentKEFactorAttribut = x.keFactor;
     });
+    this.bsunit = this.settings.bsUnitSettingSubj.getValue();
   }
 
 }

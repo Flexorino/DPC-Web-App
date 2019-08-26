@@ -49,13 +49,14 @@ import { FoodEditorComponent } from 'src/shared/components/food-editor/food-edit
 import { AddEntryFoodIntakePicker } from './diary/components/add-entry-components/inputs/components/add-entry-food-intake-picker/add-entry-food-intake-picker.component';
 import { FoodInfoShowerComponent } from '../shared/components/food-info-shower/food-info-shower.component';
 import { FoodInfoShowerPopupwrapperComponent } from 'src/shared/components/food-info-shower-popupwrapper/food-info-shower-popupwrapper.component';
-import { AddEntrySimpleFoodBolusPickerComponent } from './diary/components/add-entry-components/inputs/components/add-entry-simple-food-bolus-picker/add-entry-simple-food-bolus-picker.component';
 import { AddEntryIntervallFoodBolusPickerComponent } from './diary/components/add-entry-components/inputs/components/add-entry-intervall-food-bolus-picker/add-entry-intervall-food-bolus-picker.component';
 import { AddEntrySimpleCorrectionBolusPickerComponent } from './diary/components/add-entry-components/inputs/components/add-entry-simple-correction-bolus-picker/add-entry-simple-correction-bolus-picker.component';
 import { KeFactorShowerComponent } from '../shared/components/contextVisualisation/ke-factor-shower/ke-factor-shower.component';
 import { CorrectionFactorShowerComponent } from '../shared/components/contextVisualisation/correction-factor-shower/correction-factor-shower.component';
 import { FramevalueShowerComponent } from '../shared/components/contextVisualisation/framevalue-shower/framevalue-shower.component';
 import { BolusCalculatorButtonComponent } from './diary/components/add-entry-components/misc/bolus-calculator-button/bolus-calculator-button.component';
+import { RestNetworkBolusUtilDAO } from 'src/shared/services/DAO/network-bolus-util-dao';
+import { AddEntrySimpleFoodBolusPickerComponent } from './diary/components/add-entry-components/inputs/components/add-entry-simple-food-bolus-picker/add-entry-simple-food-bolus-picker.component';
 
 
 @NgModule({
@@ -111,7 +112,7 @@ import { BolusCalculatorButtonComponent } from './diary/components/add-entry-com
     BrowserAnimationsModule
 
   ],
-  providers: [BloodSugarPipe, CarbsPipe,{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}],
+  providers: [BloodSugarPipe, CarbsPipe,{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}, {provide: 'IBolusUtilDao', useClass: RestNetworkBolusUtilDAO}],
   bootstrap: [AppComponent],
   entryComponents: [AddEntryComponent, AddEntryFoodSelectionDecider, FoodInfoShowerPopupwrapperComponent]
 })

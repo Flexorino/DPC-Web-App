@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddEntrySimpleFoodBolusPickerComponent } from './add-entry-simple-food-bolus-picker.component';
+import { AddEntrySimpleFoodBolusPickerComponent } from "./AddEntrySimpleFoodBolusPickerComponent";
 
 describe('AddEntrySimpleFoodBolusPickerComponent', () => {
   let component: AddEntrySimpleFoodBolusPickerComponent;

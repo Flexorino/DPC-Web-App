@@ -1,10 +1,12 @@
+import { SimpleInsulinIntake } from './../../../../../shared/model/diary/entry/attributes/simple-Insulin-intake';
+import { BaseInsulinIntakeSemantics } from './../../../../../shared/model/diary/entry/attributes/insulin-attribute';
 import { IEntryBSPicker } from './../inputs/interfaces/IEntryBSPicker';
 import { AddEntryActionsProps } from './../sharedActionsProps.ts/add-entry-props';
 import { AddIngestionActions } from './add-ingestion.actions';
 import { SettingsService } from 'src/shared/services/settings.service';
 import { pipe, Subscription, Observable, Subject, merge } from 'rxjs';
 import { ActivatedRouteSnapshot, ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit, ViewChild, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ViewChildren, QueryList, Inject } from '@angular/core';
 import { Validators, FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { MatStepper, MatStep } from '@angular/material/stepper';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
@@ -17,6 +19,8 @@ import { IEntryFoodIntakeListPicker } from '../inputs/interfaces/IEntryFoodIntak
 import { delay, map } from 'rxjs/operators';
 import { IEntrySimpleInsulinIntakePicker } from '../inputs/interfaces/IEntryInsulinIntakePicker';
 import { InsulinAttribute } from 'src/shared/model/diary/entry/attributes/insulin-attribute';
+import { IBolusUtilDao } from 'src/shared/services/DAO/i-bolus-util-dao';
+import { X } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-add-ingestion',
@@ -66,7 +70,8 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
     private router: Router,
     private settings: SettingsService,
     private closer: FullScreenModalCloser,
-    private store: Store<any>
+    private store: Store<any>,
+    @Inject("IBolusUtilDao") private bolusDao: IBolusUtilDao
   ) { }
 
   private handleSubFormSubsciptions() {
@@ -172,5 +177,13 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
         this.closer.close();
       })
     }
+  }
+
+  onBolusRequest() {
+    this.loading = true;
+    this.bolusDao.getBolusSuggestion(this.entryInModification).subscribe(x => {
+      this.foodBolusPicker.setUnits(x.insulinIntakes.find(x => x.semanticIdentifier === BaseInsulinIntakeSemantics.FOOD_BOLUS && x instanceof SimpleInsulinIntake).units)
+      this.loading =false;});
+
   }
 }
