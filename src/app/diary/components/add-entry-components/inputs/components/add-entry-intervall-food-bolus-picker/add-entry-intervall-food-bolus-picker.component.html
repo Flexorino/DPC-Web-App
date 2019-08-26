@@ -1,4 +1,4 @@
-<div [formGroup]="group" >
+<div [formGroup]="group">
     <mat-expansion-panel #panel hideToggle>
         <mat-expansion-panel-header matRipple (click)="panel.toggle();" class="expansion-header">
             <mat-panel-title>
@@ -10,7 +10,8 @@
 
         </mat-expansion-panel-header>
         <div>Wie viele Einheiten sollen verzögert abgebeben werden?</div>
-        <mat-slider class="fullWidthInput" [max]="selectedNormalBolus" [min]="0" [step]="1"> </mat-slider>
+        <mat-slider class="fullWidthInput" [max]="currentPreSelectedBolus ? currentPreSelectedBolus : 0" [min]="0"
+            [step]="1"> </mat-slider>
         <mat-form-field class="fullWidthInput">
             <input class="fullWidthInput" matInput placeholder="Fixer verzögerte Bolus Anteil" type="number">
             <span matSuffix>IE</span>

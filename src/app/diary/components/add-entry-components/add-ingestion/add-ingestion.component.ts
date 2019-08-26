@@ -2,9 +2,9 @@ import { IEntryBSPicker } from './../inputs/interfaces/IEntryBSPicker';
 import { AddEntryActionsProps } from './../sharedActionsProps.ts/add-entry-props';
 import { AddIngestionActions } from './add-ingestion.actions';
 import { SettingsService } from 'src/shared/services/settings.service';
-import { pipe, Subscription } from 'rxjs';
+import { pipe, Subscription, Observable, Subject } from 'rxjs';
 import { ActivatedRouteSnapshot, ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
 import { Validators, FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { MatStepper, MatStep } from '@angular/material/stepper';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
@@ -14,7 +14,7 @@ import { FullScreenModalCloser } from 'src/shared/components/base-full-screen-mo
 import { Entry } from 'src/shared/model/diary/entry/entry';
 import { IEntryTimestampPicker } from '../inputs/interfaces/IEntryTimestampPicker';
 import { IEntryFoodIntakeListPicker } from '../inputs/interfaces/IEntryFoodIntakeListPicker';
-import { delay } from 'rxjs/operators';
+import { delay, map } from 'rxjs/operators';
 import { IEntrySimpleInsulinIntakePicker } from '../inputs/interfaces/IEntryInsulinIntakePicker';
 
 @Component({
@@ -47,6 +47,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
   private fragmentSubscription;
 
   // misc:
+  selectedNormalBolus: Subject<number> = new Subject();
   isLastStep: boolean = false;
   currentStep = 0;
   delayedBolus = false;
@@ -71,6 +72,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
     }
     );
     this.foodBolusPicker.pickedIntake.subscribe(x => console.log("BOLUS: " + JSON.stringify(x)));
+    setTimeout(() => this.foodBolusPicker.pickedIntake.subscribe(x => this.selectedNormalBolus.next(x ? x.units : null)));
   }
 
   ngOnInit() {
@@ -78,6 +80,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
     let action = AddIngestionActions.OPENED(new CompletableAction(this));
     this.store.dispatch(action);
     action.then(x => this.loading = false);
+
   }
 
   private handleFragmentNavigationStuff() {

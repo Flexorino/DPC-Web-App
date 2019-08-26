@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { IEntryIntervallInsulinIntakePicker } from '../../interfaces/IEntryIntervallInsulinIntakePicker';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { IntervallInsulinIntake } from 'src/shared/model/diary/entry/attributes/intervall-insulin-intake';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
@@ -11,16 +11,17 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class AddEntryIntervallFoodBolusPickerComponent implements OnInit, IEntryIntervallInsulinIntakePicker {
 
+  @Input("group") group: FormGroup;
+  @Input("selectedBolusObservable") selectedBolusObservable: Observable<number>;
+
+  currentPreSelectedBolus: number = null;
   pickedIntake: BehaviorSubject<IntervallInsulinIntake> = new BehaviorSubject(null);
   insulinAttribute: IntervallInsulinIntake;
 
   constructor(private fb: FormBuilder) { }
 
-  @Input("group") group: FormGroup;
-  @Input("selectedNormalBolus") selectedNormalBolus = 5;
-
   ngOnInit() {
-
+    this.selectedBolusObservable.subscribe(x => this.currentPreSelectedBolus = x);
   }
 
 }

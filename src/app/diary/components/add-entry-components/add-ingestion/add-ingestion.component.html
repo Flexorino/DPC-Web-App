@@ -26,7 +26,7 @@
                 <ng-template matStepLabel>Bolus etc.</ng-template>
                 <h3>Bolus berechnen</h3>
                 <app-add-entry-simple-food-bolus-picker #foodBolus [group]="simpleFoodBolusForm"> </app-add-entry-simple-food-bolus-picker>
-                <app-add-entry-intervall-food-bolus-picker #intervallFoodBolus [group]="intervallFoodBolusForm"> </app-add-entry-intervall-food-bolus-picker>
+                <app-add-entry-intervall-food-bolus-picker #intervallFoodBolus [selectedBolusObservable]="selectedNormalBolus" [group]="intervallFoodBolusForm"> </app-add-entry-intervall-food-bolus-picker>
                 <mat-form-field class="fullWidthInput">
                     <input class="fullWidthInput" matInput placeholder="Korrektur-Bolus" type="number">
                     <span matSuffix>IE</span>
