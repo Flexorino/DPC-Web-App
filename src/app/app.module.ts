@@ -52,6 +52,9 @@ import { FoodInfoShowerPopupwrapperComponent } from 'src/shared/components/food-
 import { AddEntrySimpleFoodBolusPickerComponent } from './diary/components/add-entry-components/inputs/components/add-entry-simple-food-bolus-picker/add-entry-simple-food-bolus-picker.component';
 import { AddEntryIntervallFoodBolusPickerComponent } from './diary/components/add-entry-components/inputs/components/add-entry-intervall-food-bolus-picker/add-entry-intervall-food-bolus-picker.component';
 import { AddEntrySimpleCorrectionBolusPickerComponent } from './diary/components/add-entry-components/inputs/components/add-entry-simple-correction-bolus-picker/add-entry-simple-correction-bolus-picker.component';
+import { KeFactorShowerComponent } from '../shared/components/contextVisualisation/ke-factor-shower/ke-factor-shower.component';
+import { CorrectionFactorShowerComponent } from '../shared/components/contextVisualisation/correction-factor-shower/correction-factor-shower.component';
+import { FramevalueShowerComponent } from '../shared/components/contextVisualisation/framevalue-shower/framevalue-shower.component';
 
 
 
@@ -87,7 +90,10 @@ import { AddEntrySimpleCorrectionBolusPickerComponent } from './diary/components
     FoodInfoShowerPopupwrapperComponent,
     AddEntrySimpleFoodBolusPickerComponent,
     AddEntryIntervallFoodBolusPickerComponent,
-    AddEntrySimpleCorrectionBolusPickerComponent  
+    AddEntrySimpleCorrectionBolusPickerComponent,
+    KeFactorShowerComponent,
+    CorrectionFactorShowerComponent,
+    FramevalueShowerComponent  
   ],
   imports: [
     ReactiveFormsModule,

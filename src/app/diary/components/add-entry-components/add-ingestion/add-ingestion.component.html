@@ -38,7 +38,11 @@
                             Berechnungsfaktoren
                         </mat-panel-title>
                     </mat-expansion-panel-header>
-                    <p>I'm visible because I am open</p>
+                    <app-framevalue-shower [currentTimestamp]="currentTimestamp"></app-framevalue-shower>
+                    <mat-divider></mat-divider>
+                    <app-ke-factor-shower [currentTimestamp]="currentTimestamp"></app-ke-factor-shower>
+                    <mat-divider></mat-divider>
+                    <app-correction-factor-shower [currentTimestamp]="currentTimestamp"> </app-correction-factor-shower>
                 </mat-expansion-panel>
             </mat-step>
         </mat-horizontal-stepper>

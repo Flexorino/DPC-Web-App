@@ -50,9 +50,13 @@ export class AddIngestionEffects {
         let correctionFactors: DiaryCorrectionFactors = new DiaryCorrectionFactors("correctionFactorsId");
         correctionFactors.dialyCorrectionFactors = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
         let keFactors: DiaryContextKEFactors = new DiaryContextKEFactors("adsasdasd");
-        keFactors.dialyKeFactors = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
+        keFactors.dialyKeFactors = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
         let frameValues: DiaryContextFrameValues = new DiaryContextFrameValues("frame values");
-        frameValues.staticBSGoalValue = 100;
+        frameValues.dailyBSGoalValues = [1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6];
+        frameValues.higherBSLimit = 3;
+        frameValues.lowerBSLimit = 1;
+        frameValues.hypoglycemiaLimit = 0.5;
+        frameValues.hyperglycemiaLimit = 3;
         context.validFrom = 1553334757;
         context.correctionFactors = correctionFactors;
         context.keFactor = keFactors;

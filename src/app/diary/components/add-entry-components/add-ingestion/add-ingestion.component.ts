@@ -49,6 +49,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
   private fragmentSubscription;
 
   // misc:
+  currentTimestamp: Subject<number> = new Subject();
   selectedNormalBolus: Subject<number> = new Subject();
   isLastStep: boolean = false;
   currentStep = 0;
@@ -75,6 +76,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
     );
     this.foodBolusPicker.pickedIntake.subscribe(x => console.log("BOLUS: " + JSON.stringify(x)));
     setTimeout(() => this.foodBolusPicker.pickedIntake.subscribe(x => this.selectedNormalBolus.next(x ? x.units : null)));
+    setTimeout(() => this.timeStampPicker.timestamp.subscribe(x => this.currentTimestamp.next(x)));
     this.intervallFoodBolus.pickedIntake.subscribe(x => {
       console.log("INTERVALL: " + JSON.stringify(x) + " VALID " + this.intervallFoodBolusForm.valid);
     })
