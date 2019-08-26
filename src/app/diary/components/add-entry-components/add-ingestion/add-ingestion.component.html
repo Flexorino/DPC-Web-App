@@ -33,8 +33,7 @@
                 </app-add-entry-intervall-food-bolus-picker>
                 <app-add-entry-simple-correction-bolus-picker #correctionBolus [group]="correctionBolusForm">
                 </app-add-entry-simple-correction-bolus-picker>
-                <button class="fullWidthInput" mat-raised-button color="primary" (click)="addMeal()">Berechne
-                    Bolus</button>
+                <app-bolus-calculator-button validation="mainFormGroup.valid"> </app-bolus-calculator-button>
                 <button class="fullWidthInput" mat-raised-button color="primary" (click)="addMeal()">Vergleiche mit
                     anderen Einträgen</button>
                 <mat-expansion-panel>

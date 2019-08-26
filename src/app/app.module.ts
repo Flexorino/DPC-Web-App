@@ -55,7 +55,7 @@ import { AddEntrySimpleCorrectionBolusPickerComponent } from './diary/components
 import { KeFactorShowerComponent } from '../shared/components/contextVisualisation/ke-factor-shower/ke-factor-shower.component';
 import { CorrectionFactorShowerComponent } from '../shared/components/contextVisualisation/correction-factor-shower/correction-factor-shower.component';
 import { FramevalueShowerComponent } from '../shared/components/contextVisualisation/framevalue-shower/framevalue-shower.component';
-
+import { BolusCalculatorButtonComponent } from './diary/components/add-entry-components/misc/bolus-calculator-button/bolus-calculator-button.component';
 
 
 @NgModule({
@@ -93,7 +93,8 @@ import { FramevalueShowerComponent } from '../shared/components/contextVisualisa
     AddEntrySimpleCorrectionBolusPickerComponent,
     KeFactorShowerComponent,
     CorrectionFactorShowerComponent,
-    FramevalueShowerComponent  
+    FramevalueShowerComponent,
+    BolusCalculatorButtonComponent  
   ],
   imports: [
     ReactiveFormsModule,

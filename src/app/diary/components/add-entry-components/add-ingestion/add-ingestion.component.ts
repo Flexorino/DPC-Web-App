@@ -2,7 +2,7 @@ import { IEntryBSPicker } from './../inputs/interfaces/IEntryBSPicker';
 import { AddEntryActionsProps } from './../sharedActionsProps.ts/add-entry-props';
 import { AddIngestionActions } from './add-ingestion.actions';
 import { SettingsService } from 'src/shared/services/settings.service';
-import { pipe, Subscription, Observable, Subject } from 'rxjs';
+import { pipe, Subscription, Observable, Subject, merge } from 'rxjs';
 import { ActivatedRouteSnapshot, ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, ViewChild, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
 import { Validators, FormBuilder, FormGroup, FormArray } from '@angular/forms';
@@ -16,6 +16,7 @@ import { IEntryTimestampPicker } from '../inputs/interfaces/IEntryTimestampPicke
 import { IEntryFoodIntakeListPicker } from '../inputs/interfaces/IEntryFoodIntakeListPicker';
 import { delay, map } from 'rxjs/operators';
 import { IEntrySimpleInsulinIntakePicker } from '../inputs/interfaces/IEntryInsulinIntakePicker';
+import { InsulinAttribute } from 'src/shared/model/diary/entry/attributes/insulin-attribute';
 
 @Component({
   selector: 'app-add-ingestion',
@@ -57,6 +58,8 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
   loading = true;
   @ViewChild("stepper", { static: false }) private stepper: MatStepper;
 
+  entryInModification: Entry = new Entry(null);
+
   constructor(
     private fb: FormBuilder,
     private currentRoute: ActivatedRoute,
@@ -65,6 +68,28 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
     private closer: FullScreenModalCloser,
     private store: Store<any>
   ) { }
+
+  private handleSubFormSubsciptions() {
+    merge(this.timeStampPicker.timestamp, this.bsMeasurePicker.bs, this.foodIntakeListPicker.foodArray,
+      this.foodBolusPicker.pickedIntake, this.intervallFoodBolus.pickedIntake, this.correctionBolus.pickedIntake).subscribe(x => {
+        this.entryInModification = new Entry(null);
+        this.entryInModification.foodIntakes = this.foodIntakeListPicker.foodArray.getValue();
+        let insulinIntake: Array<InsulinAttribute> = [];
+        if (this.foodBolusPicker.pickedIntake.getValue()) {
+          insulinIntake.push(this.foodBolusPicker.pickedIntake.getValue());
+        }
+        if (this.intervallFoodBolus.pickedIntake.getValue()) {
+          insulinIntake.push(this.intervallFoodBolus.pickedIntake.getValue());
+        }
+        if (this.correctionBolus.pickedIntake.getValue()) {
+          insulinIntake.push(this.correctionBolus.pickedIntake.getValue());
+        }
+        this.entryInModification.insulinIntakes = insulinIntake;
+        this.entryInModification.timeStamp = this.timeStampPicker.timestamp.getValue();
+        this.entryInModification.bloodSuger = this.bsMeasurePicker.bs.getValue();
+        console.log("NEW ENTRY: " + JSON.stringify(this.entryInModification));
+      });
+  }
 
   ngAfterViewInit(): void {
     this.handleFragmentNavigationStuff();
@@ -81,6 +106,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
       console.log("INTERVALL: " + JSON.stringify(x) + " VALID " + this.intervallFoodBolusForm.valid);
     })
     this.correctionBolus.pickedIntake.subscribe(x => console.log("CORRECTION: " + JSON.stringify(x)));
+    this.handleSubFormSubsciptions();
   }
 
   ngOnInit() {
