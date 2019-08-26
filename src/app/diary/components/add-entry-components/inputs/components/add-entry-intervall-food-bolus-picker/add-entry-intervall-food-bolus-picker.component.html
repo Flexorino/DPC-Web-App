@@ -5,21 +5,22 @@
                 Abgabe des Bolus über Zeitraum
             </mat-panel-title>
             <div class="expandHandler" (click)="$event.stopPropagation();">
-                <mat-checkbox (click)="panel.toggle()"></mat-checkbox>
+                <mat-checkbox (click)="panel.toggle();onToggle()"></mat-checkbox>
             </div>
 
         </mat-expansion-panel-header>
-        <div>Wie viele Einheiten sollen verzögert abgebeben werden?</div>
-        <mat-slider class="fullWidthInput" [max]="currentPreSelectedBolus ? currentPreSelectedBolus : 0" [min]="0"
+        <div>Wie viele Einheiten sollen vom eigentlichen Essens-Bolus verzögert abgebeben werden?</div>
+        <mat-slider formControlName="relativePortionControl" class="fullWidthInput" [max]="currentPreSelectedBolus ? currentPreSelectedBolus : 0" [min]="0"
             [step]="1"> </mat-slider>
+            {{relativeBolusPortion}} IE von {{currentPreSelectedBolus? currentPreSelectedBolus : 0}} IE
         <mat-form-field class="fullWidthInput">
-            <input class="fullWidthInput" matInput placeholder="Fixer verzögerte Bolus Anteil" type="number">
+            <input formControlName="fixPortionControl" class="fullWidthInput" matInput placeholder="Fixer verzögerte Bolus Anteil" type="number">
             <span matSuffix>IE</span>
         </mat-form-field>
         <mat-form-field class="fullWidthInput">
-            <input class="fullWidthInput" matInput placeholder="Fixer verzögerte Bolus" type="time">
+            <input formControlName="timeIntervallControl" class="fullWidthInput" matInput placeholder="Fixer verzögerte Bolus" type="time">
             <span matSuffix>IE</span>
         </mat-form-field>
-        <div>Es werden X Einheiten über einen Zeitraum von X abgegeben. </div>
+        <div>Es werden {{insulinAttribute.units? insulinAttribute.units : 0}} Einheiten über einen Zeitraum von {{intervallMinutes}} Minuten abgegeben. </div>
     </mat-expansion-panel>
 </div>
