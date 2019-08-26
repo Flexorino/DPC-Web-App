@@ -74,7 +74,7 @@
     <div id="r">
         <span *ngIf="!isLastStep" id="forward" routerLink="./" fragment="{{currentStep+1}}"
             class="material-icons">arrow_forward</span>
-        <span *ngIf="isLastStep" (click)="submit()" class="material-icons">check</span>
+        <span [ngClass]="{'disabled-submit': !mainFormGroup.valid}" *ngIf="isLastStep" (click)="submit()" class="material-icons">check</span>
     </div>
 
 

@@ -137,12 +137,14 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
   }
 
   submit() {
-    let action = new AddEntryActionsProps(this, new Entry(123));
-    this.store.dispatch(AddIngestionActions.CONFIRM(action));
-    this.loading = true;
-    action.then(x => this.closer.close()).catch(err => {
-      alert("Ein Fehler ist aufgetreten. Bitte versuchen Sie es päter erneut");
-      this.closer.close();
-    })
+    if (this.mainFormGroup.valid) {
+      let action = new AddEntryActionsProps(this, new Entry(123));
+      this.store.dispatch(AddIngestionActions.CONFIRM(action));
+      this.loading = true;
+      action.then(x => this.closer.close()).catch(err => {
+        alert("Ein Fehler ist aufgetreten. Bitte versuchen Sie es päter erneut");
+        this.closer.close();
+      })
+    }
   }
 }
