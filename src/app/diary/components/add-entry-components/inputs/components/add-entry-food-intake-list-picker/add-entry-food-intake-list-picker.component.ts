@@ -24,7 +24,6 @@ export class AddEnetryFoodIntakeListPicker implements OnInit, IEntryFoodIntakeLi
 
   ngOnInit() {
     this.group.addControl("meals", this.fb.array([]))
-    this.addMeal();
   }
 
   ngAfterViewInit(): void {

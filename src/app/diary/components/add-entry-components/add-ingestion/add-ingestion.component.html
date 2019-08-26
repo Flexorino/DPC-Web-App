@@ -33,8 +33,12 @@
                 </app-add-entry-intervall-food-bolus-picker>
                 <app-add-entry-simple-correction-bolus-picker #correctionBolus [group]="correctionBolusForm">
                 </app-add-entry-simple-correction-bolus-picker>
-                <app-bolus-calculator-button validation="mainFormGroup.valid"> </app-bolus-calculator-button>
-                <button class="fullWidthInput" mat-raised-button color="primary" (click)="addMeal()">Vergleiche mit
+                <div class="button">
+                    <app-bolus-calculator-button [validation]="mainFormGroup.valid">
+                    </app-bolus-calculator-button>
+                </div>
+                <button class="fullWidthInput button" mat-raised-button color="primary" (click)="addMeal()">Vergleiche
+                    mit
                     anderen Einträgen</button>
                 <mat-expansion-panel>
                     <mat-expansion-panel-header>
@@ -73,7 +77,8 @@
     <div id="r">
         <span *ngIf="!isLastStep" id="forward" routerLink="./" fragment="{{currentStep+1}}"
             class="material-icons">arrow_forward</span>
-        <span [ngClass]="{'disabled-submit': !mainFormGroup.valid}" *ngIf="isLastStep" (click)="submit()" class="material-icons">check</span>
+        <span [ngClass]="{'disabled-submit': !mainFormGroup.valid}" *ngIf="isLastStep" (click)="submit()"
+            class="material-icons">check</span>
     </div>
 
 

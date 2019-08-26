@@ -11,7 +11,6 @@ export class BolusCalculatorButtonComponent implements OnInit {
   constructor() { }
 
   @Input("validation") validation = false;
-  @Input("entry") entry: Entry;
 
   ngOnInit() {
   }
