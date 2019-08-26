@@ -3,7 +3,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { IEntryIntervallInsulinIntakePicker } from '../../interfaces/IEntryIntervallInsulinIntakePicker';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { IntervallInsulinIntake } from 'src/shared/model/diary/entry/attributes/intervall-insulin-intake';
-import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-add-entry-intervall-food-bolus-picker',
@@ -23,6 +23,8 @@ export class AddEntryIntervallFoodBolusPickerComponent implements OnInit, IEntry
   relativeBolusPortion: number = 0;
   activated = false;
 
+  relativePortionControl: FormControl;
+
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
@@ -32,36 +34,45 @@ export class AddEntryIntervallFoodBolusPickerComponent implements OnInit, IEntry
 
     this.selectedBolusObservable.subscribe(x => {
       if (this.relativeBolusPortion > x) {
-        this.relativeBolusPortion = x;
+        this.relativePortionControl.setValue(x ? x : 0);
       }
       this.currentPreSelectedBolus = x;
     });
 
-    let relativePortionControl = this.fb.control('');
+    this.relativePortionControl = this.fb.control('');
+    let relativePortionControl = this.relativePortionControl;
     let fixPortionControl = this.fb.control('', [Validators.min(1), Validators.max(50)]);
     let timeIntervallControl = this.fb.control('', [(x: AbstractControl) => !x.value && this.activated ? { 'timeIntervallNeedsTobeSet': {} } : null]);
     this.group.addControl('relativePortionControl', relativePortionControl);
     this.group.addControl('fixPortionControl', fixPortionControl);
     this.group.addControl('timeIntervallControl', timeIntervallControl);
+    this.group.setValidators([x => {
+      console.log("VALIDATE");
+      return this.activated && !relativePortionControl.value && !fixPortionControl.value ? { 'BolusNeedToBeSet': {} } : null
+    }]);
 
     this.group.valueChanges.subscribe(x => {
 
       try {
         let sum = (relativePortionControl.value ? Number.parseInt(relativePortionControl.value) : 0) + (fixPortionControl.value ? Number.parseInt(fixPortionControl.value) : 0);
         this.insulinAttribute.units = sum;
-        if(timeIntervallControl.value){
-          let time = 0;
-          let value : string = timeIntervallControl.value;
-          time += value.split(':')[0]? Number.parseInt(value.split(':')[0]) * 60 : 0;
-          time += value.split(':')[1]? Number.parseInt(value.split(':')[1]) : 0;
+        let time = 0;
+        if (timeIntervallControl.value) {
+          let value: string = timeIntervallControl.value;
+          time += value.split(':')[0] ? Number.parseInt(value.split(':')[0]) * 60 : 0;
+          time += value.split(':')[1] ? Number.parseInt(value.split(':')[1]) : 0;
           this.intervallMinutes = time;
         }
+        this.insulinAttribute.units = sum;
+        this.insulinAttribute.endTimeStamp = Math.round(+new Date(+new Date() + time * 60 * 1000) / 1000);
+        this.pickedIntake.next(this.insulinAttribute);
+
       } catch (e) {
 
       }
     });
 
-    relativePortionControl.valueChanges.subscribe(x => this.relativeBolusPortion = Number.parseInt(x));
+    relativePortionControl.valueChanges.subscribe(x => this.relativeBolusPortion = x ? Number.parseInt(x) : 0);
 
   }
 
@@ -72,6 +83,7 @@ export class AddEntryIntervallFoodBolusPickerComponent implements OnInit, IEntry
     } else {
       this.pickedIntake.next(null);
     }
+    this.group.setValue(this.group.value);
   }
 
 }
