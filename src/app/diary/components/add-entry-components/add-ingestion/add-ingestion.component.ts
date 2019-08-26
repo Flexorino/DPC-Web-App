@@ -41,6 +41,8 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
   @ViewChild("foodBolus", { static: false }) foodBolusPicker: IEntrySimpleInsulinIntakePicker;
   intervallFoodBolusForm: FormGroup = new FormGroup({});
   @ViewChild("intervallFoodBolus", { static: false }) intervallFoodBolus: IEntrySimpleInsulinIntakePicker;
+  correctionBolusForm: FormGroup = new FormGroup({});
+  @ViewChild("correctionBolus", { static: false }) correctionBolus: IEntrySimpleInsulinIntakePicker;
 
   // subscriptions
   private contextSubscription: Subscription;
@@ -74,8 +76,9 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
     this.foodBolusPicker.pickedIntake.subscribe(x => console.log("BOLUS: " + JSON.stringify(x)));
     setTimeout(() => this.foodBolusPicker.pickedIntake.subscribe(x => this.selectedNormalBolus.next(x ? x.units : null)));
     this.intervallFoodBolus.pickedIntake.subscribe(x => {
-      console.log("INTERVALL: "+JSON.stringify(x)+" VALID "+this.intervallFoodBolusForm.valid);
+      console.log("INTERVALL: " + JSON.stringify(x) + " VALID " + this.intervallFoodBolusForm.valid);
     })
+    this.correctionBolus.pickedIntake.subscribe(x => console.log("CORRECTION: " + JSON.stringify(x)));
   }
 
   ngOnInit() {
