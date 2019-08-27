@@ -34,7 +34,7 @@ export class RestNetworkBolusUtilDAO implements IBolusUtilDao {
                 simpleIntake.units = factor * takeCarbs;
                 intakes.push(simpleIntake);
                 return new BolusSuggestionAnswer(intakes);
-            }));
+            }), delay(500));
     }
 
 }
