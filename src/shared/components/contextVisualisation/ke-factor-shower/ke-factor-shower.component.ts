@@ -33,7 +33,7 @@ export class KeFactorShowerComponent implements OnInit {
 
   ngOnInit() {
     getLatestContextObservable(this.currentTimestamp, this.store).subscribe((x:DiaryContext) => {
-      this.currentKEFactorAttribut = x.keFactor;
+      x ? this.currentKEFactorAttribut = x.keFactor: this.currentKEFactorAttribut = null;
     });
     this.keFactor = this.settings.carbsFactorSubj.getValue();
   }

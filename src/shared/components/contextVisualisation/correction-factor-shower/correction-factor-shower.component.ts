@@ -14,20 +14,20 @@ import { DiaryContext } from 'src/shared/model/diary/context/diary-context';
   styleUrls: ['./correction-factor-shower.component.scss']
 })
 export class CorrectionFactorShowerComponent implements OnInit {
-  
+
   @Input("currentTimestamp") currentTimestamp: Observable<Date>;
 
 
   currentCorrectionFactorAttribut: DiaryCorrectionFactors = null;
   bsunit: BSUnit;
   constructor(
-    private store: Store<{ diary: Diary }>, private settings : SettingsService
+    private store: Store<{ diary: Diary }>, private settings: SettingsService
   ) {
   }
 
   ngOnInit() {
-    getLatestContextObservable(this.currentTimestamp, this.store).subscribe((x:DiaryContext) => {
-      this.currentCorrectionFactorAttribut = x.correctionFactors;
+    getLatestContextObservable(this.currentTimestamp, this.store).subscribe((x: DiaryContext) => {
+      x ? this.currentCorrectionFactorAttribut = x.correctionFactors : this.currentCorrectionFactorAttribut = null;
     });
     this.bsunit = this.settings.bsUnitSettingSubj.getValue();
   }

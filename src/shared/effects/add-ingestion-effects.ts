@@ -57,7 +57,7 @@ export class AddIngestionEffects {
         frameValues.lowerBSLimit = 1;
         frameValues.hypoglycemiaLimit = 0.5;
         frameValues.hyperglycemiaLimit = 3;
-        context.validFrom = 1553334757;
+        context.validFrom = new Date(1553334757*1000);
         context.correctionFactors = correctionFactors;
         context.keFactor = keFactors;
         context.frameValue = frameValues;

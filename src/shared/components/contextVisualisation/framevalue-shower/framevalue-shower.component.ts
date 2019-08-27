@@ -21,13 +21,13 @@ export class FramevalueShowerComponent implements OnInit {
 
   bsunit: BSUnit;
   constructor(
-    private store: Store<{ diary: Diary }>, private settings : SettingsService
+    private store: Store<{ diary: Diary }>, private settings: SettingsService
   ) {
   }
 
   ngOnInit() {
-    getLatestContextObservable(this.currentTimestamp, this.store).subscribe((x:DiaryContext) => {
-      this.currentFrameValues = x.frameValue;
+    getLatestContextObservable(this.currentTimestamp, this.store).subscribe((x: DiaryContext) => {
+      x ? this.currentFrameValues = x.frameValue : this.currentFrameValues = null;
     });
     this.bsunit = this.settings.bsUnitSettingSubj.getValue();
   }
