@@ -64,7 +64,9 @@ export class AddEntryIntervallFoodBolusPickerComponent implements OnInit, IEntry
           this.intervallMinutes = time;
         }
         this.insulinAttribute.units = sum;
-        this.insulinAttribute.endTimeStamp = Math.round(+new Date(+new Date() + time * 60 * 1000) / 1000);
+        let date = new Date();
+        date.setMinutes(date.getMinutes() + time);
+        this.insulinAttribute.endTimeStamp = date;
         this.pickedIntake.next(this.insulinAttribute);
 
       } catch (e) {

@@ -8,7 +8,7 @@ import { select, Store } from '@ngrx/store';
 export const getLatestContextObservable: (x: Observable<Date>, y: Store<{ diary: Diary }>) => Observable<DiaryContext> = (timestamp: Observable<Date>, store: Store<{ diary: Diary }>) =>
     combineLatest(store.pipe(select("diary")).pipe(filter((x: Diary) => x.contexts? true : false)), timestamp).pipe(map((x: any) => {
         let diary: Diary = x[0];
-        let currentTimeStamp: number = x[1];
+        let currentTimeStamp: Date = x[1];
         if (diary.contexts.length) {
             let filtered: DiaryContext[] = diary.contexts.filter(x => x.validFrom < currentTimeStamp);
             if (filtered.length) {

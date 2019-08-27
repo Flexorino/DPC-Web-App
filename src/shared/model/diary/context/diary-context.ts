@@ -9,7 +9,7 @@ export class DiaryContext {
     public correctionFactors?: DiaryCorrectionFactors;
 
     // timestamp
-    public validFrom: number;
+    public validFrom: Date;
 
     constructor(public readonly id: string) { }
 }
