@@ -26,11 +26,12 @@ export class AddEntryTimestampPickerComponent implements OnInit, IEntryTimestamp
       if (this.group.valid) {
         let timestamp = 0;
         let secondsString: string = this.group.get("time").value;
-        timestamp += 60 * Number.parseInt(secondsString.split(':')[0]);
-        timestamp += Number.parseInt(secondsString.split(':')[1]);
         let date: Date = new Date(<string>this.group.get("date").value);
+        date.setHours(Number.parseInt(secondsString.split(':')[0]));
+        date.setMinutes(timestamp += Number.parseInt(secondsString.split(':')[1]));
+
         timestamp += +date / 1000;
-        this.timestamp.next(timestamp);
+        this.timestamp.next(timestamp); 
       }
     });
   }

@@ -23,7 +23,7 @@ export class KeFactorShowerComponent implements OnInit {
 
   currentKEFactorAttribut: DiaryContextKEFactors = null;
 
-  bsunit : BSUnit;
+  keFactor : number;
 
   constructor(
     private store: Store<{ diary: Diary }>,
@@ -35,7 +35,7 @@ export class KeFactorShowerComponent implements OnInit {
     getLatestContextObservable(this.currentTimestamp, this.store).subscribe((x:DiaryContext) => {
       this.currentKEFactorAttribut = x.keFactor;
     });
-    this.bsunit = this.settings.bsUnitSettingSubj.getValue();
+    this.keFactor = this.settings.carbsFactorSubj.getValue();
   }
 
 }
