@@ -19,7 +19,7 @@ import { SettingsService } from 'src/shared/services/settings.service';
 })
 export class KeFactorShowerComponent implements OnInit {
 
-  @Input("currentTimestamp") currentTimestamp: Observable<number>;
+  @Input("currentTimestamp") currentTimestamp: Observable<Date>;
 
   currentKEFactorAttribut: DiaryContextKEFactors = null;
 

@@ -9,7 +9,7 @@ import { BehaviorSubject } from 'rxjs';
   styleUrls: ['./add-entry-timestamp-picker.component.scss']
 })
 export class AddEntryTimestampPickerComponent implements OnInit, IEntryTimestampPicker {
-  timestamp: BehaviorSubject<number> = new BehaviorSubject(null);
+  timestamp: BehaviorSubject<Date> = new BehaviorSubject(null);
 
   @Input('group') group: FormGroup;
 
@@ -19,7 +19,7 @@ export class AddEntryTimestampPickerComponent implements OnInit, IEntryTimestamp
     let cur: Date = new Date();
     let time = cur.getHours() + ":" + cur.getMinutes();
     let curdate = cur.toISOString().slice(0, 10);
-    this.timestamp.next(+cur);
+    this.timestamp.next(cur);
     this.group.addControl("time", this.fb.control(time, Validators.required));
     this.group.addControl("date", this.fb.control(curdate, Validators.required));
     this.group.valueChanges.subscribe((y) => {
@@ -29,9 +29,7 @@ export class AddEntryTimestampPickerComponent implements OnInit, IEntryTimestamp
         let date: Date = new Date(<string>this.group.get("date").value);
         date.setHours(Number.parseInt(secondsString.split(':')[0]));
         date.setMinutes(timestamp += Number.parseInt(secondsString.split(':')[1]));
-
-        timestamp += +date / 1000;
-        this.timestamp.next(timestamp); 
+        this.timestamp.next(date); 
       }
     });
   }

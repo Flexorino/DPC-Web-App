@@ -15,7 +15,7 @@ import { DiaryContext } from 'src/shared/model/diary/context/diary-context';
 })
 export class CorrectionFactorShowerComponent implements OnInit {
   
-  @Input("currentTimestamp") currentTimestamp: Observable<number>;
+  @Input("currentTimestamp") currentTimestamp: Observable<Date>;
 
 
   currentCorrectionFactorAttribut: DiaryCorrectionFactors = null;

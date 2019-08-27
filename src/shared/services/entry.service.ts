@@ -94,7 +94,7 @@ export class EntryService {
 
     private convertInternatlEntryToNEtworkEntry(entry: Entry): EntryRepr {
         const webEntry: EntryRepr = { timeStamp: 0 };
-        webEntry.timeStamp = entry.timeStamp;
+        webEntry.timeStamp = null;
         if (entry.bloodSuger) {
             webEntry.bloodSugar = entry.bloodSuger;
         }

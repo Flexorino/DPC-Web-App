@@ -26,10 +26,10 @@ export class RestNetworkBolusUtilDAO implements IBolusUtilDao {
                 let simpleIntake = new SimpleInsulinIntake();
                 simpleIntake.semanticIdentifier = BaseInsulinIntakeSemantics.FOOD_BOLUS;
                 let takeCarbs = entry.foodIntakes.length ? entry.foodIntakes.map(x => x.amount).reduce((x, y) => x + y) : 0;
-                let hour = new Date(entry.timeStamp).getHours();
-                let strzing = new Date(entry.timeStamp*1000).toISOString();
-                let utc = new Date(entry.timeStamp*1000).toLocaleDateString();
-                let time = new Date(entry.timeStamp*1000).toLocaleTimeString();
+                let hour = entry.timeStamp.getHours();
+                let strzing = entry.timeStamp.toISOString();
+                let utc = entry.timeStamp.toLocaleDateString();
+                let time = entry.timeStamp.toLocaleTimeString();
                 let factor = x.keFactor.dialyKeFactors[hour];
                 simpleIntake.units = factor * takeCarbs;
                 intakes.push(simpleIntake);

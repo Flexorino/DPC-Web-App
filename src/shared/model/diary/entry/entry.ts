@@ -15,7 +15,7 @@ export class Entry {
     public tempBasalChange?: TempBasalChangeAttribute;
     public tags?: Array<TagAttribute> =[];
     public comment?: string;
-    public timeStamp: number
+    public timeStamp: Date;
     public foodIntakes: FoodIntakeAttribute[];
 
     //TODO: ändere mich um!

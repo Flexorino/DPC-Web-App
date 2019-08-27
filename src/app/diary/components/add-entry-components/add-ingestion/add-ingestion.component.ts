@@ -54,7 +54,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
   private fragmentSubscription;
 
   // misc:
-  currentTimestamp: Subject<number> = new Subject();
+  currentTimestamp: Subject<Date> = new Subject();
   selectedNormalBolus: Subject<number> = new Subject();
   isLastStep: boolean = false;
   currentStep = 0;
@@ -98,9 +98,9 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.handleFragmentNavigationStuff();
-    this.timeStampPicker.timestamp.subscribe(x => console.log(new Date(x * 1000).toISOString()))
+    this.timeStampPicker.timestamp.subscribe(x => console.log(x.toISOString()))
     this.bsMeasurePicker.bs.subscribe(x => console.log("BS: " + x));
-    this.foodIntakeListPicker.foodArray.subscribe(x => {
+    this.foodIntakeListPicker.foodArray.subscribe(x => { 
       console.log("CHANGE: " + JSON.stringify(x));
     }
     );

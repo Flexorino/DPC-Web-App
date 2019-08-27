@@ -15,7 +15,7 @@ import { BSUnit } from 'src/shared/services/BSUnit';
 })
 export class FramevalueShowerComponent implements OnInit {
 
-  @Input("currentTimestamp") currentTimestamp: Observable<number>;
+  @Input("currentTimestamp") currentTimestamp: Observable<Date>;
 
   currentFrameValues: DiaryContextFrameValues = null;
 
