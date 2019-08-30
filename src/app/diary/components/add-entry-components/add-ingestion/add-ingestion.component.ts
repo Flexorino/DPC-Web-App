@@ -120,7 +120,6 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
     let action = AddIngestionActions.OPENED(new CompletableAction(this));
     this.store.dispatch(action);
     action.then(x => this.loading = false);
-
   }
 
   get isLastStep(): boolean {
