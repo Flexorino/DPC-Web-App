@@ -21,6 +21,7 @@ import { IEntrySimpleInsulinIntakePicker } from '../inputs/interfaces/IEntryInsu
 import { InsulinAttribute } from 'src/shared/model/diary/entry/attributes/insulin-attribute';
 import { IBolusUtilDao } from 'src/shared/services/DAO/i-bolus-util-dao';
 import { X } from '@angular/cdk/keycodes';
+import { NavUtil } from 'src/shared/util/navigation.util';
 
 @Component({
   selector: 'app-add-ingestion',
@@ -56,8 +57,6 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
   // misc:
   currentTimestamp: Subject<Date> = new Subject();
   selectedNormalBolus: Subject<number> = new Subject();
-  isLastStep: boolean = false;
-  currentStep = 0;
   delayedBolus = false;
   loading = true;
   @ViewChild("stepper", { static: false }) private stepper: MatStepper;
@@ -71,6 +70,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
     private settings: SettingsService,
     private closer: FullScreenModalCloser,
     private store: Store<any>,
+    private navUtil: NavUtil,
     @Inject("IBolusUtilDao") private bolusDao: IBolusUtilDao
   ) { }
 
@@ -93,7 +93,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
         this.entryInModification.timeStamp = this.timeStampPicker.timestamp.getValue();
         this.entryInModification.bloodSuger = this.bsMeasurePicker.bs.getValue();
         console.log("NEW ENTRY: " + JSON.stringify(this.entryInModification));
-        console.log("FFOORRMM: "+ JSON.stringify(this.mainFormGroup.value));
+        console.log("FFOORRMM: " + JSON.stringify(this.mainFormGroup.value));
       });
   }
 
@@ -101,7 +101,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
     this.handleFragmentNavigationStuff();
     this.timeStampPicker.timestamp.subscribe(x => console.log(x.toISOString()))
     this.bsMeasurePicker.bs.subscribe(x => console.log("BS: " + x));
-    this.foodIntakeListPicker.foodArray.subscribe(x => { 
+    this.foodIntakeListPicker.foodArray.subscribe(x => {
       console.log("CHANGE: " + JSON.stringify(x));
     }
     );
@@ -123,34 +123,15 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
 
   }
 
+  get isLastStep(): boolean {
+    return this.stepper ? this.stepper.selectedIndex + 1 === this.stepper.steps.length : false;
+  }
+  get currentStep () : number {
+    return this.stepper ? this.stepper.selectedIndex : 0;
+  }
+
   private handleFragmentNavigationStuff() {
-    this.fragmentSubscription = this.currentRoute.fragment.pipe(delay(0)).subscribe(z => {
-      if (z) {
-        try {
-          if (Number.parseInt(z) !== this.stepper.selectedIndex) {
-            this.stepper.selectedIndex = Number.parseInt(z);
-          }
-          this.currentStep = Number.parseInt(z);
-          if (Number.parseInt(z) + 1 === this.stepper.steps.length) {
-            this.isLastStep = true;
-          } else {
-            this.isLastStep = false;
-          }
-
-        } catch (err) {
-          this.stepper.selectedIndex = 0;
-          this.currentStep = 0;
-        }
-
-      } else {
-        this.stepper.selectedIndex = 0;
-        this.currentStep = 0;
-      }
-    }
-    );
-    this.stepper.selectionChange.subscribe((z: StepperSelectionEvent) => {
-      this.router.navigate([], { fragment: z.selectedIndex + "" });
-    });
+    this.navUtil.synchroniceFragmentNavigation(this.stepper);
   }
 
   private initializeForms(): void {
@@ -184,7 +165,8 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
     this.loading = true;
     this.bolusDao.getBolusSuggestion(this.entryInModification).subscribe(x => {
       this.foodBolusPicker.setUnits(x.insulinIntakes.find(x => x.semanticIdentifier === BaseInsulinIntakeSemantics.FOOD_BOLUS && x instanceof SimpleInsulinIntake).units)
-      this.loading =false;});
+      this.loading = false;
+    });
 
   }
 }
