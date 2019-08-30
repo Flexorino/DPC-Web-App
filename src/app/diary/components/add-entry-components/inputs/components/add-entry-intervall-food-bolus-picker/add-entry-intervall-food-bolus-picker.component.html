@@ -20,6 +20,8 @@
         <mat-form-field class="fullWidthInput">
             <input formControlName="timeIntervallControl" class="fullWidthInput" matInput placeholder="Fixer verzögerte Bolus" type="time">
             <span matSuffix>IE</span>
+            {{kek.valid}}
+            {{kek.value}}
         </mat-form-field>
         <div>Es werden {{insulinAttribute.units? insulinAttribute.units : 0}} Einheiten über einen Zeitraum von {{intervallMinutes}} Minuten abgegeben. </div>
     </mat-expansion-panel>

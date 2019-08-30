@@ -7,7 +7,7 @@ import { SettingsService } from 'src/shared/services/settings.service';
 import { pipe, Subscription, Observable, Subject, merge } from 'rxjs';
 import { ActivatedRouteSnapshot, ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, ViewChild, AfterViewInit, ViewChildren, QueryList, Inject } from '@angular/core';
-import { Validators, FormBuilder, FormGroup, FormArray } from '@angular/forms';
+import { Validators, FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { MatStepper, MatStep } from '@angular/material/stepper';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { Store } from '@ngrx/store';
@@ -93,6 +93,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
         this.entryInModification.timeStamp = this.timeStampPicker.timestamp.getValue();
         this.entryInModification.bloodSuger = this.bsMeasurePicker.bs.getValue();
         console.log("NEW ENTRY: " + JSON.stringify(this.entryInModification));
+        console.log("FFOORRMM: "+ JSON.stringify(this.mainFormGroup.value));
       });
   }
 

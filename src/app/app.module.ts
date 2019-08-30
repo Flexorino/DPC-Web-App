@@ -57,6 +57,8 @@ import { FramevalueShowerComponent } from '../shared/components/contextVisualisa
 import { BolusCalculatorButtonComponent } from './diary/components/add-entry-components/misc/bolus-calculator-button/bolus-calculator-button.component';
 import { RestNetworkBolusUtilDAO } from 'src/shared/services/DAO/network-bolus-util-dao';
 import { AddEntrySimpleFoodBolusPickerComponent } from './diary/components/add-entry-components/inputs/components/add-entry-simple-food-bolus-picker/add-entry-simple-food-bolus-picker.component';
+import { ManualEntryAddComponent } from './diary/components/add-entry-components/manual-entry-add/manual-entry-add.component';
+import { AddBSMeasureComponent } from './diary/components/add-entry-components/add-bsmeasure/add-bsmeasure.component';
 
 
 @NgModule({
@@ -95,7 +97,9 @@ import { AddEntrySimpleFoodBolusPickerComponent } from './diary/components/add-e
     KeFactorShowerComponent,
     CorrectionFactorShowerComponent,
     FramevalueShowerComponent,
-    BolusCalculatorButtonComponent  
+    BolusCalculatorButtonComponent,
+    ManualEntryAddComponent,
+    AddBSMeasureComponent  
   ],
   imports: [
     ReactiveFormsModule,

@@ -1,4 +1,5 @@
 
+
 import { state } from '@angular/animations';
 import { CallBackGuard } from './diary/services/callback-guard';
 
@@ -16,6 +17,8 @@ import { DiaryStatisticsComponent } from './diary/components/diary-statistics/di
 import { DiaryListComponent } from './diary/components/diary-list/diary-list.component';
 import { AddOverviewComponent } from './diary/components/add-overview/add-overview.component';
 import { AddIngestionComponent } from './diary/components/add-entry-components/add-ingestion/add-ingestion.component';
+import { ManualEntryAddComponent } from './diary/components/add-entry-components/manual-entry-add/manual-entry-add.component';
+import { AddBSMeasureComponent } from './diary/components/add-entry-components/add-bsmeasure/add-bsmeasure.component';
 
 
 
@@ -50,7 +53,9 @@ const routes: Routes = [
               { path: "add", children: [
                 {path:"", pathMatch:"full", redirectTo:"overview"},
                 {path:"overview", component: AddOverviewComponent, resolve: { null: PageTitleResolver }, data: { title: "Eintrag hinzufügen" }},
-                {path:"ingestion", component: AddIngestionComponent, resolve: { null: PageTitleResolver }, data: { title: "Essens-Einnahme hinzufügen" }}
+                {path:"ingestion", component: AddIngestionComponent, resolve: { null: PageTitleResolver }, data: { title: "Essens-Einnahme hinzufügen" }},
+                {path:"custom", component: ManualEntryAddComponent, resolve: { null: PageTitleResolver }, data: { title: "benutzerdefinierte Eingabe" }},
+                {path:"blood-sugar", component: AddBSMeasureComponent, resolve: { null: PageTitleResolver }, data: { title: "Blutzucker-Messung" }}
               ] }
             ]
           }

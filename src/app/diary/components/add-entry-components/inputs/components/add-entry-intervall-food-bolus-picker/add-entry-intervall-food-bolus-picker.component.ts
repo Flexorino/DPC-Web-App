@@ -24,6 +24,7 @@ export class AddEntryIntervallFoodBolusPickerComponent implements OnInit, IEntry
   activated = false;
 
   relativePortionControl: FormControl;
+  kek: FormControl;
 
   constructor(private fb: FormBuilder) { }
 
@@ -43,6 +44,7 @@ export class AddEntryIntervallFoodBolusPickerComponent implements OnInit, IEntry
     let relativePortionControl = this.relativePortionControl;
     let fixPortionControl = this.fb.control('', [Validators.min(1), Validators.max(50)]);
     let timeIntervallControl = this.fb.control('', [(x: AbstractControl) => !x.value && this.activated ? { 'timeIntervallNeedsTobeSet': {} } : null]);
+    this.kek = timeIntervallControl;
     this.group.addControl('relativePortionControl', relativePortionControl);
     this.group.addControl('fixPortionControl', fixPortionControl);
     this.group.addControl('timeIntervallControl', timeIntervallControl);
