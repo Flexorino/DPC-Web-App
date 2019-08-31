@@ -1,6 +1,6 @@
 import { BSUnit } from 'src/shared/services/BSUnit';
-import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, ControlValueAccessor, Validator, FormControl } from '@angular/forms';
+import { Component, OnInit, Input, forwardRef } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, ControlValueAccessor, Validator, FormControl, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 import { max, map, catchError } from 'rxjs/operators';
 import { SettingsService } from 'src/shared/services/settings.service';
 import { IEntryBSPicker } from '../../interfaces/IEntryBSPicker';
@@ -10,7 +10,11 @@ import { ConstructionControlValue } from 'src/shared/util/construction-constrol-
 @Component({
   selector: 'add-entry-bs-picker',
   templateUrl: './add-entry-bs-picker.component.html',
-  styleUrls: ['./add-entry-bs-picker.component.scss']
+  styleUrls: ['./add-entry-bs-picker.component.scss'],
+  providers: [
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => AddEntryBSPicker), multi: true },
+    { provide: NG_VALIDATORS, useExisting: forwardRef(() => AddEntryBSPicker), multi: true }
+  ]
 })
 export class AddEntryBSPicker implements OnInit, ControlValueAccessor, Validator {
 
@@ -51,16 +55,19 @@ export class AddEntryBSPicker implements OnInit, ControlValueAccessor, Validator
     }
   }
 
-  private setToInitial() { }
+  private setToInitial() { 
+    this.bsMeasure.setValue(null);
+  }
 
   registerOnChange(fn: any): void {
     this.construction.subscribe(fn);
+    this.group.setValue(this.group.value);
   }
+
   registerOnTouched(fn: any): void {
   }
 
-  
   validate(control: import("@angular/forms").AbstractControl): import("@angular/forms").ValidationErrors {
-    throw new Error("Method not implemented.");
+    return this.group.valid? null: { curruptedControlState: null };
   }
 }

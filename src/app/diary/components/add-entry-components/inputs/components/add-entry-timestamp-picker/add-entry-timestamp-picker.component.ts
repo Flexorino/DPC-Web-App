@@ -33,7 +33,7 @@ export class AddEntryTimestampPickerComponent implements OnInit, ControlValueAcc
     this.group.valueChanges.pipe(map((y) => {
       let obj: ConstructionControlValue<Date> = new ConstructionControlValue();
       obj.raw = this.group.value;
-      try{
+      try {
         let timestamp = 0;
         let secondsString: string = this.group.get("time").value;
         let date: Date = new Date(<string>this.group.get("date").value);
@@ -41,14 +41,14 @@ export class AddEntryTimestampPickerComponent implements OnInit, ControlValueAcc
         date.setMinutes(timestamp += Number.parseInt(secondsString.split(':')[1]));
         obj.constructed = date;
         this.timestamp = date;
-      } catch(e) {
+      } catch (e) {
         obj.constructed = null;
       }
       return obj;
     })).subscribe(x => this.obs.next(x));
   }
 
-  get errors(){
+  get errors() {
     return JSON.stringify(this.group.errors);
   }
 
@@ -62,6 +62,7 @@ export class AddEntryTimestampPickerComponent implements OnInit, ControlValueAcc
   }
 
   writeValue(obj: any): void {
+    console.log("WRITEVALUE_FORTIME");
     if (!obj) {
       this.setToInitial();
       return;
@@ -82,6 +83,7 @@ export class AddEntryTimestampPickerComponent implements OnInit, ControlValueAcc
 
   registerOnChange(fn: any): void {
     this.obs.subscribe(fn);
+    this.group.setValue(this.group.value);
   }
   registerOnTouched(fn: any): void {
     this.obs.subscribe(fn);
@@ -90,6 +92,6 @@ export class AddEntryTimestampPickerComponent implements OnInit, ControlValueAcc
   }
 
   validate(control: AbstractControl): import("@angular/forms").ValidationErrors {
-    return this.group.valid? null: { curruptedControlState: null };
+    return this.group.valid ? null : { curruptedControlState: null };
   }
 }

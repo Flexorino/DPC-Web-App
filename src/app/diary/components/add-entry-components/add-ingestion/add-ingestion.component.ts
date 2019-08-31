@@ -5,7 +5,7 @@ import { IEntryBSPicker } from './../inputs/interfaces/IEntryBSPicker';
 import { AddEntryActionsProps } from './../sharedActionsProps.ts/add-entry-props';
 import { AddIngestionActions } from './add-ingestion.actions';
 import { SettingsService } from 'src/shared/services/settings.service';
-import { pipe, Subscription, Observable, Subject, merge } from 'rxjs';
+import { pipe, Subscription, Observable, Subject, merge, combineLatest } from 'rxjs';
 import { ActivatedRouteSnapshot, ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, ViewChild, AfterViewInit, ViewChildren, QueryList, Inject, OnDestroy } from '@angular/core';
 import { Validators, FormBuilder, FormGroup, FormArray, FormControl, AbstractControl } from '@angular/forms';
@@ -25,6 +25,7 @@ import { X } from '@angular/cdk/keycodes';
 import { NavUtil } from 'src/shared/util/navigation.util';
 import { ConstructionControlValue } from 'src/shared/util/construction-constrol-value';
 import { SaverTestService } from 'src/shared/services/savertest.service';
+import { FormUtil } from 'src/shared/util/form-util';
 
 @Component({
   selector: 'app-add-ingestion',
@@ -42,8 +43,6 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
   thirdFormGroup: FormGroup;
   mainFormGroup: FormGroup;
 
-  bsMeasureFormGroup: FormGroup = new FormGroup({});
-  @ViewChild("bsMeasure", { static: false }) bsMeasurePicker: IEntryBSPicker;
   foodPickerFormGroup: FormGroup = new FormGroup({});
   @ViewChild("foodIntakeListPicker", { static: false }) foodIntakeListPicker: IEntryFoodIntakeListPicker;
   simpleFoodBolusForm: FormGroup = new FormGroup({});
@@ -57,7 +56,9 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
   private contextSubscription: Subscription;
   private fragmentSubscription;
 
-  private timeStampControl: ConstructionConstrol<ConstructionControlValue<Date>> = new ConstructionConstrol(null, [(x : ConstructionConstrol<ConstructionControlValue<Date>>)=> x.value && x.value.constructed? null : {'required': null}]);
+  //CONTROLS
+  private timeStampControl: ConstructionConstrol<ConstructionControlValue<Date>> = new ConstructionConstrol(null, [(x: ConstructionConstrol<ConstructionControlValue<Date>>) => x.value && x.value.constructed ? null : { 'required': null }]);
+  private bsMeasureControl: ConstructionConstrol<ConstructionControlValue<number>> = new ConstructionConstrol(null);
 
   // misc:
   currentTimestamp: Subject<Date> = new Subject();
@@ -76,16 +77,20 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
     private closer: FullScreenModalCloser,
     private store: Store<any>,
     private navUtil: NavUtil,
-    private saver : SaverTestService, 
+    private saver: SaverTestService,
     @Inject("IBolusUtilDao") private bolusDao: IBolusUtilDao
-  ) { }
+  ) {
+    this.timeStampControl.valueChanges.subscribe(x => console.log("TIMEHASCHANGED"));
+    this.bsMeasureControl.valueChanges.subscribe(x => console.log("BSHASCHANGED"));
 
-    get firstForm() {
-      return JSON.stringify(this.firstFormGroup.value);
-    }
+   }
+
+  get firstForm() {
+    return JSON.stringify(this.firstFormGroup.value);
+  }
 
   private handleSubFormSubsciptions() {
-    merge(this.timeStampControl.valueChanges, this.bsMeasurePicker.bs, this.foodIntakeListPicker.foodArray,
+    merge(this.timeStampControl.valueChanges, this.bsMeasureControl.valueChanges, this.foodIntakeListPicker.foodArray,
       this.foodBolusPicker.pickedIntake, this.intervallFoodBolus.pickedIntake, this.correctionBolus.pickedIntake).subscribe(x => {
         this.entryInModification = new Entry(null);
         this.entryInModification.foodIntakes = this.foodIntakeListPicker.foodArray.getValue();
@@ -100,7 +105,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
           insulinIntake.push(this.correctionBolus.pickedIntake.getValue());
         }
         this.entryInModification.insulinIntakes = insulinIntake;
-        this.entryInModification.bloodSuger = this.bsMeasurePicker.bs.getValue();
+        this.entryInModification.bloodSuger = this.bsMeasureControl.value.constructed;
         this.entryInModification.timeStamp = this.timeStampControl.value.constructed;
         console.log("NEW ENTRY: " + JSON.stringify(this.entryInModification));
         console.log("FFOORRMM: " + JSON.stringify(this.mainFormGroup.value));
@@ -109,23 +114,17 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.handleFragmentNavigationStuff();
-    this.bsMeasurePicker.bs.subscribe(x => console.log("BS: " + x));
-    this.foodIntakeListPicker.foodArray.subscribe(x => {
-      console.log("CHANGE: " + JSON.stringify(x));
-    }
-    );
-    this.foodBolusPicker.pickedIntake.subscribe(x => console.log("BOLUS: " + JSON.stringify(x)));
-    setTimeout(() => this.foodBolusPicker.pickedIntake.subscribe(x => this.selectedNormalBolus.next(x ? x.units : null)));
-    this.intervallFoodBolus.pickedIntake.subscribe(x => {
-      console.log("INTERVALL: " + JSON.stringify(x) + " VALID " + this.intervallFoodBolusForm.valid);
-    })
-    this.correctionBolus.pickedIntake.subscribe(x => console.log("CORRECTION: " + JSON.stringify(x)));
-    this.handleSubFormSubsciptions();
   }
 
   ngOnInit() {
+    FormUtil.waitForInitialization(this.timeStampControl, this.bsMeasureControl).subscribe(x => {
+      console.log("INITSS");
+      this.handleSubFormSubsciptions();
+    });
+
+    combineLatest(this.timeStampControl.valueChanges, this.bsMeasureControl.valueChanges).subscribe(x => console.log("TESTORINO"));
     this.initializeForms();
-    if(this.saver.save){
+    if (this.saver.save) {
       this.firstFormGroup.setValue(this.saver.save);
     }
     let action = AddIngestionActions.OPENED(new CompletableAction(this));
@@ -141,12 +140,13 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private handleFragmentNavigationStuff() {
-    this.navUtil.synchroniceFragmentNavigation(this.stepper);
+    setTimeout(x => this.navUtil.synchroniceFragmentNavigation(this.stepper));
   }
 
   private initializeForms(): void {
     this.firstFormGroup = this.fb.group({
-      timestamp: this.timeStampControl
+      timestamp: this.timeStampControl,
+      bsMeasure: this.bsMeasureControl
     });
     this.secondFormGroup = this.fb.group({
       meals: this.foodPickerFormGroup
@@ -179,9 +179,9 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
-  compare(){
+  compare() {
     this.timeStampControl.setValue(null);
     let x = this.timeStampControl.value;
-    console.log("Xx xX:"+ JSON.stringify(x));
+    console.log("Xx xX:" + JSON.stringify(x));
   }
 }
