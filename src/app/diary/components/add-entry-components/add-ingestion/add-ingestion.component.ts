@@ -53,7 +53,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
   private contextSubscription: Subscription;
   private fragmentSubscription;
 
-  private timeStampControl : ConstructionConstrol<ConstructionControlValue<Date>> = new ConstructionConstrol();
+  private timeStampControl: ConstructionConstrol<ConstructionControlValue<Date>> = new ConstructionConstrol();
 
   // misc:
   currentTimestamp: Subject<Date> = new Subject();
@@ -76,7 +76,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
   ) { }
 
   private handleSubFormSubsciptions() {
-    merge(this.bsMeasurePicker.bs, this.foodIntakeListPicker.foodArray,
+    merge(this.timeStampControl.valueChanges, this.bsMeasurePicker.bs, this.foodIntakeListPicker.foodArray,
       this.foodBolusPicker.pickedIntake, this.intervallFoodBolus.pickedIntake, this.correctionBolus.pickedIntake).subscribe(x => {
         this.entryInModification = new Entry(null);
         this.entryInModification.foodIntakes = this.foodIntakeListPicker.foodArray.getValue();
@@ -92,6 +92,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
         }
         this.entryInModification.insulinIntakes = insulinIntake;
         this.entryInModification.bloodSuger = this.bsMeasurePicker.bs.getValue();
+        this.entryInModification.timeStamp = this.timeStampControl.value.constructed;
         console.log("NEW ENTRY: " + JSON.stringify(this.entryInModification));
         console.log("FFOORRMM: " + JSON.stringify(this.mainFormGroup.value));
       });
@@ -123,7 +124,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
   get isLastStep(): boolean {
     return this.stepper ? this.stepper.selectedIndex + 1 === this.stepper.steps.length : false;
   }
-  get currentStep () : number {
+  get currentStep(): number {
     return this.stepper ? this.stepper.selectedIndex : 0;
   }
 
@@ -133,7 +134,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
 
   private initializeForms(): void {
     this.firstFormGroup = this.fb.group({
-      timestamp : this.timeStampControl,
+      timestamp: this.timeStampControl,
       bs: this.bsMeasureFormGroup
     });
     this.secondFormGroup = this.fb.group({
