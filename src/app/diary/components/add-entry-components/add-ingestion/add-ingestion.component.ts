@@ -1,3 +1,4 @@
+import { ConstructionConstrol } from './../../../../../shared/util/construction-control';
 import { SimpleInsulinIntake } from './../../../../../shared/model/diary/entry/attributes/simple-Insulin-intake';
 import { BaseInsulinIntakeSemantics } from './../../../../../shared/model/diary/entry/attributes/insulin-attribute';
 import { IEntryBSPicker } from './../inputs/interfaces/IEntryBSPicker';
@@ -22,6 +23,7 @@ import { InsulinAttribute } from 'src/shared/model/diary/entry/attributes/insuli
 import { IBolusUtilDao } from 'src/shared/services/DAO/i-bolus-util-dao';
 import { X } from '@angular/cdk/keycodes';
 import { NavUtil } from 'src/shared/util/navigation.util';
+import { ConstructionControlValue } from 'src/shared/util/construction-constrol-value';
 
 @Component({
   selector: 'app-add-ingestion',
@@ -50,6 +52,8 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
   // subscriptions
   private contextSubscription: Subscription;
   private fragmentSubscription;
+
+  private timeStampControl : ConstructionConstrol<ConstructionControlValue<Date>> = new ConstructionConstrol();
 
   // misc:
   currentTimestamp: Subject<Date> = new Subject();
@@ -129,7 +133,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
 
   private initializeForms(): void {
     this.firstFormGroup = this.fb.group({
-      timestamp : new FormControl(),
+      timestamp : this.timeStampControl,
       bs: this.bsMeasureFormGroup
     });
     this.secondFormGroup = this.fb.group({
