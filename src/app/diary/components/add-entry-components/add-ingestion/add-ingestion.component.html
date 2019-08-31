@@ -8,6 +8,7 @@
                 <div>
                     <ng-template matStepLabel>Zeit & <br> Blutzucker</ng-template>
                     <h3>Zeitpunkt:</h3>
+                    <app-add-entry-timestamp-picker></app-add-entry-timestamp-picker>
                     <h3>Blutzucker</h3>
                     <add-entry-bs-picker #bsMeasure [group]="bsMeasureFormGroup">
                     </add-entry-bs-picker>
