@@ -129,6 +129,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
 
   private initializeForms(): void {
     this.firstFormGroup = this.fb.group({
+      timestamp : new FormControl(),
       bs: this.bsMeasureFormGroup
     });
     this.secondFormGroup = this.fb.group({
