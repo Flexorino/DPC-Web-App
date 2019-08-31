@@ -36,9 +36,6 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
   thirdFormGroup: FormGroup;
   mainFormGroup: FormGroup;
 
-  // sub form groups
-  timestampFormGroup: FormGroup = new FormGroup({});
-  @ViewChild("timeStamp", { static: false }) timeStampPicker: IEntryTimestampPicker;
   bsMeasureFormGroup: FormGroup = new FormGroup({});
   @ViewChild("bsMeasure", { static: false }) bsMeasurePicker: IEntryBSPicker;
   foodPickerFormGroup: FormGroup = new FormGroup({});
@@ -75,7 +72,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
   ) { }
 
   private handleSubFormSubsciptions() {
-    merge(this.timeStampPicker.timestamp, this.bsMeasurePicker.bs, this.foodIntakeListPicker.foodArray,
+    merge(this.bsMeasurePicker.bs, this.foodIntakeListPicker.foodArray,
       this.foodBolusPicker.pickedIntake, this.intervallFoodBolus.pickedIntake, this.correctionBolus.pickedIntake).subscribe(x => {
         this.entryInModification = new Entry(null);
         this.entryInModification.foodIntakes = this.foodIntakeListPicker.foodArray.getValue();
@@ -90,7 +87,6 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
           insulinIntake.push(this.correctionBolus.pickedIntake.getValue());
         }
         this.entryInModification.insulinIntakes = insulinIntake;
-        this.entryInModification.timeStamp = this.timeStampPicker.timestamp.getValue();
         this.entryInModification.bloodSuger = this.bsMeasurePicker.bs.getValue();
         console.log("NEW ENTRY: " + JSON.stringify(this.entryInModification));
         console.log("FFOORRMM: " + JSON.stringify(this.mainFormGroup.value));
@@ -99,7 +95,6 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.handleFragmentNavigationStuff();
-    this.timeStampPicker.timestamp.subscribe(x => console.log(x.toISOString()))
     this.bsMeasurePicker.bs.subscribe(x => console.log("BS: " + x));
     this.foodIntakeListPicker.foodArray.subscribe(x => {
       console.log("CHANGE: " + JSON.stringify(x));
@@ -107,7 +102,6 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
     );
     this.foodBolusPicker.pickedIntake.subscribe(x => console.log("BOLUS: " + JSON.stringify(x)));
     setTimeout(() => this.foodBolusPicker.pickedIntake.subscribe(x => this.selectedNormalBolus.next(x ? x.units : null)));
-    setTimeout(() => this.timeStampPicker.timestamp.subscribe(x => this.currentTimestamp.next(x)));
     this.intervallFoodBolus.pickedIntake.subscribe(x => {
       console.log("INTERVALL: " + JSON.stringify(x) + " VALID " + this.intervallFoodBolusForm.valid);
     })
@@ -135,7 +129,6 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
 
   private initializeForms(): void {
     this.firstFormGroup = this.fb.group({
-      timestamp: this.timestampFormGroup,
       bs: this.bsMeasureFormGroup
     });
     this.secondFormGroup = this.fb.group({
