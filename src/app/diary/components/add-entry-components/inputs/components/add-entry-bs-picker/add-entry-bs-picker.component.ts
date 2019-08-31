@@ -1,30 +1,66 @@
 import { BSUnit } from 'src/shared/services/BSUnit';
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { max } from 'rxjs/operators';
+import { FormGroup, FormBuilder, Validators, ControlValueAccessor, Validator, FormControl } from '@angular/forms';
+import { max, map, catchError } from 'rxjs/operators';
 import { SettingsService } from 'src/shared/services/settings.service';
 import { IEntryBSPicker } from '../../interfaces/IEntryBSPicker';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { ConstructionControlValue } from 'src/shared/util/construction-constrol-value';
 
 @Component({
   selector: 'add-entry-bs-picker',
   templateUrl: './add-entry-bs-picker.component.html',
   styleUrls: ['./add-entry-bs-picker.component.scss']
 })
-export class AddEntryBSPicker implements OnInit, IEntryBSPicker {
+export class AddEntryBSPicker implements OnInit, ControlValueAccessor, Validator {
 
-  @Input('group') group: FormGroup;
+  //CONTROLS
+  bsMeasure: FormControl
 
-  bs: BehaviorSubject<number> = new BehaviorSubject(null);
+  group: FormGroup = new FormGroup({});
   bsUnit: BSUnit;
 
-  constructor(private fb: FormBuilder, settings: SettingsService) {
-    this.bsUnit = settings.bsUnitSettingSubj.getValue();
-  }
+  //CONSTRUCTION
+  construction: Observable<ConstructionControlValue<number>>;
+
+  constructor(private fb: FormBuilder, private settings: SettingsService) {}
 
   ngOnInit() {
-    this.group.addControl("bsMeasure", this.fb.control('', [Validators.min(1 * this.bsUnit.factor), Validators.max(30 * this.bsUnit.factor)]))
-    this.group.valueChanges.subscribe(x => this.group.valid ? this.group.get("bsMeasure").value ? this.bs.next(this.group.get("bsMeasure").value as number / this.bsUnit.factor) : this.bs.next(null) : null);
+    this.bsUnit = this.settings.bsUnitSettingSubj.getValue();
+    this.bsMeasure = this.fb.control(null, [Validators.min(1 * this.bsUnit.factor), Validators.max(30 * this.bsUnit.factor)]);
+    this.group.addControl("bsMeasure", this.bsMeasure);
+    this.construction = this.bsMeasure.valueChanges.pipe(map(x => new ConstructionControlValue(this.group.value, Number.parseFloat(x)), catchError(err => of(new ConstructionControlValue(this.group.value, null)))));
+   
   }
 
+  writeValue(obj: any): void {
+    if (!obj) {
+      this.setToInitial();
+      return;
+    }
+    if (!(obj instanceof ConstructionControlValue)) {
+      throw new Error("Invalid Value");
+    } else if (obj.raw) {
+      this.group.setValue(obj.raw);
+    } else {
+      if (!obj.constructed) {
+        this.bsMeasure.setValue(null);
+      } else {
+        throw new Error("notimplemented");
+      }
+    }
+  }
+
+  private setToInitial() { }
+
+  registerOnChange(fn: any): void {
+    this.construction.subscribe(fn);
+  }
+  registerOnTouched(fn: any): void {
+  }
+
+  
+  validate(control: import("@angular/forms").AbstractControl): import("@angular/forms").ValidationErrors {
+    throw new Error("Method not implemented.");
+  }
 }
