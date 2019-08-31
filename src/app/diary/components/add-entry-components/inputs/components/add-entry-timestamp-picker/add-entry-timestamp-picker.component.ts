@@ -63,14 +63,13 @@ export class AddEntryTimestampPickerComponent implements OnInit, ControlValueAcc
 
   writeValue(obj: any): void {
     if (!obj) {
-      this.timeConstrol.setValue(null);
-      this.dateControl.setValue(null);
+      this.setToInitial();
       return;
     }
     if (!(obj instanceof ConstructionControlValue)) {
       throw new Error("Invalid Value");
     } else if (obj.raw) {
-      this.group = obj.raw;
+      this.group.setValue(obj.raw);
     } else {
       if (!obj.constructed) {
         this.timeConstrol.setValue(null);

@@ -1,4 +1,5 @@
-{{mainFormGroup.valid}}
+{{mainFormGroup.valid}}<br>
+{{firstForm}}
 <div *ngIf="loading" class="full-screen-loader">
     <mat-spinner></mat-spinner>
 </div>
@@ -37,7 +38,7 @@
                     <app-bolus-calculator-button (onCalculateRequest)="onBolusRequest()" [validation]="mainFormGroup.valid">
                     </app-bolus-calculator-button>
                 </div>
-                <button class="fullWidthInput button" mat-raised-button color="primary" (click)="addMeal()">Vergleiche
+                <button class="fullWidthInput button" mat-raised-button color="primary" (click)="compare()">Vergleiche
                     mit
                     anderen Einträgen</button>
                 <mat-expansion-panel>

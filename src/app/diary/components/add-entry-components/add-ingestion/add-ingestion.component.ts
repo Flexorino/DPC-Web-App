@@ -7,7 +7,7 @@ import { AddIngestionActions } from './add-ingestion.actions';
 import { SettingsService } from 'src/shared/services/settings.service';
 import { pipe, Subscription, Observable, Subject, merge } from 'rxjs';
 import { ActivatedRouteSnapshot, ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit, ViewChild, AfterViewInit, ViewChildren, QueryList, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ViewChildren, QueryList, Inject, OnDestroy } from '@angular/core';
 import { Validators, FormBuilder, FormGroup, FormArray, FormControl, AbstractControl } from '@angular/forms';
 import { MatStepper, MatStep } from '@angular/material/stepper';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
@@ -24,13 +24,17 @@ import { IBolusUtilDao } from 'src/shared/services/DAO/i-bolus-util-dao';
 import { X } from '@angular/cdk/keycodes';
 import { NavUtil } from 'src/shared/util/navigation.util';
 import { ConstructionControlValue } from 'src/shared/util/construction-constrol-value';
+import { SaverTestService } from 'src/shared/services/savertest.service';
 
 @Component({
   selector: 'app-add-ingestion',
   templateUrl: './add-ingestion.component.html',
   styleUrls: ['./add-ingestion.component.scss']
 })
-export class AddIngestionComponent implements OnInit, AfterViewInit {
+export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
+  ngOnDestroy(): void {
+    this.saver.save = this.firstFormGroup.value;
+  }
 
   // main form groups
   firstFormGroup: FormGroup;
@@ -72,8 +76,13 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
     private closer: FullScreenModalCloser,
     private store: Store<any>,
     private navUtil: NavUtil,
+    private saver : SaverTestService, 
     @Inject("IBolusUtilDao") private bolusDao: IBolusUtilDao
   ) { }
+
+    get firstForm() {
+      return JSON.stringify(this.firstFormGroup.value);
+    }
 
   private handleSubFormSubsciptions() {
     merge(this.timeStampControl.valueChanges, this.bsMeasurePicker.bs, this.foodIntakeListPicker.foodArray,
@@ -116,6 +125,9 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.initializeForms();
+    if(this.saver.save){
+      this.firstFormGroup.setValue(this.saver.save);
+    }
     let action = AddIngestionActions.OPENED(new CompletableAction(this));
     this.store.dispatch(action);
     action.then(x => this.loading = false);
@@ -134,8 +146,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
 
   private initializeForms(): void {
     this.firstFormGroup = this.fb.group({
-      timestamp: this.timeStampControl,
-      bs: this.bsMeasureFormGroup
+      timestamp: this.timeStampControl
     });
     this.secondFormGroup = this.fb.group({
       meals: this.foodPickerFormGroup
@@ -166,5 +177,11 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
       this.loading = false;
     });
 
+  }
+
+  compare(){
+    this.timeStampControl.setValue(null);
+    let x = this.timeStampControl.value;
+    console.log("Xx xX:"+ JSON.stringify(x));
   }
 }
