@@ -9,14 +9,7 @@ import { Store } from '@ngrx/store';
   styleUrls: ['./add-bsmeasure.component.scss']
 })
 export class AddBSMeasureComponent implements OnInit {
-
-  loading = true;
-
-  constructor(private store: Store<any>) { }
-
-  ngOnInit() {
-    let action = AddBSMeasreActions.OPENED(new CompletableAction(this));
-    this.store.dispatch(action);
-    action.then(x => this.loading = false);
+  ngOnInit(): void {
   }
+
 }
