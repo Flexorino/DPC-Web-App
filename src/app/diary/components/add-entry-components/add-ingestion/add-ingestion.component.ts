@@ -8,7 +8,7 @@ import { SettingsService } from 'src/shared/services/settings.service';
 import { pipe, Subscription, Observable, Subject, merge } from 'rxjs';
 import { ActivatedRouteSnapshot, ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, ViewChild, AfterViewInit, ViewChildren, QueryList, Inject } from '@angular/core';
-import { Validators, FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
+import { Validators, FormBuilder, FormGroup, FormArray, FormControl, AbstractControl } from '@angular/forms';
 import { MatStepper, MatStep } from '@angular/material/stepper';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { Store } from '@ngrx/store';
@@ -53,7 +53,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit {
   private contextSubscription: Subscription;
   private fragmentSubscription;
 
-  private timeStampControl: ConstructionConstrol<ConstructionControlValue<Date>> = new ConstructionConstrol();
+  private timeStampControl: ConstructionConstrol<ConstructionControlValue<Date>> = new ConstructionConstrol(null, [(x : ConstructionConstrol<ConstructionControlValue<Date>>)=> x.value && x.value.constructed? null : {'required': null}]);
 
   // misc:
   currentTimestamp: Subject<Date> = new Subject();
