@@ -48,6 +48,10 @@ export class AddEntryTimestampPickerComponent implements OnInit, ControlValueAcc
     })).subscribe(x => this.obs.next(x));
   }
 
+  get errors(){
+    return JSON.stringify(this.group.errors);
+  }
+
   private setToInitial() {
     let cur: Date = new Date();
     let time = cur.getHours() + ":" + cur.getMinutes();
