@@ -1,19 +1,20 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, forwardRef } from '@angular/core';
 import { IEntrySimpleInsulinIntakePicker } from '../../interfaces/IEntryInsulinIntakePicker';
 import { BehaviorSubject } from 'rxjs';
 import { InsulinAttribute, BaseInsulinIntakeSemantics } from 'src/shared/model/diary/entry/attributes/insulin-attribute';
 import { SimpleInsulinIntake } from 'src/shared/model/diary/entry/attributes/simple-Insulin-intake';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
 
 @Component({
   selector: 'app-add-entry-simple-correction-bolus-picker',
   templateUrl: './add-entry-simple-correction-bolus-picker.component.html',
-  styleUrls: ['./add-entry-simple-correction-bolus-picker.component.scss']
+  styleUrls: ['./add-entry-simple-correction-bolus-picker.component.scss'],
+  providers: [
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => AddEntrySimpleCorrectionBolusPickerComponent), multi: true },
+    { provide: NG_VALIDATORS, useExisting: forwardRef(() => AddEntrySimpleCorrectionBolusPickerComponent), multi: true }]
+
 })
-export class AddEntrySimpleCorrectionBolusPickerComponent implements OnInit, IEntrySimpleInsulinIntakePicker {
-  setUnits(units: number) {
-    throw new Error("Method not implemented.");
-  }
+export class AddEntrySimpleCorrectionBolusPickerComponent implements OnInit {
 
   pickedIntake: BehaviorSubject<InsulinAttribute> = new BehaviorSubject(null);
   insulinAttribute: SimpleInsulinIntake;

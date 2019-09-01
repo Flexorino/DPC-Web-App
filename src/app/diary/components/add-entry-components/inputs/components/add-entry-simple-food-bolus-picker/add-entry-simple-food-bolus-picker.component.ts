@@ -16,10 +16,7 @@ import { ConstructionControlValue } from 'src/shared/util/construction-constrol-
     { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => AddEntrySimpleFoodBolusPickerComponent), multi: true },
     { provide: NG_VALIDATORS, useExisting: forwardRef(() => AddEntrySimpleFoodBolusPickerComponent), multi: true }]
 })
-export class AddEntrySimpleFoodBolusPickerComponent implements OnInit, IEntrySimpleInsulinIntakePicker, Validator, ControlValueAccessor {
-
-  pickedIntake: BehaviorSubject<InsulinAttribute> = new BehaviorSubject(null);
-  control: FormControl;
+export class AddEntrySimpleFoodBolusPickerComponent implements OnInit, Validator, ControlValueAccessor {
 
   //CONTROLS
   bolus: FormControl
@@ -34,7 +31,6 @@ export class AddEntrySimpleFoodBolusPickerComponent implements OnInit, IEntrySim
   ngOnInit() {
     let control = this.fb.control(null, [Validators.min(1), Validators.max(50)]);
     this.bolus = control;
-    this.control = control;
     this.group.addControl('bolus', control);
     this.construction = control.valueChanges.pipe(map(x => {
       let z = new SimpleInsulinIntake();
@@ -50,9 +46,6 @@ export class AddEntrySimpleFoodBolusPickerComponent implements OnInit, IEntrySim
       }
       return new ConstructionControlValue(this.group.value, z);
     }));
-  }
-  setUnits(units: number) {
-    this.control.setValue(units);
   }
 
   validate(control: import("@angular/forms").AbstractControl): import("@angular/forms").ValidationErrors {

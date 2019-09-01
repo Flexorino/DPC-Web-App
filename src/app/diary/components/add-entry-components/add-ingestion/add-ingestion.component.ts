@@ -35,9 +35,6 @@ import { FormUtil } from 'src/shared/util/form-util';
   styleUrls: ['./add-ingestion.component.scss']
 })
 export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
-  ngOnDestroy(): void {
-    this.saver.save = this.firstFormGroup.value;
-  }
 
   // main form groups
   firstFormGroup: FormGroup;
@@ -47,8 +44,6 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
 
   intervallFoodBolusForm: FormGroup = new FormGroup({});
   @ViewChild("intervallFoodBolus", { static: false }) intervallFoodBolus: IEntrySimpleInsulinIntakePicker;
-  correctionBolusForm: FormGroup = new FormGroup({});
-  @ViewChild("correctionBolus", { static: false }) correctionBolus: IEntrySimpleInsulinIntakePicker;
 
   // subscriptions
   private contextSubscription: Subscription;
@@ -189,5 +184,9 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
     this.timeStampControl.setValue(null);
     let x = this.timeStampControl.value;
     console.log("Xx xX:" + JSON.stringify(x));
+  }
+
+  ngOnDestroy(): void {
+    this.saver.save = this.firstFormGroup.value;
   }
 }
