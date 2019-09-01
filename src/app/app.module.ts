@@ -59,6 +59,7 @@ import { RestNetworkBolusUtilDAO } from 'src/shared/services/DAO/network-bolus-u
 import { AddEntrySimpleFoodBolusPickerComponent } from './diary/components/add-entry-components/inputs/components/add-entry-simple-food-bolus-picker/add-entry-simple-food-bolus-picker.component';
 import { ManualEntryAddComponent } from './diary/components/add-entry-components/manual-entry-add/manual-entry-add.component';
 import { AddBSMeasureComponent } from './diary/components/add-entry-components/add-bsmeasure/add-bsmeasure.component';
+import { AddEntryBSMeasureEntryComponent } from './diary/components/add-entry-components/inputs/components/add-entry-bsmeasure-entry/add-entry-bsmeasure-entry.component';
 
 
 @NgModule({
@@ -99,7 +100,8 @@ import { AddBSMeasureComponent } from './diary/components/add-entry-components/a
     FramevalueShowerComponent,
     BolusCalculatorButtonComponent,
     ManualEntryAddComponent,
-    AddBSMeasureComponent  
+    AddBSMeasureComponent,
+    AddEntryBSMeasureEntryComponent  
   ],
   imports: [
     ReactiveFormsModule,
