@@ -45,8 +45,6 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
   thirdFormGroup: FormGroup;
   mainFormGroup: FormGroup;
 
-  simpleFoodBolusForm: FormGroup = new FormGroup({});
-  @ViewChild("foodBolus", { static: false }) foodBolusPicker: IEntrySimpleInsulinIntakePicker;
   intervallFoodBolusForm: FormGroup = new FormGroup({});
   @ViewChild("intervallFoodBolus", { static: false }) intervallFoodBolus: IEntrySimpleInsulinIntakePicker;
   correctionBolusForm: FormGroup = new FormGroup({});
@@ -59,7 +57,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
   //CONTROLS
   private timeStampControl: ConstructionConstrol<ConstructionControlValue<Date>> = new ConstructionConstrol(null, [(x: ConstructionConstrol<ConstructionControlValue<Date>>) => x.value && x.value.constructed ? null : { 'required': null }]);
   private bsMeasureControl: ConstructionConstrol<ConstructionControlValue<number>> = new ConstructionConstrol(null);
-  private simpleFoodBolusControl: ConstructionConstrol<ConstructionControlValue<number>> = new ConstructionConstrol(null);
+  private simpleFoodBolusControl: ConstructionConstrol<ConstructionControlValue<SimpleInsulinIntake>> = new ConstructionConstrol(null);
   private intervallFoodBolusControl: ConstructionConstrol<ConstructionControlValue<number>> = new ConstructionConstrol(null);
   private correctionFoodBolusControl: ConstructionConstrol<ConstructionControlValue<number>> = new ConstructionConstrol(null);
   private foodIntakeListPicker: ConstructionConstrol<ConstructionControlValue<Array<FoodIntakeAttribute>>> = new ConstructionConstrol(null);
@@ -99,12 +97,12 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private handleSubFormSubsciptions() {
     merge(this.timeStampControl.valueChanges, this.bsMeasureControl.valueChanges, this.foodIntakeListPicker.valueChanges,
-      this.foodBolusPicker.pickedIntake, this.intervallFoodBolus.pickedIntake, this.correctionBolus.pickedIntake).subscribe(x => {
+      this.simpleFoodBolusControl.valueChanges, this.intervallFoodBolus.pickedIntake, this.correctionBolus.pickedIntake).subscribe(x => {
         this.entryInModification = new Entry(null);
         this.entryInModification.foodIntakes = this.foodIntakeListPicker.value.constructed;
         let insulinIntake: Array<InsulinAttribute> = [];
-        if (this.foodBolusPicker.pickedIntake.getValue()) {
-          insulinIntake.push(this.foodBolusPicker.pickedIntake.getValue());
+        if (this.simpleFoodBolusControl.value.constructed) {
+          insulinIntake.push(this.simpleFoodBolusControl.value.constructed);
         }
         if (this.intervallFoodBolus.pickedIntake.getValue()) {
           insulinIntake.push(this.intervallFoodBolus.pickedIntake.getValue());
@@ -160,7 +158,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
       foodIntakeListPicker: this.foodIntakeListPicker
     });
     this.thirdFormGroup = this.fb.group({
-      mealBolus: this.simpleFoodBolusForm,
+      simpleFoodBolusControl: this.simpleFoodBolusControl,
       intervallFoodBolus: this.intervallFoodBolus
     });
     this.mainFormGroup = this.fb.group({ timeAndBs: this.firstFormGroup, mealForm: this.secondFormGroup, bolusEtc: this.thirdFormGroup });
@@ -181,7 +179,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
   onBolusRequest() {
     this.loading = true;
     this.bolusDao.getBolusSuggestion(this.entryInModification).subscribe(x => {
-      this.foodBolusPicker.setUnits(x.insulinIntakes.find(x => x.semanticIdentifier === BaseInsulinIntakeSemantics.FOOD_BOLUS && x instanceof SimpleInsulinIntake).units)
+      this.simpleFoodBolusControl.setValue(x.insulinIntakes.find(x => x.semanticIdentifier === BaseInsulinIntakeSemantics.FOOD_BOLUS && x instanceof SimpleInsulinIntake).units)
       this.loading = false;
     });
 
