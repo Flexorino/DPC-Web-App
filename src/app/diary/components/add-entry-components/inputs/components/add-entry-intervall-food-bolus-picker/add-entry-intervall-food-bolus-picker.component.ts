@@ -31,6 +31,8 @@ export class AddEntryIntervallFoodBolusPickerComponent implements OnInit, Valida
 
   //MISC
   currentSelectedNormalBolus = 0;
+  currentSumBolus = 0;
+  currentTimeIntervall = 0;
 
   constructor(private fb: FormBuilder) { }
 
@@ -62,7 +64,7 @@ export class AddEntryIntervallFoodBolusPickerComponent implements OnInit, Valida
       constructed.endTimeStamp = null;
       constructed.units = null;
       try {
-        let sum = (this.relativPart.value ? Number.parseInt(this.relativPart.value.value) : 0) + (this.absolutePart.value ? Number.parseInt(this.absolutePart.value.value) : 0);
+        let sum = (this.relativPart.value ? Number.parseInt(this.relativPart.value) : 0) + (this.absolutePart.value ? Number.parseInt(this.absolutePart.value) : 0);
         constructed.units = sum;
         let time = 0;
         if (this.time.value) {
@@ -71,10 +73,13 @@ export class AddEntryIntervallFoodBolusPickerComponent implements OnInit, Valida
           time += value.split(':')[1] ? Number.parseInt(value.split(':')[1]) : 0;
         }
         constructed.units = sum;
+        this.currentSumBolus = sum;
         let date = new Date();
         date.setMinutes(date.getMinutes() + time);
         constructed.endTimeStamp = date;
+        this.currentTimeIntervall = time;
       } catch (e) { }
+      console.log("CONSTRUCTED: "+JSON.stringify(constructed));
       return new ConstructionControlValue(this.group.value, constructed);
     }));
   }
@@ -121,6 +126,4 @@ export class AddEntryIntervallFoodBolusPickerComponent implements OnInit, Valida
   registerOnValidatorChange?(fn: () => void): void {
     this.group.statusChanges.subscribe(fn);
   }
-
-
 }

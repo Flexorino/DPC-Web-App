@@ -10,17 +10,21 @@
 
         </mat-expansion-panel-header>
         <div>Wie viele Einheiten sollen vom eigentlichen Essens-Bolus verzögert abgebeben werden?</div>
-        <mat-slider formControlName="relativePortionControl" class="fullWidthInput" [max]="currentSelectedNormalBolus" [min]="0"
-            [step]="1"> </mat-slider>
-            {{relativPart.value? relativPart.value : 0}} IE von {{currentSelectedNormalBolus}} IE 
+        <mat-slider formControlName="relativePortionControl" class="fullWidthInput" [max]="currentSelectedNormalBolus"
+            [min]="0" [step]="1"> </mat-slider>
+        {{relativPart.value? relativPart.value : 0}} IE von {{currentSelectedNormalBolus}} IE
         <mat-form-field class="fullWidthInput">
-            <input formControlName="fixPortionControl" class="fullWidthInput" matInput placeholder="Fixer verzögerte Bolus Anteil" type="number">
+            <input formControlName="fixPortionControl" class="fullWidthInput" matInput
+                placeholder="Fixer verzögerte Bolus Anteil" type="number">
             <span matSuffix>IE</span>
         </mat-form-field>
         <mat-form-field class="fullWidthInput">
-            <input formControlName="timeIntervallControl" class="fullWidthInput" matInput placeholder="Fixer verzögerte Bolus" type="time">
+            <input formControlName="timeIntervallControl" class="fullWidthInput" matInput
+                placeholder="Fixer verzögerte Bolus" type="time">
             <span matSuffix>IE</span>
         </mat-form-field>
-      <!--   <div>Es werden {{insulinAttribute.units? insulinAttribute.units : 0}} Einheiten über einen Zeitraum von {{intervallMinutes}} Minuten abgegeben. </div> -->
+        <div>Es werden {{currentSumBolus}} Einheiten über einen Zeitraum von
+                {{currentTimeIntervall}} Minuten abgegeben. </div>
+
     </mat-expansion-panel>
 </div>
