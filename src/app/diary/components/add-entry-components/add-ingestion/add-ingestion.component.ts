@@ -116,12 +116,10 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    FormUtil.waitForInitialization(this.timeStampControl, this.bsMeasureControl).subscribe(x => {
+    FormUtil.waitForInitialization(this.timeStampControl, this.bsMeasureControl, this.foodIntakeListPicker, this.simpleFoodBolusControl, this.intervallFoodBolusControl, this.correctionFoodBolusControl).subscribe(x => {
       console.log("INITSS");
-      //this.handleSubFormSubsciptions();
+      this.handleSubFormSubsciptions();
     });
-
-    combineLatest(this.timeStampControl.valueChanges, this.bsMeasureControl.valueChanges).subscribe(x => console.log("TESTORINO"));
     this.initializeForms();
     this.selectedNormalBolus = this.simpleFoodBolusControl.valueChanges.pipe(map(x => x.constructed ? x.constructed.units : null));
     if (this.saver.save) {

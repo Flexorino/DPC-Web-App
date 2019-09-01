@@ -57,7 +57,7 @@ export class AddEntryIntervallFoodBolusPickerComponent implements OnInit, Valida
 
     this.construction = this.group.valueChanges.pipe(map(x => {
       if (!this.activated.value) {
-        return null;
+        return new ConstructionControlValue(this.group.value, null);
       }
       let constructed: IntervallInsulinIntake = new IntervallInsulinIntake();
       constructed.semanticIdentifier = BaseInsulinIntakeSemantics.FOOD_BOLUS;
@@ -114,6 +114,7 @@ export class AddEntryIntervallFoodBolusPickerComponent implements OnInit, Valida
 
   registerOnChange(fn: any): void {
     this.construction.subscribe(fn);
+    this.group.setValue(this.group.value);
   }
 
   registerOnTouched(fn: any): void {
