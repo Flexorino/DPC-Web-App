@@ -29,6 +29,9 @@ export class AddEntryIntervallFoodBolusPickerComponent implements OnInit, Valida
   group: FormGroup = new FormGroup({});
   @Input("selectedBolusObservable") selectedBolusObservable: Observable<number>;
 
+  //MISC
+  currentSelectedNormalBolus = 0;
+
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
@@ -37,6 +40,7 @@ export class AddEntryIntervallFoodBolusPickerComponent implements OnInit, Valida
       if (current > x) {
         this.relativPart.setValue(x ? x : 0);
       }
+      this.currentSelectedNormalBolus = x ? x : 0;
     });
 
     this.relativPart = this.fb.control(null);

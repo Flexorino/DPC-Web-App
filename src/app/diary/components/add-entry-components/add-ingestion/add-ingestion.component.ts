@@ -57,7 +57,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // misc:
   currentTimestamp: Subject<Date> = new Subject();
-  selectedNormalBolus: Subject<number> = new Subject();
+  selectedNormalBolus: Observable<number>;
   delayedBolus = false;
   loading = true;
   @ViewChild("stepper", { static: false }) private stepper: MatStepper;
@@ -123,6 +123,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
 
     combineLatest(this.timeStampControl.valueChanges, this.bsMeasureControl.valueChanges).subscribe(x => console.log("TESTORINO"));
     this.initializeForms();
+    this.selectedNormalBolus = this.simpleFoodBolusControl.valueChanges.pipe(map(x => x.constructed ? x.constructed.units : null));
     if (this.saver.save) {
       this.firstFormGroup.setValue(this.saver.save);
     }
@@ -153,7 +154,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
     this.thirdFormGroup = this.fb.group({
       simpleFoodBolusControl: this.simpleFoodBolusControl,
       intervallFoodBolus: this.intervallFoodBolusControl,
-      correctionFoodBolusControl : this.correctionFoodBolusControl
+      correctionFoodBolusControl: this.correctionFoodBolusControl
     });
     this.mainFormGroup = this.fb.group({ timeAndBs: this.firstFormGroup, mealForm: this.secondFormGroup, bolusEtc: this.thirdFormGroup });
   }

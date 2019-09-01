@@ -10,9 +10,9 @@
 
         </mat-expansion-panel-header>
         <div>Wie viele Einheiten sollen vom eigentlichen Essens-Bolus verzögert abgebeben werden?</div>
-        <mat-slider formControlName="relativePortionControl" class="fullWidthInput" [max]="selectedBolusObservable | async" [min]="0"
+        <mat-slider formControlName="relativePortionControl" class="fullWidthInput" [max]="currentSelectedNormalBolus" [min]="0"
             [step]="1"> </mat-slider>
-<!--            {{relativeBolusPortion}} IE von {{currentPreSelectedBolus? currentPreSelectedBolus : 0}} IE -->
+            {{relativPart.value? relativPart.value : 0}} IE von {{currentSelectedNormalBolus}} IE 
         <mat-form-field class="fullWidthInput">
             <input formControlName="fixPortionControl" class="fullWidthInput" matInput placeholder="Fixer verzögerte Bolus Anteil" type="number">
             <span matSuffix>IE</span>
