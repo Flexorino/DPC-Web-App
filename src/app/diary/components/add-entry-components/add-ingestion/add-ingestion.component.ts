@@ -37,15 +37,11 @@ import { IntervallInsulinIntake } from 'src/shared/model/diary/entry/attributes/
 })
 export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  // main form groups
+  //main form groups
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
   thirdFormGroup: FormGroup;
   mainFormGroup: FormGroup;
-
-  // subscriptions
-  private contextSubscription: Subscription;
-  private fragmentSubscription;
 
   //CONTROLS
   private timeStampControl: ConstructionConstrol<ConstructionControlValue<Date>> = new ConstructionConstrol(null, [(x: ConstructionConstrol<ConstructionControlValue<Date>>) => x.value && x.value.constructed ? null : { 'required': null }]);
@@ -55,10 +51,8 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
   private correctionFoodBolusControl: ConstructionConstrol<ConstructionControlValue<SimpleInsulinIntake>> = new ConstructionConstrol(null);
   private foodIntakeListPicker: ConstructionConstrol<ConstructionControlValue<Array<FoodIntakeAttribute>>> = new ConstructionConstrol(null);
 
-  // misc:
-  currentTimestamp: Subject<Date> = new Subject();
+  //MISC:
   selectedNormalBolus: Observable<number>;
-  delayedBolus = false;
   loading = true;
   @ViewChild("stepper", { static: false }) private stepper: MatStepper;
 
@@ -74,19 +68,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
     private navUtil: NavUtil,
     private saver: SaverTestService,
     @Inject("IBolusUtilDao") private bolusDao: IBolusUtilDao
-  ) {
-    this.timeStampControl.valueChanges.subscribe(x => console.log("TIMEHASCHANGED"));
-    this.bsMeasureControl.valueChanges.subscribe(x => console.log("BSHASCHANGED"));
-
-  }
-
-  get firstForm() {
-    return JSON.stringify(this.firstFormGroup.value);
-  }
-
-  get sec() {
-    return JSON.stringify(this.secondFormGroup.value);
-  }
+  ) { }
 
   private handleSubFormSubsciptions() {
     merge(this.timeStampControl.valueChanges, this.bsMeasureControl.valueChanges, this.foodIntakeListPicker.valueChanges,
@@ -116,18 +98,15 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    FormUtil.waitForInitialization(this.timeStampControl, this.bsMeasureControl, this.foodIntakeListPicker, this.simpleFoodBolusControl, this.intervallFoodBolusControl, this.correctionFoodBolusControl).subscribe(x => {
-      console.log("INITSS");
-      this.handleSubFormSubsciptions();
-    });
+    FormUtil.waitForInitialization(this.timeStampControl, this.bsMeasureControl, this.foodIntakeListPicker, this.simpleFoodBolusControl, this.intervallFoodBolusControl, this.correctionFoodBolusControl).subscribe(x => this.handleSubFormSubsciptions());
     this.initializeForms();
     this.selectedNormalBolus = this.simpleFoodBolusControl.valueChanges.pipe(map(x => x.constructed ? x.constructed.units : null));
-    if (this.saver.save) {
-      this.thirdFormGroup.setValue(this.saver.save);
-    }
     let action = AddIngestionActions.OPENED(new CompletableAction(this));
     this.store.dispatch(action);
     action.then(x => this.loading = false);
+    if (this.saver.save) {
+      this.thirdFormGroup.setValue(this.saver.save);
+    }
   }
 
   get isLastStep(): boolean {
