@@ -37,14 +37,6 @@ export class AddEntryIntervallFoodBolusPickerComponent implements OnInit, Valida
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
-    this.selectedBolusObservable.subscribe(x => {
-      let current = Number.parseInt(this.relativPart.value);
-      if (current > x) {
-        this.relativPart.setValue(x ? x : 0);
-      }
-      this.currentSelectedNormalBolus = x ? x : 0;
-    });
-
     this.relativPart = this.fb.control(null);
     this.absolutePart = this.fb.control('', [Validators.min(1), Validators.max(50)]);
     this.time = this.fb.control('', [(x: AbstractControl) => !x.value && this.activated ? { 'timeIntervallNeedsTobeSet': {} } : null]);
@@ -79,9 +71,17 @@ export class AddEntryIntervallFoodBolusPickerComponent implements OnInit, Valida
         constructed.endTimeStamp = date;
         this.currentTimeIntervall = time;
       } catch (e) { }
-      console.log("CONSTRUCTED: "+JSON.stringify(constructed));
+      console.log("CONSTRUCTED: " + JSON.stringify(constructed));
       return new ConstructionControlValue(this.group.value, constructed);
     }));
+    this.selectedBolusObservable.subscribe(x => {
+      let current = Number.parseInt(this.relativPart.value);
+      if (current > x) {
+        this.relativPart.setValue(x ? x : 0);
+      }
+      this.currentSelectedNormalBolus = x ? x : 0;
+    });
+    
   }
 
   writeValue(obj: any): void {

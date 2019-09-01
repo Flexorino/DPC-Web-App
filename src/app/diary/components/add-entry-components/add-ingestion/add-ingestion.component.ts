@@ -7,7 +7,7 @@ import { IEntryBSPicker } from './../inputs/interfaces/IEntryBSPicker';
 import { AddEntryActionsProps } from './../sharedActionsProps.ts/add-entry-props';
 import { AddIngestionActions } from './add-ingestion.actions';
 import { SettingsService } from 'src/shared/services/settings.service';
-import { pipe, Subscription, Observable, Subject, merge, combineLatest } from 'rxjs';
+import { pipe, Subscription, Observable, Subject, merge, combineLatest, BehaviorSubject, of } from 'rxjs';
 import { ActivatedRouteSnapshot, ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, ViewChild, AfterViewInit, ViewChildren, QueryList, Inject, OnDestroy } from '@angular/core';
 import { Validators, FormBuilder, FormGroup, FormArray, FormControl, AbstractControl } from '@angular/forms';
@@ -52,7 +52,8 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
   private foodIntakeListPicker: ConstructionConstrol<ConstructionControlValue<Array<FoodIntakeAttribute>>> = new ConstructionConstrol(null);
 
   //MISC:
-  selectedNormalBolus: Observable<number>;
+  currentTimestamp: BehaviorSubject<Date> = new BehaviorSubject(null);
+  selectedNormalBolus: BehaviorSubject<number> = new BehaviorSubject(null);
   loading = true;
   @ViewChild("stepper", { static: false }) private stepper: MatStepper;
 
@@ -91,6 +92,8 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
         console.log("NEW ENTRY: " + JSON.stringify(this.entryInModification));
         console.log("FFOORRMM: " + JSON.stringify(this.mainFormGroup.value));
       });
+    FormUtil.getImmediateObservable(this.timeStampControl).subscribe(x => this.currentTimestamp.next(x));
+    FormUtil.getImmediateObservable(this.simpleFoodBolusControl).subscribe(x => this.selectedNormalBolus.next(x ? x.units : null));
   }
 
   ngAfterViewInit(): void {
@@ -100,7 +103,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {
     FormUtil.waitForInitialization(this.timeStampControl, this.bsMeasureControl, this.foodIntakeListPicker, this.simpleFoodBolusControl, this.intervallFoodBolusControl, this.correctionFoodBolusControl).subscribe(x => this.handleSubFormSubsciptions());
     this.initializeForms();
-    this.selectedNormalBolus = this.simpleFoodBolusControl.valueChanges.pipe(map(x => x.constructed ? x.constructed.units : null));
+    //this.selectedNormalBolus = this.simpleFoodBolusControl.valueChanges.pipe(map(x => x.constructed ? x.constructed.units : null));
     let action = AddIngestionActions.OPENED(new CompletableAction(this));
     this.store.dispatch(action);
     action.then(x => this.loading = false);
