@@ -20,7 +20,7 @@ export class BaseFullScreenModalComponent implements OnInit {
   ngOnInit() {
   }
 
-  public close() {
+  private close() {
     if (this.callBackService.current !== null) {
       this.router.navigateByUrl(this.callBackService.current);
     } else {
