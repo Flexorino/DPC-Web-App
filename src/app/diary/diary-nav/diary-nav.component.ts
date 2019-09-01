@@ -1,3 +1,4 @@
+import { DepthNavigationService } from './../../../shared/services/depth-navigation.service';
 import { DiaryNavigationService } from './../../../shared/services/diary.navigation.service';
 import { Subscription } from 'rxjs';
 import { PageTitleService } from './../../../shared/services/title.service';
@@ -16,18 +17,18 @@ import { Router, NavigationEnd, RouterEvent } from '@angular/router';
 })
 export class DiaryNavComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
-    if(this.navigationSubscription){
+    if (this.navigationSubscription) {
       this.navigationSubscription.unsubscribe();
-    } 
+    }
   }
-  
+
   public currentSelectedDiary$;
 
-  constructor(public dialog: MatDialog,private diaryNavService: DiaryNavigationService, private store: Store<any>, private titelServie: PageTitleService, private router: Router) {
+  constructor(private deepNav: DepthNavigationService, public dialog: MatDialog, private diaryNavService: DiaryNavigationService, private store: Store<any>, private titelServie: PageTitleService, private router: Router) {
     this.currentSelectedDiary$ = diaryNavService.currentDiaryId$;
-   }
+  }
 
-  private navigationSubscription :  Subscription;
+  private navigationSubscription: Subscription;
   private currentSelectedDiaryName = "";
 
   ngOnInit() {
@@ -42,7 +43,7 @@ export class DiaryNavComponent implements OnInit, OnDestroy {
     );
     this.navigationSubscription = this.router.events.subscribe((event: RouterEvent) => {
       if (event instanceof NavigationEnd) {
-        if(this.currentSelectedDiaryName) {
+        if (this.currentSelectedDiaryName) {
           this.titelServie.setTitleExtension(this.currentSelectedDiaryName);
         }
       }
@@ -51,5 +52,9 @@ export class DiaryNavComponent implements OnInit, OnDestroy {
 
   public openAddEntryDialog() {
     this.dialog.open(AddEntryComponent, { panelClass: 'full_screen_dialog' })
+  }
+
+  onAdd() {
+    this.deepNav.goDeep();
   }
 }

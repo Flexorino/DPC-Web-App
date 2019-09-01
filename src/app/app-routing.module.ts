@@ -1,3 +1,4 @@
+import { SearchViewComponent } from './search-view/search-view.component';
 
 
 import { state } from '@angular/animations';
@@ -31,10 +32,10 @@ const routes: Routes = [
         { path: "", component: DiaryHeaderExtensionComponent, outlet: "base-nav-extension" },
         {
           path: ":diary-id", canActivateChild: [CanActivateDiaryViewGuard], component: DiaryNavComponent, children: [
-            { path: "", redirectTo: "overview", pathMatch: 'full'},
-            { path: "overview", component: DiaryOverviewComponent, resolve: { null: PageTitleResolver }, data: { title: "Übersicht" } , canDeactivate: [CallBackGuard] },
-            { path: "statistics", component: DiaryStatisticsComponent, resolve: { null: PageTitleResolver }, data: { title: "Statistik" } , canDeactivate: [CallBackGuard] },
-            { path: "list", component: DiaryListComponent, resolve: { null: PageTitleResolver }, data: { title: "Listen-Ansicht" } , canDeactivate: [CallBackGuard] },
+            { path: "", redirectTo: "overview", pathMatch: 'full' },
+            { path: "overview", component: DiaryOverviewComponent, resolve: { null: PageTitleResolver }, data: { title: "Übersicht" } },
+            { path: "statistics", component: DiaryStatisticsComponent, resolve: { null: PageTitleResolver }, data: { title: "Statistik" } },
+            { path: "list", component: DiaryListComponent, resolve: { null: PageTitleResolver }, data: { title: "Listen-Ansicht" } },
           ]
         }
       ]
@@ -50,13 +51,16 @@ const routes: Routes = [
         path: "diary", children: [
           {
             path: ":diary-id", canActivateChild: [CanActivateDiaryViewGuard], children: [
-              { path: "add", children: [
-                {path:"", pathMatch:"full", redirectTo:"overview"},
-                {path:"overview", component: AddOverviewComponent, resolve: { null: PageTitleResolver }, data: { title: "Eintrag hinzufügen" }},
-                {path:"ingestion", component: AddIngestionComponent, resolve: { null: PageTitleResolver }, data: { title: "Essens-Einnahme hinzufügen" }},
-                {path:"custom", component: ManualEntryAddComponent, resolve: { null: PageTitleResolver }, data: { title: "benutzerdefinierte Eingabe" }},
-                {path:"blood-sugar", component: AddBSMeasureComponent, resolve: { null: PageTitleResolver }, data: { title: "Blutzucker-Messung" }}
-              ] }
+              {
+                path: "add", children: [
+                  { path: "", pathMatch: "full", redirectTo: "overview" },
+                  { path: "overview", component: AddOverviewComponent, resolve: { null: PageTitleResolver }, data: { title: "Eintrag hinzufügen" } },
+                  { path: "ingestion", component: AddIngestionComponent, resolve: { null: PageTitleResolver }, data: { title: "Essens-Einnahme hinzufügen" } },
+                  { path: "custom", component: ManualEntryAddComponent, resolve: { null: PageTitleResolver }, data: { title: "benutzerdefinierte Eingabe" } },
+                  { path: "blood-sugar", component: AddBSMeasureComponent, resolve: { null: PageTitleResolver }, data: { title: "Blutzucker-Messung" } }
+                ]
+              },
+              {path: "search", component: SearchViewComponent, resolve: { null: PageTitleResolver }, data: { title: "Suchen" }}
             ]
           }
         ]
@@ -66,7 +70,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes,{scrollPositionRestoration:'enabled'})],
+  imports: [RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' })],
   exports: [RouterModule]
 })
 export class AppRoutingModule {

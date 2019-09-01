@@ -17,4 +17,4 @@
         Liste
     </div>
 </div>
-<button mat-fab color="primary" routerLink="/diary/{{currentSelectedDiary$ | async}}/add" id = "add"><mat-icon>add</mat-icon></button>
+<button mat-fab color="primary" (click)="onAdd()" routerLink="/diary/{{currentSelectedDiary$ | async}}/add" id = "add"><mat-icon>add</mat-icon></button>

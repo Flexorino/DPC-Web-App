@@ -37,7 +37,7 @@
                             [validation]="mainFormGroup.valid">
                         </app-bolus-calculator-button>
                     </div>
-                    <button class="fullWidthInput button" mat-raised-button color="primary"
+                    <button class="fullWidthInput button" mat-raised-button color="primary"  routerLink="/diary/{{currentSelectedDiary$ | async}}/search"
                         (click)="compare()">Vergleiche
                         mit
                         anderen Einträgen</button>

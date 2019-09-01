@@ -1,3 +1,5 @@
+import { DepthNavigationService } from './../../../../../shared/services/depth-navigation.service';
+import { DiaryNavigationService } from './../../../../../shared/services/diary.navigation.service';
 import { FoodIntakeAttribute } from 'src/shared/model/diary/entry/attributes/food-intake-attribute';
 import { Food } from './../../../../../shared/model/diary/food';
 import { ConstructionConstrol } from './../../../../../shared/util/construction-control';
@@ -29,6 +31,7 @@ import { ConstructionControlValue } from 'src/shared/util/construction-constrol-
 import { SaverTestService } from 'src/shared/services/savertest.service';
 import { FormUtil } from 'src/shared/util/form-util';
 import { IntervallInsulinIntake } from 'src/shared/model/diary/entry/attributes/intervall-insulin-intake';
+import { CurrentDiaryViewSerivce } from 'src/app/diary/services/CurrentDiaryView.service';
 
 @Component({
   selector: 'app-add-ingestion',
@@ -56,7 +59,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
   selectedNormalBolus: BehaviorSubject<number> = new BehaviorSubject(null);
   loading = true;
   @ViewChild("stepper", { static: false }) private stepper: MatStepper;
-
+  currentSelectedDiary$ : Observable<string>;
   entryInModification: Entry = new Entry(null);
 
   constructor(
@@ -68,8 +71,12 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
     private store: Store<any>,
     private navUtil: NavUtil,
     private saver: SaverTestService,
+    private diaryNav: DiaryNavigationService,
+    private deepNav: DepthNavigationService,
     @Inject("IBolusUtilDao") private bolusDao: IBolusUtilDao
-  ) { }
+  ) {
+    this.currentSelectedDiary$ = diaryNav.currentDiaryId$;
+   }
 
   private handleSubFormSubsciptions() {
     merge(this.timeStampControl.valueChanges, this.bsMeasureControl.valueChanges, this.foodIntakeListPicker.valueChanges,
@@ -161,9 +168,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   compare() {
-    this.timeStampControl.setValue(null);
-    let x = this.timeStampControl.value;
-    console.log("Xx xX:" + JSON.stringify(x));
+    this.deepNav.goDeep();
   }
 
   ngOnDestroy(): void {
