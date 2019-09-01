@@ -70,4 +70,8 @@ export class AddEntryBSPicker implements OnInit, ControlValueAccessor, Validator
   validate(control: import("@angular/forms").AbstractControl): import("@angular/forms").ValidationErrors {
     return this.group.valid? null: { curruptedControlState: null };
   }
+
+  registerOnValidatorChange?(fn: () => void): void {
+    this.group.statusChanges.subscribe(fn);
+  }
 }

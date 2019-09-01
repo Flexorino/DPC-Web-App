@@ -1,3 +1,5 @@
+import { FoodIntakeAttribute } from 'src/shared/model/diary/entry/attributes/food-intake-attribute';
+import { Food } from './../../../../../shared/model/diary/food';
 import { ConstructionConstrol } from './../../../../../shared/util/construction-control';
 import { SimpleInsulinIntake } from './../../../../../shared/model/diary/entry/attributes/simple-Insulin-intake';
 import { BaseInsulinIntakeSemantics } from './../../../../../shared/model/diary/entry/attributes/insulin-attribute';
@@ -43,8 +45,6 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
   thirdFormGroup: FormGroup;
   mainFormGroup: FormGroup;
 
-  foodPickerFormGroup: FormGroup = new FormGroup({});
-  @ViewChild("foodIntakeListPicker", { static: false }) foodIntakeListPicker: IEntryFoodIntakeListPicker;
   simpleFoodBolusForm: FormGroup = new FormGroup({});
   @ViewChild("foodBolus", { static: false }) foodBolusPicker: IEntrySimpleInsulinIntakePicker;
   intervallFoodBolusForm: FormGroup = new FormGroup({});
@@ -59,6 +59,10 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
   //CONTROLS
   private timeStampControl: ConstructionConstrol<ConstructionControlValue<Date>> = new ConstructionConstrol(null, [(x: ConstructionConstrol<ConstructionControlValue<Date>>) => x.value && x.value.constructed ? null : { 'required': null }]);
   private bsMeasureControl: ConstructionConstrol<ConstructionControlValue<number>> = new ConstructionConstrol(null);
+  private simpleFoodBolusControl: ConstructionConstrol<ConstructionControlValue<number>> = new ConstructionConstrol(null);
+  private intervallFoodBolusControl: ConstructionConstrol<ConstructionControlValue<number>> = new ConstructionConstrol(null);
+  private correctionFoodBolusControl: ConstructionConstrol<ConstructionControlValue<number>> = new ConstructionConstrol(null);
+  private foodIntakeListPicker: ConstructionConstrol<ConstructionControlValue<Array<FoodIntakeAttribute>>> = new ConstructionConstrol(null);
 
   // misc:
   currentTimestamp: Subject<Date> = new Subject();
@@ -83,17 +87,21 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
     this.timeStampControl.valueChanges.subscribe(x => console.log("TIMEHASCHANGED"));
     this.bsMeasureControl.valueChanges.subscribe(x => console.log("BSHASCHANGED"));
 
-   }
+  }
 
   get firstForm() {
     return JSON.stringify(this.firstFormGroup.value);
   }
 
+  get sec() {
+    return JSON.stringify(this.secondFormGroup.value);
+  }
+
   private handleSubFormSubsciptions() {
-    merge(this.timeStampControl.valueChanges, this.bsMeasureControl.valueChanges, this.foodIntakeListPicker.foodArray,
+    merge(this.timeStampControl.valueChanges, this.bsMeasureControl.valueChanges, this.foodIntakeListPicker.valueChanges,
       this.foodBolusPicker.pickedIntake, this.intervallFoodBolus.pickedIntake, this.correctionBolus.pickedIntake).subscribe(x => {
         this.entryInModification = new Entry(null);
-        this.entryInModification.foodIntakes = this.foodIntakeListPicker.foodArray.getValue();
+        this.entryInModification.foodIntakes = this.foodIntakeListPicker.value.constructed;
         let insulinIntake: Array<InsulinAttribute> = [];
         if (this.foodBolusPicker.pickedIntake.getValue()) {
           insulinIntake.push(this.foodBolusPicker.pickedIntake.getValue());
@@ -119,7 +127,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {
     FormUtil.waitForInitialization(this.timeStampControl, this.bsMeasureControl).subscribe(x => {
       console.log("INITSS");
-      this.handleSubFormSubsciptions();
+      //this.handleSubFormSubsciptions();
     });
 
     combineLatest(this.timeStampControl.valueChanges, this.bsMeasureControl.valueChanges).subscribe(x => console.log("TESTORINO"));
@@ -149,7 +157,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
       bsMeasure: this.bsMeasureControl
     });
     this.secondFormGroup = this.fb.group({
-      meals: this.foodPickerFormGroup
+      foodIntakeListPicker: this.foodIntakeListPicker
     });
     this.thirdFormGroup = this.fb.group({
       mealBolus: this.simpleFoodBolusForm,

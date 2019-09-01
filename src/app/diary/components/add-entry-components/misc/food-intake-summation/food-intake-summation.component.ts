@@ -12,7 +12,7 @@ import { map, delay } from 'rxjs/operators';
 })
 export class FoodIntakeSummationComponent implements OnInit, AfterViewInit {
 
-  @Input("foodIntakes") foodIntakes: IEntryFoodIntakeListPicker;
+  @Input("foodIntakes") foodIntakes: Observable<FoodIntakeAttribute[]>;
 
   sum: Observable<number>;
 
@@ -22,14 +22,16 @@ export class FoodIntakeSummationComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.sum = this.foodIntakes.foodArray.pipe(delay(0),map(
-      (x: FoodIntakeAttribute[]) => {
-        if (x.length) {
-          return x.map(x => x.amount ? x.amount * this.settings.carbsFactorSubj.getValue() : 0).reduce((x, y) => x + y);
-        } else {
-          return 0;
-        }
-      }));
+    if (this.foodIntakes) {
+      this.sum = this.foodIntakes.pipe(delay(0), map(
+        (x: FoodIntakeAttribute[]) => {
+          if (x.length) {
+            return x.map(x => x.amount ? x.amount * this.settings.carbsFactorSubj.getValue() : 0).reduce((x, y) => x + y);
+          } else {
+            return 0;
+          }
+        }));
+    }
   }
 
 }
