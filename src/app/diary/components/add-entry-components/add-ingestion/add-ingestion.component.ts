@@ -54,7 +54,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
   private bsMeasureControl: ConstructionConstrol<ConstructionControlValue<number>> = new ConstructionConstrol(null);
   private simpleFoodBolusControl: ConstructionConstrol<ConstructionControlValue<SimpleInsulinIntake>> = new ConstructionConstrol(null);
   private intervallFoodBolusControl: ConstructionConstrol<ConstructionControlValue<number>> = new ConstructionConstrol(null);
-  private correctionFoodBolusControl: ConstructionConstrol<ConstructionControlValue<number>> = new ConstructionConstrol(null);
+  private correctionFoodBolusControl: ConstructionConstrol<ConstructionControlValue<SimpleInsulinIntake>> = new ConstructionConstrol(null);
   private foodIntakeListPicker: ConstructionConstrol<ConstructionControlValue<Array<FoodIntakeAttribute>>> = new ConstructionConstrol(null);
 
   // misc:
@@ -92,7 +92,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private handleSubFormSubsciptions() {
     merge(this.timeStampControl.valueChanges, this.bsMeasureControl.valueChanges, this.foodIntakeListPicker.valueChanges,
-      this.simpleFoodBolusControl.valueChanges, this.intervallFoodBolus.pickedIntake, this.correctionBolus.pickedIntake).subscribe(x => {
+      this.simpleFoodBolusControl.valueChanges, this.intervallFoodBolus.pickedIntake, this.correctionFoodBolusControl.valueChanges).subscribe(x => {
         this.entryInModification = new Entry(null);
         this.entryInModification.foodIntakes = this.foodIntakeListPicker.value.constructed;
         let insulinIntake: Array<InsulinAttribute> = [];
@@ -102,8 +102,8 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
         if (this.intervallFoodBolus.pickedIntake.getValue()) {
           insulinIntake.push(this.intervallFoodBolus.pickedIntake.getValue());
         }
-        if (this.correctionBolus.pickedIntake.getValue()) {
-          insulinIntake.push(this.correctionBolus.pickedIntake.getValue());
+        if (this.correctionFoodBolusControl.value.constructed) {
+          insulinIntake.push(this.correctionFoodBolusControl.value.constructed);
         }
         this.entryInModification.insulinIntakes = insulinIntake;
         this.entryInModification.bloodSuger = this.bsMeasureControl.value.constructed;
@@ -154,7 +154,8 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
     });
     this.thirdFormGroup = this.fb.group({
       simpleFoodBolusControl: this.simpleFoodBolusControl,
-      intervallFoodBolus: this.intervallFoodBolus
+      intervallFoodBolus: this.intervallFoodBolus,
+      correctionFoodBolusControl : this.correctionFoodBolusControl
     });
     this.mainFormGroup = this.fb.group({ timeAndBs: this.firstFormGroup, mealForm: this.secondFormGroup, bolusEtc: this.thirdFormGroup });
   }

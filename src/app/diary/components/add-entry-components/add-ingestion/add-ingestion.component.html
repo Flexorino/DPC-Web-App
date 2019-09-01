@@ -36,7 +36,7 @@ BS-Measure: {{bsMeasureControl.valid}}+{{bsMeasureControl.value}} <br>
                     <app-add-entry-intervall-food-bolus-picker #intervallFoodBolus
                         [selectedBolusObservable]="selectedNormalBolus" [group]="intervallFoodBolusForm">
                     </app-add-entry-intervall-food-bolus-picker>
-                    <app-add-entry-simple-correction-bolus-picker>
+                    <app-add-entry-simple-correction-bolus-picker formControlName="correctionFoodBolusControl">
                     </app-add-entry-simple-correction-bolus-picker>
                     <div class="button">
                         <app-bolus-calculator-button (onCalculateRequest)="onBolusRequest()"
