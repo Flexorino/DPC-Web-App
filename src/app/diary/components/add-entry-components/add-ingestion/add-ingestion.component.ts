@@ -114,8 +114,8 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
     let action = AddIngestionActions.OPENED(new CompletableAction(this));
     this.store.dispatch(action);
     action.then(x => this.loading = false);
-    if (this.saver.save) {
-      this.thirdFormGroup.setValue(this.saver.save);
+    if (this.deepNav.recoverData) {
+      this.mainFormGroup.setValue(this.deepNav.recoverData);
     }
   }
 
@@ -168,10 +168,10 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   compare() {
-    this.deepNav.goDeep();
+    this.deepNav.goDeep(this.mainFormGroup.value);
   }
 
   ngOnDestroy(): void {
-    this.saver.save = this.thirdFormGroup.value;
+    //this.saver.save = this.thirdFormGroup.value;
   }
 }

@@ -4,17 +4,21 @@ import { Router } from '@angular/router';
 @Injectable({ providedIn: 'root' })
 export class DepthNavigationService {
 
-    private stack: Array<any> = [];
+    private stack: Array<{ r: string, d: any }> = [];
+
+    public recoverData: any = null;
 
     constructor(private router: Router) { }
 
-    goDeep() {
-        this.stack.push(this.router.routerState.snapshot.url);
+    goDeep(recoveryData?: any) {
+        this.stack.push({ r: this.router.routerState.snapshot.url, d: recoveryData });
     }
 
     back(fallback?: any): Promise<boolean> {
         if (this.stack.length) {
-            return this.router.navigateByUrl(this.stack.pop());
+            let pop = this.stack.pop();
+            this.recoverData = pop.d ? pop.d : null;
+            return this.router.navigateByUrl(pop.r);
         }
         if (fallback) {
             return this.router.navigate(fallback, { relativeTo: null });
