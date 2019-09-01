@@ -1,18 +1,18 @@
 <div [formGroup]="group">
-    <mat-expansion-panel #panel hideToggle>
+    <mat-expansion-panel [expanded]="activated.value" #panel hideToggle>
         <mat-expansion-panel-header matRipple (click)="panel.toggle();" class="expansion-header">
             <mat-panel-title>
                 Abgabe des Bolus über Zeitraum
             </mat-panel-title>
             <div class="expandHandler" (click)="$event.stopPropagation();">
-                <mat-checkbox (click)="panel.toggle();onToggle()"></mat-checkbox>
+                <mat-checkbox formControlName="activated" (click)="panel.toggle();"></mat-checkbox>
             </div>
 
         </mat-expansion-panel-header>
         <div>Wie viele Einheiten sollen vom eigentlichen Essens-Bolus verzögert abgebeben werden?</div>
-        <mat-slider formControlName="relativePortionControl" class="fullWidthInput" [max]="currentPreSelectedBolus ? currentPreSelectedBolus : 0" [min]="0"
+        <mat-slider formControlName="relativePortionControl" class="fullWidthInput" [max]="selectedBolusObservable | async" [min]="0"
             [step]="1"> </mat-slider>
-            {{relativeBolusPortion}} IE von {{currentPreSelectedBolus? currentPreSelectedBolus : 0}} IE
+<!--            {{relativeBolusPortion}} IE von {{currentPreSelectedBolus? currentPreSelectedBolus : 0}} IE -->
         <mat-form-field class="fullWidthInput">
             <input formControlName="fixPortionControl" class="fullWidthInput" matInput placeholder="Fixer verzögerte Bolus Anteil" type="number">
             <span matSuffix>IE</span>
@@ -20,9 +20,7 @@
         <mat-form-field class="fullWidthInput">
             <input formControlName="timeIntervallControl" class="fullWidthInput" matInput placeholder="Fixer verzögerte Bolus" type="time">
             <span matSuffix>IE</span>
-            {{kek.valid}}
-            {{kek.value}}
         </mat-form-field>
-        <div>Es werden {{insulinAttribute.units? insulinAttribute.units : 0}} Einheiten über einen Zeitraum von {{intervallMinutes}} Minuten abgegeben. </div>
+      <!--   <div>Es werden {{insulinAttribute.units? insulinAttribute.units : 0}} Einheiten über einen Zeitraum von {{intervallMinutes}} Minuten abgegeben. </div> -->
     </mat-expansion-panel>
 </div>
