@@ -28,6 +28,7 @@ import { NavUtil } from 'src/shared/util/navigation.util';
 import { ConstructionControlValue } from 'src/shared/util/construction-constrol-value';
 import { SaverTestService } from 'src/shared/services/savertest.service';
 import { FormUtil } from 'src/shared/util/form-util';
+import { IntervallInsulinIntake } from 'src/shared/model/diary/entry/attributes/intervall-insulin-intake';
 
 @Component({
   selector: 'app-add-ingestion',
@@ -42,9 +43,6 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
   thirdFormGroup: FormGroup;
   mainFormGroup: FormGroup;
 
-  intervallFoodBolusForm: FormGroup = new FormGroup({});
-  @ViewChild("intervallFoodBolus", { static: false }) intervallFoodBolus: IEntrySimpleInsulinIntakePicker;
-
   // subscriptions
   private contextSubscription: Subscription;
   private fragmentSubscription;
@@ -53,7 +51,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
   private timeStampControl: ConstructionConstrol<ConstructionControlValue<Date>> = new ConstructionConstrol(null, [(x: ConstructionConstrol<ConstructionControlValue<Date>>) => x.value && x.value.constructed ? null : { 'required': null }]);
   private bsMeasureControl: ConstructionConstrol<ConstructionControlValue<number>> = new ConstructionConstrol(null);
   private simpleFoodBolusControl: ConstructionConstrol<ConstructionControlValue<SimpleInsulinIntake>> = new ConstructionConstrol(null);
-  private intervallFoodBolusControl: ConstructionConstrol<ConstructionControlValue<number>> = new ConstructionConstrol(null);
+  private intervallFoodBolusControl: ConstructionConstrol<ConstructionControlValue<IntervallInsulinIntake>> = new ConstructionConstrol(null);
   private correctionFoodBolusControl: ConstructionConstrol<ConstructionControlValue<SimpleInsulinIntake>> = new ConstructionConstrol(null);
   private foodIntakeListPicker: ConstructionConstrol<ConstructionControlValue<Array<FoodIntakeAttribute>>> = new ConstructionConstrol(null);
 
@@ -92,15 +90,15 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private handleSubFormSubsciptions() {
     merge(this.timeStampControl.valueChanges, this.bsMeasureControl.valueChanges, this.foodIntakeListPicker.valueChanges,
-      this.simpleFoodBolusControl.valueChanges, this.intervallFoodBolus.pickedIntake, this.correctionFoodBolusControl.valueChanges).subscribe(x => {
+      this.simpleFoodBolusControl.valueChanges, this.intervallFoodBolusControl.valueChanges, this.correctionFoodBolusControl.valueChanges).subscribe(x => {
         this.entryInModification = new Entry(null);
         this.entryInModification.foodIntakes = this.foodIntakeListPicker.value.constructed;
         let insulinIntake: Array<InsulinAttribute> = [];
         if (this.simpleFoodBolusControl.value.constructed) {
           insulinIntake.push(this.simpleFoodBolusControl.value.constructed);
         }
-        if (this.intervallFoodBolus.pickedIntake.getValue()) {
-          insulinIntake.push(this.intervallFoodBolus.pickedIntake.getValue());
+        if (this.intervallFoodBolusControl.value.constructed) {
+          insulinIntake.push(this.intervallFoodBolusControl.value.constructed);
         }
         if (this.correctionFoodBolusControl.value.constructed) {
           insulinIntake.push(this.correctionFoodBolusControl.value.constructed);
@@ -154,7 +152,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
     });
     this.thirdFormGroup = this.fb.group({
       simpleFoodBolusControl: this.simpleFoodBolusControl,
-      intervallFoodBolus: this.intervallFoodBolus,
+      intervallFoodBolus: this.intervallFoodBolusControl,
       correctionFoodBolusControl : this.correctionFoodBolusControl
     });
     this.mainFormGroup = this.fb.group({ timeAndBs: this.firstFormGroup, mealForm: this.secondFormGroup, bolusEtc: this.thirdFormGroup });
