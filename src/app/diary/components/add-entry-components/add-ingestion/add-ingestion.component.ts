@@ -125,7 +125,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
     this.initializeForms();
     this.selectedNormalBolus = this.simpleFoodBolusControl.valueChanges.pipe(map(x => x.constructed ? x.constructed.units : null));
     if (this.saver.save) {
-      this.firstFormGroup.setValue(this.saver.save);
+      this.thirdFormGroup.setValue(this.saver.save);
     }
     let action = AddIngestionActions.OPENED(new CompletableAction(this));
     this.store.dispatch(action);
@@ -187,6 +187,6 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.saver.save = this.firstFormGroup.value;
+    this.saver.save = this.thirdFormGroup.value;
   }
 }
