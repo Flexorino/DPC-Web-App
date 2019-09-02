@@ -1,6 +1,6 @@
 import { FormService } from './../../../../../../../shared/services/form-service';
 import { Component, OnInit, ViewChild, Inject, AfterViewInit, forwardRef } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, NG_VALUE_ACCESSOR, NG_VALIDATORS, Validator, ControlValueAccessor } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, NG_VALUE_ACCESSOR, NG_VALIDATORS, Validator, ControlValueAccessor, AbstractControl } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
 import { NavUtil } from 'src/shared/util/navigation.util';
 import { IBolusUtilDao } from 'src/shared/services/DAO/i-bolus-util-dao';
@@ -9,7 +9,7 @@ import { ConstructionControlValue } from 'src/shared/util/construction-constrol-
 import { FormUtil } from 'src/shared/util/form-util';
 import { Observable, Subject } from 'rxjs';
 import { Entry } from 'src/shared/model/diary/entry/entry';
-import { map } from 'rxjs/operators';
+import { map, delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-add-entry-bsmeasure-entry',
@@ -52,15 +52,17 @@ export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit, V
       bsMeasure: this.bsMeasureControl
     });
     this.mainFormGroup = this.fb.group({ timeAndBs: this.firstFormGroup, bolusEtc: this.secondFormGroup });
+    this.mainFormGroup.setValidators([FormUtil.save(((x: AbstractControl) => this.bsMeasureControl.value.constructed ? null : { atleastOneEntryAttributeNeedsToBeSet: null }))])
   }
 
   private handleSubFormSubsciptions() {
-    FormUtil.getImmediateObservableFromRawControl(this.mainFormGroup).pipe(map(() => {
+    FormUtil.getImmediateObservableFromRawControl(this.mainFormGroup).pipe(delay(0), map(() => {
       let entry = new Entry(null);
       entry.timeStamp = this.timeStampControl.value.constructed;
       entry.bloodSuger = this.bsMeasureControl.value.constructed;
       return new ConstructionControlValue(this.mainFormGroup.value, entry);
     })).subscribe(x => this.construction.next(x));
+    this.bsMeasureControl.valueChanges.subscribe(x => console.warn("CHANGE"));
   }
 
   get isLastStep(): boolean {
@@ -80,10 +82,6 @@ export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit, V
 
   validate(control: import("@angular/forms").AbstractControl): import("@angular/forms").ValidationErrors {
     return this.mainFormGroup.valid ? null : { curruptedControlState: null };
-  }
-
-  registerOnValidatorChange?(fn: () => void): void {
-    this.mainFormGroup.statusChanges.subscribe(fn);
   }
 
   writeValue(obj: any): void {

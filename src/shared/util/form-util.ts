@@ -1,4 +1,4 @@
-import { FormControl, AbstractControl } from '@angular/forms';
+import { FormControl, AbstractControl, ValidationErrors } from '@angular/forms';
 import { filter, finalize, take, map, tap, delay } from 'rxjs/operators';
 import { ConstructionControlValue } from './construction-constrol-value';
 import { ConstructionConstrol } from './construction-control';
@@ -20,4 +20,14 @@ export class FormUtil {
         return this.getImmediateObservableFromRawControl<ConstructionControlValue<T>>(control).pipe(map(x => x.constructed));
     }
 
+
+    static save(funk: (AbstractControl) => null | ValidationErrors): (AbstractControl) => null | ValidationErrors {
+        return (x: AbstractControl) => {
+            try {
+                return funk(x);
+            } catch (e) {
+                return { notInit: null };
+            }
+        };
+    }
 }
