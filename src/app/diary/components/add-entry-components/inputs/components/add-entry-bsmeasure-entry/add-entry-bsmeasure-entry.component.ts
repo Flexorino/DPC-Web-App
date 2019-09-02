@@ -3,8 +3,10 @@ import { Component, OnInit, ViewChild, Inject, AfterViewInit } from '@angular/co
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
 import { NavUtil } from 'src/shared/util/navigation.util';
-import { SaverTestService } from 'src/shared/services/savertest.service';
 import { IBolusUtilDao } from 'src/shared/services/DAO/i-bolus-util-dao';
+import { ConstructionConstrol } from 'src/shared/util/construction-control';
+import { ConstructionControlValue } from 'src/shared/util/construction-constrol-value';
+import { FormUtil } from 'src/shared/util/form-util';
 
 @Component({
   selector: 'app-add-entry-bsmeasure-entry',
@@ -12,6 +14,12 @@ import { IBolusUtilDao } from 'src/shared/services/DAO/i-bolus-util-dao';
   styleUrls: ['./add-entry-bsmeasure-entry.component.scss']
 })
 export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit {
+
+  //CONTROLS
+  private timeStampControl: ConstructionConstrol<ConstructionControlValue<Date>> = new ConstructionConstrol(null, [(x: ConstructionConstrol<ConstructionControlValue<Date>>) => x.value && x.value.constructed ? null : { 'required': null }]);
+  private bsMeasureControl: ConstructionConstrol<ConstructionControlValue<number>> = new ConstructionConstrol(null);
+
+  //CONSTRUCTION
 
   //main form groups
   firstFormGroup: FormGroup = new FormGroup({});
@@ -23,11 +31,26 @@ export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit {
   constructor(
     private fb: FormBuilder,
     private navUtil: NavUtil,
-    private formService : FormService,
+    private formService: FormService,
     @Inject("IBolusUtilDao") private bolusDao: IBolusUtilDao
   ) { }
 
   ngOnInit() {
+    FormUtil.waitForInitialization(this.timeStampControl, this.bsMeasureControl).subscribe(this.handleSubFormSubsciptions);
+    this.initializeForms();
+  }
+
+  private initializeForms() { 
+    this.firstFormGroup = this.fb.group({
+      timestamp: this.timeStampControl,
+      bsMeasure: this.bsMeasureControl
+    });
+    this.mainFormGroup = this.fb.group({ timeAndBs: this.firstFormGroup, bolusEtc: this.secondFormGroup });
+
+  }
+
+  private handleSubFormSubsciptions() {
+
   }
 
   get isLastStep(): boolean {

@@ -12,6 +12,7 @@ import { Entry } from 'src/shared/model/diary/entry/entry';
 import { AddIngestionActions } from '../add-ingestion/add-ingestion.actions';
 import { DepthNavigationService } from 'src/shared/services/depth-navigation.service';
 import { AddEntryActionsProps } from '../sharedActionsProps.ts/add-entry-props';
+import { CustomValidators } from '../misc/custom-validators';
 
 @Component({
   selector: 'app-add-bsmeasure',
@@ -22,7 +23,7 @@ import { AddEntryActionsProps } from '../sharedActionsProps.ts/add-entry-props';
 export class AddBSMeasureComponent implements OnInit {
 
   //CONTROL
-  entryControl: ConstructionConstrol<Entry> = new ConstructionConstrol(null);
+  entryControl: ConstructionConstrol<Entry> = new ConstructionConstrol(null, CustomValidators.required);
 
   //MISC
   loading = true;
