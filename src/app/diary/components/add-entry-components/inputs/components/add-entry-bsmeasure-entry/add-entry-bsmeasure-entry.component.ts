@@ -10,7 +10,7 @@ import { ConstructionControlValue } from 'src/shared/util/construction-constrol-
 import { FormUtil } from 'src/shared/util/form-util';
 import { Observable, Subject } from 'rxjs';
 import { Entry } from 'src/shared/model/diary/entry/entry';
-import { map, delay } from 'rxjs/operators';
+import { map, delay, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-add-entry-bsmeasure-entry',
@@ -32,6 +32,9 @@ export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit, V
   firstFormGroup: FormGroup = new FormGroup({});
   secondFormGroup: FormGroup = new FormGroup({});
   mainFormGroup: FormGroup = new FormGroup({});
+
+  //MISC
+  currentTimestamp : Subject<Date> = new Subject();
 
   @ViewChild("stepper", { static: false }) private stepper: MatStepper;
 
@@ -63,7 +66,7 @@ export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit, V
       entry.bloodSuger = this.bsMeasureControl.value.constructed;
       return new ConstructionControlValue(this.mainFormGroup.value, entry);
     })).subscribe(x => this.construction.next(x));
-    this.bsMeasureControl.valueChanges.subscribe(x => console.warn("CHANGE"));
+    this.timeStampControl.valueChanges.pipe(startWith(this.timeStampControl.value)).subscribe(x => this.currentTimestamp.next(x.constructed));
   }
 
   get isLastStep(): boolean {

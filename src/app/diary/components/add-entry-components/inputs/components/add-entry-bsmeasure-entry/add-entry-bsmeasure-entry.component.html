@@ -16,6 +16,20 @@
                 <div [formGroup]="secondFormGroup">
                     <ng-template matStepLabel>Bolus etc.</ng-template>
                     <h3>Bolus berechnen</h3>
+
+                    <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Berechnungsfaktoren
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <app-framevalue-shower [currentTimestamp]="currentTimestamp"></app-framevalue-shower>
+                        <mat-divider></mat-divider>
+                        <div class="calc-factors-field">
+                            <app-correction-factor-shower [currentTimestamp]="currentTimestamp">
+                            </app-correction-factor-shower>
+                        </div>
+                    </mat-expansion-panel>
                 </div>
             </mat-step>
         </mat-horizontal-stepper>
