@@ -11,6 +11,8 @@ import { FormUtil } from 'src/shared/util/form-util';
 import { Observable, Subject } from 'rxjs';
 import { Entry } from 'src/shared/model/diary/entry/entry';
 import { map, delay, startWith } from 'rxjs/operators';
+import { SimpleInsulinIntake } from 'src/shared/model/diary/entry/attributes/simple-Insulin-intake';
+import { IntervallInsulinIntake } from 'src/shared/model/diary/entry/attributes/intervall-insulin-intake';
 
 @Component({
   selector: 'app-add-entry-bsmeasure-entry',
@@ -24,6 +26,9 @@ export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit, V
   //CONTROLS
   private timeStampControl: ConstructionConstrol<ConstructionControlValue<Date>> = new ConstructionConstrol(null, [CustomValidators.required]);
   private bsMeasureControl: ConstructionConstrol<ConstructionControlValue<number>> = new ConstructionConstrol(null);
+  private simpleFoodBolusControl: ConstructionConstrol<ConstructionControlValue<SimpleInsulinIntake>> = new ConstructionConstrol(null);
+  private intervallFoodBolusControl: ConstructionConstrol<ConstructionControlValue<IntervallInsulinIntake>> = new ConstructionConstrol(null);
+  private correctionFoodBolusControl: ConstructionConstrol<ConstructionControlValue<SimpleInsulinIntake>> = new ConstructionConstrol(null);
 
   //CONSTRUCTION
   construction: Subject<ConstructionControlValue<Entry>> = new Subject();
@@ -34,7 +39,8 @@ export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit, V
   mainFormGroup: FormGroup = new FormGroup({});
 
   //MISC
-  currentTimestamp : Subject<Date> = new Subject();
+  currentTimestamp: Subject<Date> = new Subject();
+  selectedNormalBolus: Subject<number> = new Subject();
 
   @ViewChild("stepper", { static: false }) private stepper: MatStepper;
 
@@ -55,6 +61,11 @@ export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit, V
       timestamp: this.timeStampControl,
       bsMeasure: this.bsMeasureControl
     });
+    this.secondFormGroup = this.fb.group({
+      simpleFoodBolusControl: this.simpleFoodBolusControl,
+      intervallFoodBolus: this.intervallFoodBolusControl,
+      correctionFoodBolusControl: this.correctionFoodBolusControl
+    });
     this.mainFormGroup = this.fb.group({ timeAndBs: this.firstFormGroup, bolusEtc: this.secondFormGroup });
     this.mainFormGroup.setValidators([FormUtil.save(((x: AbstractControl) => this.bsMeasureControl.value.constructed ? null : { atleastOneEntryAttributeNeedsToBeSet: null }))])
   }
@@ -67,6 +78,7 @@ export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit, V
       return new ConstructionControlValue(this.mainFormGroup.value, entry);
     })).subscribe(x => this.construction.next(x));
     this.timeStampControl.valueChanges.pipe(startWith(this.timeStampControl.value)).subscribe(x => this.currentTimestamp.next(x.constructed));
+    this.simpleFoodBolusControl.valueChanges.pipe(startWith(this.simpleFoodBolusControl.value)).subscribe(x => this.selectedNormalBolus.next(x.constructed ? x.constructed.units : null));
   }
 
   get isLastStep(): boolean {
