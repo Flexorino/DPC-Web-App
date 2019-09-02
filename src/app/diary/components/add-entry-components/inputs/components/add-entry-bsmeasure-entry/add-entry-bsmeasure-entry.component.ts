@@ -75,6 +75,17 @@ export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit, V
       let entry = new Entry(null);
       entry.timeStamp = this.timeStampControl.value.constructed;
       entry.bloodSuger = this.bsMeasureControl.value.constructed;
+      let insulinIntakes = [];
+      if(this.simpleFoodBolusControl.value.constructed){
+        insulinIntakes.push(this.simpleFoodBolusControl.value.constructed);
+      }
+      if(this.correctionFoodBolusControl.value.constructed){
+        insulinIntakes.push(this.correctionFoodBolusControl.value.constructed);
+      }
+      if(this.intervallFoodBolusControl.value.constructed){
+        insulinIntakes.push(this.intervallFoodBolusControl.value.constructed);
+      }
+      entry.insulinIntakes = insulinIntakes;
       return new ConstructionControlValue(this.mainFormGroup.value, entry);
     })).subscribe(x => this.construction.next(x));
     this.timeStampControl.valueChanges.pipe(startWith(this.timeStampControl.value)).subscribe(x => this.currentTimestamp.next(x.constructed));
