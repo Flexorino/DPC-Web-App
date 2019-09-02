@@ -5,7 +5,7 @@ import { InsulinAttribute, BaseInsulinIntakeSemantics } from 'src/shared/model/d
 import { SimpleInsulinIntake } from 'src/shared/model/diary/entry/attributes/simple-Insulin-intake';
 import { FormBuilder, FormGroup, Validators, NG_VALUE_ACCESSOR, NG_VALIDATORS, FormControl, Validator, ControlValueAccessor } from '@angular/forms';
 import { ConstructionControlValue } from 'src/shared/util/construction-constrol-value';
-import { map } from 'rxjs/operators';
+import { map, delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-add-entry-simple-correction-bolus-picker',
@@ -32,9 +32,9 @@ export class AddEntrySimpleCorrectionBolusPickerComponent implements OnInit, Val
     let control = this.fb.control(null, [Validators.min(1), Validators.max(50)]);
     this.bolus = control;
     this.group.addControl('bolus', control);
-    this.construction = control.valueChanges.pipe(map(x => {
+    this.construction = control.valueChanges.pipe(delay(0),map(x => {
       let z = new SimpleInsulinIntake();
-      z.semanticIdentifier = BaseInsulinIntakeSemantics.FOOD_BOLUS;
+      z.semanticIdentifier = BaseInsulinIntakeSemantics.CORRECTION_BOLUS;
       if (control.value) {
         try {
           z.units = Number.parseInt(control.value);
@@ -50,10 +50,6 @@ export class AddEntrySimpleCorrectionBolusPickerComponent implements OnInit, Val
 
   validate(control: import("@angular/forms").AbstractControl): import("@angular/forms").ValidationErrors {
     return this.group.valid ? null : { curruptedControlState: null };
-  }
-
-  registerOnValidatorChange?(fn: () => void): void {
-    this.group.statusChanges.subscribe(fn);
   }
 
   writeValue(obj: any): void {

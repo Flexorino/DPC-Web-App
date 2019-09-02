@@ -5,7 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { IntervallInsulinIntake } from 'src/shared/model/diary/entry/attributes/intervall-insulin-intake';
 import { FormBuilder, FormGroup, Validators, AbstractControl, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator, ControlValueAccessor } from '@angular/forms';
 import { ConstructionControlValue } from 'src/shared/util/construction-constrol-value';
-import { map } from 'rxjs/operators';
+import { map, delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-add-entry-intervall-food-bolus-picker',
@@ -47,7 +47,7 @@ export class AddEntryIntervallFoodBolusPickerComponent implements OnInit, Valida
     this.group.addControl('timeIntervallControl', this.time);
     this.group.addControl('activated', this.activated);
 
-    this.construction = this.group.valueChanges.pipe(map(x => {
+    this.construction = this.group.valueChanges.pipe(delay(0),map(x => {
       if (!this.activated.value) {
         return new ConstructionControlValue(this.group.value, null);
       }
@@ -122,9 +122,5 @@ export class AddEntryIntervallFoodBolusPickerComponent implements OnInit, Valida
 
   validate(control: import("@angular/forms").AbstractControl): import("@angular/forms").ValidationErrors {
     return this.group.valid ? null : { curruptedControlState: null };
-  }
-
-  registerOnValidatorChange?(fn: () => void): void {
-    this.group.statusChanges.subscribe(fn);
   }
 }
