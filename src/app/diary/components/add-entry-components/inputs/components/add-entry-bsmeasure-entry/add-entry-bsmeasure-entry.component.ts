@@ -150,9 +150,9 @@ export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit, V
     this.bolusDao.getBolusSuggestion(this.lastConstruction).subscribe(x => {
       this.correctionFoodBolusControl.reset();
       let intake = x.insulinIntakes.find(x => x.semanticIdentifier === BaseInsulinIntakeSemantics.CORRECTION_BOLUS && x instanceof SimpleInsulinIntake);
-      this.correctionFoodBolusControl.setValue(intake ? intake.units : null);
+      this.correctionFoodBolusControl.setValue( new ConstructionControlValue(null, intake));
       this.loading = false;
-    });
+    }, err => { alert(err); this.loading = false; });
 
   }
 }

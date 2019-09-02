@@ -29,7 +29,7 @@ export class AddEntrySimpleCorrectionBolusPickerComponent implements OnInit, Val
   group: FormGroup = new FormGroup({});
 
   ngOnInit() {
-    let control = this.fb.control(null, [Validators.min(1), Validators.max(50)]);
+    let control = this.fb.control(null, [Validators.min(0.01), Validators.max(50)]);
     this.bolus = control;
     this.group.addControl('bolus', control);
     this.construction = control.valueChanges.pipe(delay(0),map(x => {
@@ -66,7 +66,7 @@ export class AddEntrySimpleCorrectionBolusPickerComponent implements OnInit, Val
         this.bolus.setValue(null);
       } else {
         let constr: ConstructionControlValue<SimpleInsulinIntake> = obj;
-        this.bolus.setValue(constr.constructed.units);
+        this.bolus.setValue( constr.constructed.units.toFixed(2));
       }
     }
   }

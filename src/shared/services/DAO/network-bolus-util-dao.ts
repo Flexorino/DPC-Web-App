@@ -22,13 +22,16 @@ export class RestNetworkBolusUtilDAO implements IBolusUtilDao {
     getBolusSuggestion(entry: Entry): Observable<BolusSuggestionAnswer> {
         return getLatestContextObservable(of(entry.timeStamp), this.store).pipe(
             map(x => {
+                if(!x){
+                     throw new Error("kein Kontext gefunden (sollte spätert nicht mehr vorkommen)");
+                }
                 if(!x.keFactor || !x.frameValue || !x.correctionFactors){
                     throw new Error("momentan nur Bolus-Berechnung unterstützt, wenn Rahmenwerte, Korrekturfaktoren und KE_Faktoren angegeben sind!");
                 }
                 let intakes = [];
-                let simpleIntake = new SimpleInsulinIntake();
-                simpleIntake.semanticIdentifier = BaseInsulinIntakeSemantics.FOOD_BOLUS;
                 if (entry.foodIntakes.length) {
+                    let simpleIntake = new SimpleInsulinIntake();
+                    simpleIntake.semanticIdentifier = BaseInsulinIntakeSemantics.FOOD_BOLUS;
                     let takeCarbs = entry.foodIntakes.length ? entry.foodIntakes.map(x => x.amount).reduce((x, y) => x + y) : 0;
                     let hour = entry.timeStamp.getHours();
                     let strzing = entry.timeStamp.toISOString();
@@ -37,6 +40,18 @@ export class RestNetworkBolusUtilDAO implements IBolusUtilDao {
                     let factor = x.keFactor.dialyKeFactors[hour];
                     simpleIntake.units = factor * takeCarbs;
                     intakes.push(simpleIntake);
+                }
+                if(entry.bloodSuger){
+                    let tooHighDiff = entry.bloodSuger - x.frameValue.dailyBSGoalValues[entry.timeStamp.getHours()] ;
+                    if(tooHighDiff > 0){
+                        let hour = entry.timeStamp.getHours();
+                        let corrFactor = x.correctionFactors.dialyCorrectionFactors[hour];
+                        let ie = tooHighDiff/ corrFactor;
+                        let simpleIntake = new SimpleInsulinIntake();
+                        simpleIntake.semanticIdentifier = BaseInsulinIntakeSemantics.CORRECTION_BOLUS;
+                        simpleIntake.units = ie;
+                        intakes.push(simpleIntake);
+                    }
                 }
                 return new BolusSuggestionAnswer(intakes);
             }), delay(500));
