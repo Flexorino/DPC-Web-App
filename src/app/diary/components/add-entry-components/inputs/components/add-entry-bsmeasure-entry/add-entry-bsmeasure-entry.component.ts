@@ -41,6 +41,7 @@ export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit, V
   //MISC
   currentTimestamp: Subject<Date> = new Subject();
   selectedNormalBolus: Subject<number> = new Subject();
+  currentBS: Subject<number> = new Subject();
 
   @ViewChild("stepper", { static: false }) private stepper: MatStepper;
 
@@ -90,6 +91,7 @@ export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit, V
     })).subscribe(x => this.construction.next(x));
     this.timeStampControl.valueChanges.pipe(startWith(this.timeStampControl.value)).subscribe(x => this.currentTimestamp.next(x.constructed));
     this.simpleFoodBolusControl.valueChanges.pipe(startWith(this.simpleFoodBolusControl.value)).subscribe(x => this.selectedNormalBolus.next(x.constructed ? x.constructed.units : null));
+    this.bsMeasureControl.valueChanges.pipe(startWith(this.bsMeasureControl.value)).subscribe(x => this.currentBS.next(x.constructed));
   }
 
   get isLastStep(): boolean {

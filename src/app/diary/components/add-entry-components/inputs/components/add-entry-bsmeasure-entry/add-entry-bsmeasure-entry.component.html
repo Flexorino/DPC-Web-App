@@ -10,6 +10,7 @@
                     <h3>Blutzucker</h3>
                     <add-entry-bs-picker formControlName="bsMeasure">
                     </add-entry-bs-picker>
+                    <app-bsrating-view [currentTimestamp]="currentTimestamp" [currentBS]="currentBS"></app-bsrating-view>
                 </div>
             </mat-step>
             <mat-step [stepControl]="secondFormGroup">

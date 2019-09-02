@@ -62,6 +62,7 @@ import { AddBSMeasureComponent } from './diary/components/add-entry-components/a
 import { AddEntryBSMeasureEntryComponent } from './diary/components/add-entry-components/inputs/components/add-entry-bsmeasure-entry/add-entry-bsmeasure-entry.component';
 import { SearchViewComponent } from './diary/components/search-view/search-view.component';
 import { AddBSEffects } from 'src/shared/effects/add-bs-effects';
+import { BSRatingViewComponent } from './diary/components/add-entry-components/misc/bsrating-view/bsrating-view.component';
 
 
 @NgModule({
@@ -104,7 +105,8 @@ import { AddBSEffects } from 'src/shared/effects/add-bs-effects';
     ManualEntryAddComponent,
     AddBSMeasureComponent,
     AddEntryBSMeasureEntryComponent,
-    SearchViewComponent  
+    SearchViewComponent,
+    BSRatingViewComponent  
   ],
   imports: [
     ReactiveFormsModule,
