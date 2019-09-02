@@ -28,6 +28,9 @@ export class BSRatingViewComponent implements OnInit {
   }
 
   get rating(): number {
+    if(!this.currentFrameValues){
+      return null;
+    }
     let l: number = this.lastBSValue;
     let f = this.currentFrameValues;
     return l < f.hypoglycemiaLimit ? -2 : (l < f.lowerBSLimit ? -1 : (l < f.higherBSLimit ? 0 : (l < f.hyperglycemiaLimit ? 1 : 2)));

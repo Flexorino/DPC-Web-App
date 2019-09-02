@@ -31,14 +31,14 @@ export class AddEntryBSPicker implements OnInit, ControlValueAccessor, Validator
   //CONSTRUCTION
   construction: Observable<ConstructionControlValue<number>>;
 
-  constructor(private fb: FormBuilder, private settings: SettingsService) {}
+  constructor(private fb: FormBuilder, private settings: SettingsService) { }
 
   ngOnInit() {
     console.warn("INIIT");
     this.bsUnit = this.settings.bsUnitSettingSubj.getValue();
     this.bsMeasure = this.fb.control(null, [Validators.min(1 * this.bsUnit.factor), Validators.max(30 * this.bsUnit.factor)]);
     this.group.addControl("bsMeasure", this.bsMeasure);
-    this.construction = this.bsMeasure.valueChanges.pipe(delay(0),map(x => new ConstructionControlValue(this.group.value, Number.parseFloat(x)), catchError(err => of(new ConstructionControlValue(this.group.value, null)))));
+    this.construction = this.bsMeasure.valueChanges.pipe(delay(0), map(x => new ConstructionControlValue(this.group.value, Number.parseFloat(x) / this.bsUnit.factor), catchError(err => of(new ConstructionControlValue(this.group.value, null)))));
   }
 
   writeValue(obj: any): void {
@@ -60,7 +60,7 @@ export class AddEntryBSPicker implements OnInit, ControlValueAccessor, Validator
     }
   }
 
-  private setToInitial() { 
+  private setToInitial() {
     this.bsMeasure.setValue(null);
   }
 
@@ -74,6 +74,6 @@ export class AddEntryBSPicker implements OnInit, ControlValueAccessor, Validator
   }
 
   validate(control: import("@angular/forms").AbstractControl): import("@angular/forms").ValidationErrors {
-    return this.group.valid? null: { curruptedControlState: null };
+    return this.group.valid ? null : { curruptedControlState: null };
   }
 }

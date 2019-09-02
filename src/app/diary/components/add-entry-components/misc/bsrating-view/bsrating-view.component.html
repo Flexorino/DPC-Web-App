@@ -1,13 +1,26 @@
-<mat-card id="card">
+<mat-card id="card" [ngClass]="{'oof': (rating===-2 || rating===2) && showable}">
     <div *ngIf="currentFrameValues===null"> Für diesen Zeitraum sind keine Zielwerte-Angegeben!</div>
-    <div *ngIf="currentFrameValues!==null">Zielwert für diese Zeit: {{(hourGoalVal * bsunit.factor )| number:'1.0-2'}}
-        {{bsunit.identifier}}</div>
     <div *ngIf="showable">
-        <div *ngIf="rating===-2"> Sie befinden sich im Hypoglykämie-Bereich </div>
-        <div *ngIf="rating===-1"> Sie befinden sich unter dem Ziel-Bereich! </div>
-        <div *ngIf="rating===0"> Sie befinden sich im Ziel-Bereich!</div>
-        <div *ngIf="rating===1"> Sie befinden sich über dem Ziel-Bereich! </div>
-        <div *ngIf="rating===2"> Sie befinden sich im Hyperglykämie-Bereich </div>
+        <div *ngIf="rating===-2" class="rating-message">
+            <mat-icon>error</mat-icon>
+            <div> Sie befinden sich im Hypoglykämie-Bereich </div>
+        </div>
+        <div *ngIf=" rating===-1" class="rating-message">
+            <mat-icon>warning</mat-icon>
+            <div> Sie befinden sich unter dem Ziel-Bereich!</div>
+        </div>
+        <div *ngIf="rating===0" class="rating-message">
+            <mat-icon style="color: green">check_box</mat-icon>
+            <div> Sie befinden sich im Ziel-Bereich!!</div>
+        </div>
+        <div *ngIf="rating===1" class="rating-message">
+            <mat-icon>warning</mat-icon>
+            <div> Sie befinden sich über dem Ziel-Bereich! </div>
+        </div>
+        <div *ngIf="rating===2" class="rating-message">
+            <mat-icon>error</mat-icon>
+            <div> Sie befinden sich im Hyperglykämie-Bereich </div>
+        </div>
     </div>
+    <div *ngIf="currentFrameValues!==null"> (Zielwert für diese Zeit: {{(hourGoalVal * bsunit.factor )| number:'1.0-2'}} {{bsunit.identifier}})</div>
 </mat-card>
-{{lastBSValue}}

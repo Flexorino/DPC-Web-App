@@ -82,6 +82,10 @@ $candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-
     background: mat-color(map-get($candy-app-theme, primary),100);
   }
 
+  .oof {
+    background: mat-color(map-get($candy-app-theme, warn),100);
+  }
+
   .selected-item {
     background: mat-color(map-get($candy-app-theme, primary),100) !important;
   }

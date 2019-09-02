@@ -1,3 +1,15 @@
-#card {
+.rating-message{
+    display: flex;
+    div{
+        flex-basis: 59%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    mat-icon{
+        flex-basis: 40%;
+        font-size: 80px;
+        height: auto;
+    }
 
 }
