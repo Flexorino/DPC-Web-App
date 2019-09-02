@@ -1,3 +1,4 @@
+import { FoodIntakeAttribute } from './../../../../../../../shared/model/diary/entry/attributes/food-intake-attribute';
 import { DiaryNavigationService } from './../../../../../../../shared/services/diary.navigation.service';
 import { CustomValidators } from './../../../misc/custom-validators';
 import { FormService } from './../../../../../../../shared/services/form-service';
@@ -29,6 +30,7 @@ export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit, V
   private timeStampControl: ConstructionConstrol<ConstructionControlValue<Date>> = new ConstructionConstrol(null, [CustomValidators.required]);
   private bsMeasureControl: ConstructionConstrol<ConstructionControlValue<number>> = new ConstructionConstrol(null);
   private correctionFoodBolusControl: ConstructionConstrol<ConstructionControlValue<SimpleInsulinIntake>> = new ConstructionConstrol(null);
+  private fastKE: ConstructionConstrol<ConstructionControlValue<FoodIntakeAttribute>> = new ConstructionConstrol(null);
 
   //CONSTRUCTION
   construction: Subject<ConstructionControlValue<Entry>> = new Subject();
@@ -58,7 +60,7 @@ export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit, V
   }
 
   ngOnInit() {
-    FormUtil.waitForInitialization(this.timeStampControl, this.bsMeasureControl).subscribe(() => this.handleSubFormSubsciptions());
+    FormUtil.waitForInitialization(this.timeStampControl, this.bsMeasureControl, this.fastKE, this.correctionFoodBolusControl).subscribe(() => this.handleSubFormSubsciptions());
     this.initializeForms();
   }
 
@@ -68,7 +70,8 @@ export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit, V
       bsMeasure: this.bsMeasureControl
     });
     this.secondFormGroup = this.fb.group({
-      correctionFoodBolusControl: this.correctionFoodBolusControl
+      correctionFoodBolusControl: this.correctionFoodBolusControl,
+      fastKE: this.fastKE
     });
     this.mainFormGroup = this.fb.group({ timeAndBs: this.firstFormGroup, bolusEtc: this.secondFormGroup });
     this.mainFormGroup.setValidators([FormUtil.save(((x: AbstractControl) => this.bsMeasureControl.value.constructed || this.correctionFoodBolusControl.value.constructed ? null : { atleastOneEntryAttributeNeedsToBeSet: null }))])
@@ -82,6 +85,9 @@ export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit, V
       let insulinIntakes = [];
       if (this.correctionFoodBolusControl.value.constructed) {
         insulinIntakes.push(this.correctionFoodBolusControl.value.constructed);
+      }
+      if(this.fastKE.value.constructed){
+        entry.foodIntakes.push(this.fastKE.value.constructed);
       }
       entry.insulinIntakes = insulinIntakes;
       this.lastConstruction = entry;
@@ -150,7 +156,7 @@ export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit, V
     this.bolusDao.getBolusSuggestion(this.lastConstruction).subscribe(x => {
       this.correctionFoodBolusControl.reset();
       let intake = x.insulinIntakes.find(x => x.semanticIdentifier === BaseInsulinIntakeSemantics.CORRECTION_BOLUS && x instanceof SimpleInsulinIntake);
-      this.correctionFoodBolusControl.setValue( new ConstructionControlValue(null, intake));
+      this.correctionFoodBolusControl.setValue(new ConstructionControlValue(null, intake));
       this.loading = false;
     }, err => { alert(err); this.loading = false; });
 

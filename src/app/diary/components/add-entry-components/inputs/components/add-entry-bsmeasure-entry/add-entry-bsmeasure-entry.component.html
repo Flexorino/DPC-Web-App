@@ -25,6 +25,7 @@
                     <h3>Bolus berechnen</h3>
                     <app-add-entry-simple-correction-bolus-picker formControlName="correctionFoodBolusControl">
                     </app-add-entry-simple-correction-bolus-picker>
+                    <app-fast-keinput formControlName="fastKE"> </app-fast-keinput>
                     <button [disabled]="!mainFormGroup.valid || !(currentBS | async)" class="fullWidthInput button"
                         mat-raised-button color="primary" (click)="onBlous()">Berechne
                         Bolus</button>
