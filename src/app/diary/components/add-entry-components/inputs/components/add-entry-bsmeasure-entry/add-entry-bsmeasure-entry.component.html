@@ -10,7 +10,9 @@
                     <h3>Blutzucker</h3>
                     <add-entry-bs-picker formControlName="bsMeasure">
                     </add-entry-bs-picker>
-                    <app-bsrating-view [currentTimestamp]="currentTimestamp" [currentBS]="currentBS"></app-bsrating-view>
+                    <app-bsrating-view [currentTimestamp]="currentTimestamp" [currentBS]="currentBS">
+                            <button class="fullWidthInput button ok" mat-raised-button color="primary" [disabled]="!mainFormGroup.valid" (click)="submit()">Eingabe beenden</button>
+                    </app-bsrating-view>
                 </div>
             </mat-step>
             <mat-step [stepControl]="secondFormGroup">
