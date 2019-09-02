@@ -39,40 +39,25 @@ export class AddEntryIntervallFoodBolusPickerComponent implements OnInit, Valida
   ngOnInit() {
     this.relativPart = this.fb.control(null);
     this.absolutePart = this.fb.control('', [Validators.min(1), Validators.max(50)]);
-    this.time = this.fb.control('', [(x: AbstractControl) => !x.value && this.activated ? { 'timeIntervallNeedsTobeSet': {} } : null]);
+    this.time = this.fb.control('00:00', [(x: AbstractControl) => this.getTimeIntervallInMinutes() ? this.getTimeIntervallInMinutes() > 5 ? null : { timeIntervallToSmol: null } : null]);
     this.activated = this.fb.control(false);
 
     this.group.addControl('relativePortionControl', this.relativPart);
     this.group.addControl('fixPortionControl', this.absolutePart);
     this.group.addControl('timeIntervallControl', this.time);
     this.group.addControl('activated', this.activated);
-
-    this.construction = this.group.valueChanges.pipe(delay(0),map(x => {
+    this.group.setValidators([(x: AbstractControl) => {
+      if (!this.activated.value) {
+        return null;
+      }
+      let intake = this.constructIntervallBolus();
+      return intake ? intake.endTimeStamp && intake.units ? null : { notComplete: null } : { notComplete: null };
+    }]);
+    this.construction = this.group.valueChanges.pipe(delay(0), map(x => {
       if (!this.activated.value) {
         return new ConstructionControlValue(this.group.value, null);
       }
-      let constructed: IntervallInsulinIntake = new IntervallInsulinIntake();
-      constructed.semanticIdentifier = BaseInsulinIntakeSemantics.FOOD_BOLUS;
-      constructed.endTimeStamp = null;
-      constructed.units = null;
-      try {
-        let sum = (this.relativPart.value ? Number.parseInt(this.relativPart.value) : 0) + (this.absolutePart.value ? Number.parseInt(this.absolutePart.value) : 0);
-        constructed.units = sum;
-        let time = 0;
-        if (this.time.value) {
-          let value: string = this.time.value;
-          time += value.split(':')[0] ? Number.parseInt(value.split(':')[0]) * 60 : 0;
-          time += value.split(':')[1] ? Number.parseInt(value.split(':')[1]) : 0;
-        }
-        constructed.units = sum;
-        this.currentSumBolus = sum;
-        let date = new Date();
-        date.setMinutes(date.getMinutes() + time);
-        constructed.endTimeStamp = date;
-        this.currentTimeIntervall = time;
-      } catch (e) { }
-      console.log("CONSTRUCTED: " + JSON.stringify(constructed));
-      return new ConstructionControlValue(this.group.value, constructed);
+      return new ConstructionControlValue(this.group.value, this.constructIntervallBolus());
     }));
     this.selectedBolusObservable.subscribe(x => {
       let current = Number.parseInt(this.relativPart.value);
@@ -81,7 +66,43 @@ export class AddEntryIntervallFoodBolusPickerComponent implements OnInit, Valida
       }
       this.currentSelectedNormalBolus = x ? x : 0;
     });
-    
+
+  }
+
+  private constructIntervallBolus(): IntervallInsulinIntake {
+    let constructed: IntervallInsulinIntake = new IntervallInsulinIntake();
+    constructed.semanticIdentifier = BaseInsulinIntakeSemantics.FOOD_BOLUS;
+    constructed.endTimeStamp = null;
+    constructed.units = null;
+    try {
+      let sum = (this.relativPart.value ? Number.parseInt(this.relativPart.value) : 0) + (this.absolutePart.value ? Number.parseInt(this.absolutePart.value) : 0);
+      constructed.units = sum;
+      let time = this.getTimeIntervallInMinutes();
+      constructed.units = sum;
+      this.currentSumBolus = sum;
+      if (time) {
+        let date = new Date();
+        date.setMinutes(date.getMinutes() + time);
+        constructed.endTimeStamp = date;
+      }
+      this.currentTimeIntervall = time;
+    } catch (e) { }
+    return constructed;
+  }
+
+  private getTimeIntervallInMinutes(): number {
+    let time = null;
+    if (this.time && this.time.value) {
+      try {
+        time = 0;
+        let value: string = this.time.value;
+        time += value.split(':')[0] ? Number.parseInt(value.split(':')[0]) * 60 : 0;
+        time += value.split(':')[1] ? Number.parseInt(value.split(':')[1]) : 0;
+      } catch (e) {
+        return null;
+      }
+    }
+    return time;
   }
 
   writeValue(obj: any): void {
@@ -107,7 +128,7 @@ export class AddEntryIntervallFoodBolusPickerComponent implements OnInit, Valida
 
   private setToInitial() {
     this.activated.setValue(false);
-    this.time.setValue(null);
+    this.time.setValue("00:00");
     this.relativPart.setValue(null);
     this.absolutePart.setValue(null);
   }
