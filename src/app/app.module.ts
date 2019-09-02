@@ -60,7 +60,7 @@ import { AddEntrySimpleFoodBolusPickerComponent } from './diary/components/add-e
 import { ManualEntryAddComponent } from './diary/components/add-entry-components/manual-entry-add/manual-entry-add.component';
 import { AddBSMeasureComponent } from './diary/components/add-entry-components/add-bsmeasure/add-bsmeasure.component';
 import { AddEntryBSMeasureEntryComponent } from './diary/components/add-entry-components/inputs/components/add-entry-bsmeasure-entry/add-entry-bsmeasure-entry.component';
-import { SearchViewComponent } from './search-view/search-view.component';
+import { SearchViewComponent } from './diary/components/search-view/search-view.component';
 
 
 @NgModule({

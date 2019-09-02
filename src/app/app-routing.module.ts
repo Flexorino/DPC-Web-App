@@ -1,5 +1,3 @@
-import { SearchViewComponent } from './search-view/search-view.component';
-
 
 import { state } from '@angular/animations';
 import { CallBackGuard } from './diary/services/callback-guard';
@@ -20,6 +18,7 @@ import { AddOverviewComponent } from './diary/components/add-overview/add-overvi
 import { AddIngestionComponent } from './diary/components/add-entry-components/add-ingestion/add-ingestion.component';
 import { ManualEntryAddComponent } from './diary/components/add-entry-components/manual-entry-add/manual-entry-add.component';
 import { AddBSMeasureComponent } from './diary/components/add-entry-components/add-bsmeasure/add-bsmeasure.component';
+import { SearchViewComponent } from './diary/components/search-view/search-view.component';
 
 
 
