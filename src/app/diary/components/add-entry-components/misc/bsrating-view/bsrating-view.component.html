@@ -24,7 +24,7 @@
     </div>
     <div *ngIf="currentFrameValues!==null"> (Zielwert für diese Zeit: {{(hourGoalVal * bsunit.factor )| number:'1.0-2'}}
         {{bsunit.identifier}})</div>
-    <div *ngIf="rating===0">
+    <div *ngIf="rating===0" class="projected">
         <ng-content select=".ok"></ng-content>
     </div>
 </mat-card>

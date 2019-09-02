@@ -1,4 +1,3 @@
-{{mainFormGroup.valid}}
 <div id="content">
     <div>
         <mat-horizontal-stepper [linear]="isLinear" #stepper [formGroup]="mainFormGroup">
@@ -10,7 +9,7 @@
                     <h3>Blutzucker</h3>
                     <add-entry-bs-picker formControlName="bsMeasure">
                     </add-entry-bs-picker>
-                    <app-bsrating-view [currentTimestamp]="currentTimestamp" [currentBS]="currentBS">
+                    <app-bsrating-view [hidden]="!(currentBS | async)" [currentTimestamp]="currentTimestamp" [currentBS]="currentBS">
                             <button class="fullWidthInput button ok" mat-raised-button color="primary" [disabled]="!mainFormGroup.valid" (click)="submit()">Eingabe beenden</button>
                     </app-bsrating-view>
                 </div>
