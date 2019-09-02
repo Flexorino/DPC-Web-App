@@ -1,3 +1,4 @@
+import { CustomValidators } from './../../../misc/custom-validators';
 import { FormService } from './../../../../../../../shared/services/form-service';
 import { Component, OnInit, ViewChild, Inject, AfterViewInit, forwardRef } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, NG_VALUE_ACCESSOR, NG_VALIDATORS, Validator, ControlValueAccessor, AbstractControl } from '@angular/forms';
@@ -21,7 +22,7 @@ import { map, delay } from 'rxjs/operators';
 })
 export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit, Validator, ControlValueAccessor {
   //CONTROLS
-  private timeStampControl: ConstructionConstrol<ConstructionControlValue<Date>> = new ConstructionConstrol(null, [(x: ConstructionConstrol<ConstructionControlValue<Date>>) => x.value && x.value.constructed ? null : { 'required': null }]);
+  private timeStampControl: ConstructionConstrol<ConstructionControlValue<Date>> = new ConstructionConstrol(null, [CustomValidators.required]);
   private bsMeasureControl: ConstructionConstrol<ConstructionControlValue<number>> = new ConstructionConstrol(null);
 
   //CONSTRUCTION

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, forwardRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl, ControlValueAccessor, NG_VALUE_ACCESSOR, FormControl, Validator, NG_VALIDATORS } from '@angular/forms';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, delay } from 'rxjs/operators';
 import { ConstructionControlValue } from 'src/shared/util/construction-constrol-value';
 
 @Component({
@@ -14,7 +14,6 @@ import { ConstructionControlValue } from 'src/shared/util/construction-constrol-
   ]
 })
 export class AddEntryTimestampPickerComponent implements OnInit, ControlValueAccessor, Validator {
-
 
   group: FormGroup = new FormGroup({});
   private obs: Subject<ConstructionControlValue<Date>> = new Subject();
@@ -30,7 +29,7 @@ export class AddEntryTimestampPickerComponent implements OnInit, ControlValueAcc
     this.group.addControl("date", this.dateControl);
     timeStamp: Date;
 
-    this.group.valueChanges.pipe(map((y) => {
+    this.group.valueChanges.pipe(delay(0),map((y) => {
       let obj: ConstructionControlValue<Date> = new ConstructionControlValue();
       obj.raw = this.group.value;
       try {
