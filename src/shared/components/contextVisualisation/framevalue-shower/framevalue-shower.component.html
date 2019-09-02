@@ -1,16 +1,18 @@
 <b>Grenzwerte:</b>
 <div *ngIf="currentFrameValues">
-    Hyperglykämie-Grenze: {{currentFrameValues.hyperglycemiaLimit * bsunit.factor}} {{bsunit.identifier}}
-    Obergrenze-Grenze: {{currentFrameValues.higherBSLimit * bsunit.factor}} {{bsunit.identifier}}
-    Untergenze-Grenze: {{currentFrameValues.lowerBSLimit * bsunit.factor}} {{bsunit.identifier}}
-    Hypoglykämie-Grenze: {{currentFrameValues.hypoglycemiaLimit * bsunit.factor}} {{bsunit.identifier}}
+    Hyperglykämie-Grenze: {{(currentFrameValues.hyperglycemiaLimit * bsunit.factor) | number:'1.0-2'}}
+    {{bsunit.identifier}}
+    Obergrenze-Grenze: {{(currentFrameValues.higherBSLimit * bsunit.factor)| number:'1.0-2'}} {{bsunit.identifier}}
+    Untergenze-Grenze: {{(currentFrameValues.lowerBSLimit * bsunit.factor) | number:'1.0-2'}} {{bsunit.identifier}}
+    Hypoglykämie-Grenze: {{(currentFrameValues.hypoglycemiaLimit * bsunit.factor)| number:'1.0-2'}}
+    {{bsunit.identifier}}
 </div>
-
 
 <div id="sec" *ngIf="currentFrameValues">
     <b>Ziel Werte über den Tag:</b>
     <div *ngFor="let val of currentFrameValues.dailyBSGoalValues; let i = index">
-        {{i | number:'2.0-0'}}:00 Uhr bis {{(i+1)%24 | number:'2.0-0'}}:00 Uhr : {{val * bsunit.factor}}
+        {{i | number:'2.0-0'}}:00 Uhr bis {{(i+1)%24 | number:'2.0-0'}}:00 Uhr :
+        {{(val * bsunit.factor) | number:'1.0-2'}}
         {{bsunit.identifier}}
     </div>
 </div>
