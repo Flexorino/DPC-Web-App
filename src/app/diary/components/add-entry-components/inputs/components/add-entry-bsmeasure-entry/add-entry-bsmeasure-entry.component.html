@@ -9,8 +9,10 @@
                     <h3>Blutzucker</h3>
                     <add-entry-bs-picker formControlName="bsMeasure">
                     </add-entry-bs-picker>
-                    <app-bsrating-view [hidden]="!(currentBS | async)" [currentTimestamp]="currentTimestamp" [currentBS]="currentBS">
-                            <button class="fullWidthInput button ok" mat-raised-button color="primary" [disabled]="!mainFormGroup.valid" (click)="submit()">Eingabe beenden</button>
+                    <app-bsrating-view [hidden]="!(currentBS | async)" [currentTimestamp]="currentTimestamp"
+                        [currentBS]="currentBS">
+                        <button class="fullWidthInput button ok" mat-raised-button color="primary"
+                            [disabled]="!mainFormGroup.valid" (click)="submit()">Eingabe beenden</button>
                     </app-bsrating-view>
                 </div>
             </mat-step>
@@ -20,16 +22,18 @@
                     <h3>Bolus berechnen</h3>
                     <app-add-entry-simple-food-bolus-picker formControlName="simpleFoodBolusControl">
                     </app-add-entry-simple-food-bolus-picker>
-                    <app-add-entry-intervall-food-bolus-picker
-                        formControlName="intervallFoodBolus" [selectedBolusObservable]="selectedNormalBolus">
+                    <app-add-entry-intervall-food-bolus-picker formControlName="intervallFoodBolus"
+                        [selectedBolusObservable]="selectedNormalBolus">
                     </app-add-entry-intervall-food-bolus-picker>
                     <app-add-entry-simple-correction-bolus-picker formControlName="correctionFoodBolusControl">
                     </app-add-entry-simple-correction-bolus-picker>
-                    <div class="button">
-                        <app-bolus-calculator-button (onCalculateRequest)="onBolusRequest()"
-                            [validation]="mainFormGroup.valid">
-                        </app-bolus-calculator-button>
-                    </div>
+                    <button [disabled]="!mainFormGroup.valid || !(currentBS | async)" class="fullWidthInput button"
+                        mat-raised-button color="primary" (click)="click()">Berechne
+                        Bolus</button>
+                    <button [disabled]="!mainFormGroup.valid" class="fullWidthInput button" mat-raised-button color="primary"
+                        routerLink="/diary/{{currentSelectedDiary$ | async}}/search" (click)="compare()">Vergleiche
+                        mit
+                        anderen Einträgen</button>
                     <mat-expansion-panel>
                         <mat-expansion-panel-header>
                             <mat-panel-title>

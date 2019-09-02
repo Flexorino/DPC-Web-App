@@ -1,3 +1,4 @@
+import { DiaryNavigationService } from './../../../../../../../shared/services/diary.navigation.service';
 import { CustomValidators } from './../../../misc/custom-validators';
 import { FormService } from './../../../../../../../shared/services/form-service';
 import { Component, OnInit, ViewChild, Inject, AfterViewInit, forwardRef } from '@angular/core';
@@ -42,6 +43,7 @@ export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit, V
   currentTimestamp: Subject<Date> = new Subject();
   selectedNormalBolus: Subject<number> = new Subject();
   currentBS: Subject<number> = new Subject();
+  currentSelectedDiary$;
 
   @ViewChild("stepper", { static: false }) private stepper: MatStepper;
 
@@ -49,8 +51,11 @@ export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit, V
     private fb: FormBuilder,
     private navUtil: NavUtil,
     private formService: FormService,
-    @Inject("IBolusUtilDao") private bolusDao: IBolusUtilDao
-  ) { }
+    @Inject("IBolusUtilDao") private bolusDao: IBolusUtilDao,
+    diaryNav: DiaryNavigationService
+  ) { 
+    this.currentSelectedDiary$ = diaryNav.currentDiaryId$;
+  }
 
   ngOnInit() {
     FormUtil.waitForInitialization(this.timeStampControl, this.bsMeasureControl).subscribe(() => this.handleSubFormSubsciptions());
@@ -141,5 +146,10 @@ export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit, V
   }
 
   registerOnTouched(fn: any): void {
+  }
+
+  
+  compare() {
+    this.formService.notifyLeave();
   }
 }
