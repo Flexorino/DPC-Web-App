@@ -6,5 +6,5 @@ export interface IBolusUtilDao {
 }
 
 export class BolusSuggestionAnswer {
-    constructor(public readonly insulinIntakes: InsulinAttribute[]) { }
+    constructor(public readonly insulinIntakes: InsulinAttribute[], public fastKE?: number) { }
 }

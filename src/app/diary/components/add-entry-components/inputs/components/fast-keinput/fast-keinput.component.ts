@@ -1,10 +1,10 @@
-import { ConstructionControlValue } from './../../../../../../../shared/util/construction-constrol-value';
+
 import { FoodIntakeAttribute } from './../../../../../../../shared/model/diary/entry/attributes/food-intake-attribute';
 import { Component, OnInit, forwardRef } from '@angular/core';
 import { Validator, ControlValueAccessor, FormControl, FormGroup, FormBuilder, Validators, NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Observable, of } from 'rxjs';
-import { ConstructionControlValue } from 'src/shared/util/construction-constrol-value';
 import { map, delay, catchError } from 'rxjs/operators';
+import { ConstructionControlValue } from 'src/shared/util/construction-constrol-value';
 
 @Component({
   selector: 'app-fast-keinput',
@@ -57,7 +57,8 @@ export class FastKEInputComponent implements OnInit, Validator, ControlValueAcce
       if (!obj.constructed) {
         this.fastke.setValue(null);
       } else {
-        throw new Error("notimplemented");
+        let z : FoodIntakeAttribute = obj.constructed;
+        this.fastke.setValue(z.amount.toFixed(2));
       }
     }
   }

@@ -22,10 +22,10 @@ export class RestNetworkBolusUtilDAO implements IBolusUtilDao {
     getBolusSuggestion(entry: Entry): Observable<BolusSuggestionAnswer> {
         return getLatestContextObservable(of(entry.timeStamp), this.store).pipe(
             map(x => {
-                if(!x){
-                     throw new Error("kein Kontext gefunden (sollte spätert nicht mehr vorkommen)");
+                if (!x) {
+                    throw new Error("kein Kontext gefunden (sollte spätert nicht mehr vorkommen)");
                 }
-                if(!x.keFactor || !x.frameValue || !x.correctionFactors){
+                if (!x.keFactor || !x.frameValue || !x.correctionFactors) {
                     throw new Error("momentan nur Bolus-Berechnung unterstützt, wenn Rahmenwerte, Korrekturfaktoren und KE_Faktoren angegeben sind!");
                 }
                 let intakes = [];
@@ -41,19 +41,29 @@ export class RestNetworkBolusUtilDAO implements IBolusUtilDao {
                     simpleIntake.units = factor * takeCarbs;
                     intakes.push(simpleIntake);
                 }
-                if(entry.bloodSuger){
-                    let tooHighDiff = entry.bloodSuger - x.frameValue.dailyBSGoalValues[entry.timeStamp.getHours()] ;
-                    if(tooHighDiff > 0){
+                let fastKE = undefined;
+                if (entry.bloodSuger) {
+                    let diff = entry.bloodSuger - x.frameValue.dailyBSGoalValues[entry.timeStamp.getHours()];
+                    if (diff > 0) {
                         let hour = entry.timeStamp.getHours();
                         let corrFactor = x.correctionFactors.dialyCorrectionFactors[hour];
-                        let ie = tooHighDiff/ corrFactor;
+                        let ie = diff / corrFactor;
                         let simpleIntake = new SimpleInsulinIntake();
                         simpleIntake.semanticIdentifier = BaseInsulinIntakeSemantics.CORRECTION_BOLUS;
                         simpleIntake.units = ie;
                         intakes.push(simpleIntake);
                     }
+                    if (diff < 0) {
+                        diff = -diff;
+                        let hour = entry.timeStamp.getHours();
+                        let corrFactor = x.correctionFactors.dialyCorrectionFactors[hour];
+                        let ie = diff / corrFactor;
+                        let kef = x.keFactor.dialyKeFactors[hour];
+                        let ke = ie / kef;
+                        fastKE = ke;
+                    }
                 }
-                return new BolusSuggestionAnswer(intakes);
+                return new BolusSuggestionAnswer(intakes, fastKE);
             }), delay(500));
     }
 
