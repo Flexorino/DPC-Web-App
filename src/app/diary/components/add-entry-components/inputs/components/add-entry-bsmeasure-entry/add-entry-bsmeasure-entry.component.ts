@@ -42,8 +42,8 @@ export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit, V
   ) { }
 
   ngOnInit() {
-    this.initializeForms();
     FormUtil.waitForInitialization(this.timeStampControl, this.bsMeasureControl).subscribe(() => this.handleSubFormSubsciptions());
+    this.initializeForms();
   }
 
   private initializeForms() {
@@ -56,7 +56,10 @@ export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit, V
 
   private handleSubFormSubsciptions() {
     FormUtil.getImmediateObservableFromRawControl(this.mainFormGroup).pipe(map(() => {
-      return new ConstructionControlValue(this.mainFormGroup.value, new Entry(null));
+      let entry = new Entry(null);
+      entry.timeStamp = this.timeStampControl.value.constructed;
+      entry.bloodSuger = this.bsMeasureControl.value.constructed;
+      return new ConstructionControlValue(this.mainFormGroup.value, entry);
     })).subscribe(x => this.construction.next(x));
   }
 

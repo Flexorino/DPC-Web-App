@@ -1,3 +1,4 @@
+import { ConstructionControlValue } from './../../../../../shared/util/construction-constrol-value';
 import { FormUtil } from './../../../../../shared/util/form-util';
 import { NavUtil } from 'src/shared/util/navigation.util';
 import { FullScreenModalCloser } from 'src/shared/components/base-full-screen-modal/full_screen_closer.service';
@@ -21,7 +22,7 @@ import { CustomValidators } from '../misc/custom-validators';
 export class AddBSMeasureComponent implements OnInit {
 
   //CONTROL
-  entryControl: ConstructionConstrol<Entry> = new ConstructionConstrol(null, CustomValidators.required);
+  entryControl: ConstructionConstrol<ConstructionControlValue<Entry>> = new ConstructionConstrol(null, CustomValidators.required);
 
   //MISC
   loading = true;
@@ -33,7 +34,11 @@ export class AddBSMeasureComponent implements OnInit {
     this.formServie.submitRequest.subscribe(() => this.handleSubmit());
     this.formServie.formLeave.subscribe(() => this.deepNav.goDeep(this.entryControl.value));
     this.modalCloser.closeSubject.subscribe(() => this.deepNav.back(this.navUtil.defaultNavigationRoute));
-    FormUtil.waitForInitialization(this.entryControl).subscribe(x => this.entryControl.valueChanges.subscribe(x => console.log("ENTRY: "+ JSON.stringify(x))))
+    FormUtil.waitForInitialization(this.entryControl).subscribe(x => this.handleSubsciption())
+  }
+
+  handleSubsciption(){
+    FormUtil.getImmediateObservable(this.entryControl).subscribe(x => console.log("ENTRY: "+ JSON.stringify(x)));
   }
 
   private handleActionForInit() {
@@ -51,7 +56,7 @@ export class AddBSMeasureComponent implements OnInit {
       alert("Eingabe fehlerhat!");
       return;
     }
-    let action = new AddEntryActionsProps(this, new Entry(123));
+    let action = new AddEntryActionsProps(this, this.entryControl.value.constructed);
     this.store.dispatch(AddBSMeasreActions.CONFIRM(action));
     this.loading = true;
     action.then(x => this.deepNav.back(this.navUtil.defaultNavigationRoute)).catch(err => {
