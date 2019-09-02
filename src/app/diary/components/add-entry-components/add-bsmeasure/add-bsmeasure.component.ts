@@ -35,10 +35,10 @@ export class AddBSMeasureComponent implements OnInit {
   }
 
   private handleActionForInit() {
-    // this view throws this action from which all required data for the sub-controls should be loaded!
+    //this view throws this action from which all required data for the sub-controls should be loaded!
     let action = AddBSMeasreActions.OPENED(new CompletableAction(this));
     this.store.dispatch(action);
-    action.then(x => this.loading = false);
+    action.then(() => this.loading = false);
     if (this.deepNav.recoverData) {
       this.entryControl.setValue(this.deepNav.recoverData);
     }

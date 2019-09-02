@@ -61,6 +61,7 @@ import { ManualEntryAddComponent } from './diary/components/add-entry-components
 import { AddBSMeasureComponent } from './diary/components/add-entry-components/add-bsmeasure/add-bsmeasure.component';
 import { AddEntryBSMeasureEntryComponent } from './diary/components/add-entry-components/inputs/components/add-entry-bsmeasure-entry/add-entry-bsmeasure-entry.component';
 import { SearchViewComponent } from './diary/components/search-view/search-view.component';
+import { AddBSEffects } from 'src/shared/effects/add-bs-effects';
 
 
 @NgModule({
@@ -114,7 +115,7 @@ import { SearchViewComponent } from './diary/components/search-view/search-view.
     ApiModule.forRoot(() => new Configuration({ basePath: "http://localhost:8889" })),
     HttpClientModule,
     StoreModule.forRoot({ diary: diaryReducer, user: userReducer }),
-    EffectsModule.forRoot([DiaryEffects, UserEffects, AddIngestionEffects]),
+    EffectsModule.forRoot([DiaryEffects, UserEffects, AddIngestionEffects, AddBSEffects]),
     FormsModule,
     MaterialModule,
     BrowserAnimationsModule
