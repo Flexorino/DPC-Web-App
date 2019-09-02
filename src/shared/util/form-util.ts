@@ -1,3 +1,4 @@
+import { FormControl, AbstractControl } from '@angular/forms';
 import { filter, finalize, take, map, tap, delay } from 'rxjs/operators';
 import { ConstructionControlValue } from './construction-constrol-value';
 import { ConstructionConstrol } from './construction-control';
@@ -11,8 +12,12 @@ export class FormUtil {
 
     }
 
+    static getImmediateObservableFromRawControl<T>(control: AbstractControl): Observable<T> {
+        return merge(of(control.value), control.valueChanges);
+    }
+
     static getImmediateObservable<T>(control: ConstructionConstrol<ConstructionControlValue<T>>): Observable<T> {
-        return merge(of(control.value.constructed), control.valueChanges.pipe(map(x => x.constructed)));
+        return this.getImmediateObservableFromRawControl<ConstructionControlValue<T>>(control).pipe(map(x => x.constructed));
     }
 
 }

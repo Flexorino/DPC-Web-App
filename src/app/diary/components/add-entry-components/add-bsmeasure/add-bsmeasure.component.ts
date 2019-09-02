@@ -1,15 +1,13 @@
+import { FormUtil } from './../../../../../shared/util/form-util';
 import { NavUtil } from 'src/shared/util/navigation.util';
-import { DiaryNavigationService } from './../../../../../shared/services/diary.navigation.service';
 import { FullScreenModalCloser } from 'src/shared/components/base-full-screen-modal/full_screen_closer.service';
 import { FormService } from './../../../../../shared/services/form-service';
-import { Validators } from '@angular/forms';
 import { ConstructionConstrol } from './../../../../../shared/util/construction-control';
 import { Component, OnInit } from '@angular/core';
 import { AddBSMeasreActions } from './add-bsmeasure.actions';
 import { CompletableAction } from 'src/shared/actions/CompletableAction';
 import { Store } from '@ngrx/store';
 import { Entry } from 'src/shared/model/diary/entry/entry';
-import { AddIngestionActions } from '../add-ingestion/add-ingestion.actions';
 import { DepthNavigationService } from 'src/shared/services/depth-navigation.service';
 import { AddEntryActionsProps } from '../sharedActionsProps.ts/add-entry-props';
 import { CustomValidators } from '../misc/custom-validators';
@@ -35,6 +33,7 @@ export class AddBSMeasureComponent implements OnInit {
     this.formServie.submitRequest.subscribe(() => this.handleSubmit());
     this.formServie.formLeave.subscribe(() => this.deepNav.goDeep(this.entryControl.value));
     this.modalCloser.closeSubject.subscribe(() => this.deepNav.back(this.navUtil.defaultNavigationRoute));
+    FormUtil.waitForInitialization(this.entryControl).subscribe(x => this.entryControl.valueChanges.subscribe(x => console.log("ENTRY: "+ JSON.stringify(x))))
   }
 
   private handleActionForInit() {
