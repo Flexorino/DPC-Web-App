@@ -1,3 +1,6 @@
+<div *ngIf="loading" class="full-screen-loader">
+    <mat-spinner></mat-spinner>
+</div>
 <div id="content">
     <div>
         <mat-horizontal-stepper [linear]="isLinear" #stepper [formGroup]="mainFormGroup">
@@ -23,10 +26,11 @@
                     <app-add-entry-simple-correction-bolus-picker formControlName="correctionFoodBolusControl">
                     </app-add-entry-simple-correction-bolus-picker>
                     <button [disabled]="!mainFormGroup.valid || !(currentBS | async)" class="fullWidthInput button"
-                        mat-raised-button color="primary" (click)="click()">Berechne
+                        mat-raised-button color="primary" (click)="onBlous()">Berechne
                         Bolus</button>
-                    <button [disabled]="!mainFormGroup.valid" class="fullWidthInput button" mat-raised-button color="primary"
-                        routerLink="/diary/{{currentSelectedDiary$ | async}}/search" (click)="compare()">Vergleiche
+                    <button [disabled]="!mainFormGroup.valid" class="fullWidthInput button" mat-raised-button
+                        color="primary" routerLink="/diary/{{currentSelectedDiary$ | async}}/search"
+                        (click)="compare()">Vergleiche
                         mit
                         anderen Einträgen</button>
                     <mat-expansion-panel>

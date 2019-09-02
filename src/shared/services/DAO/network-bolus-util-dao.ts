@@ -22,17 +22,22 @@ export class RestNetworkBolusUtilDAO implements IBolusUtilDao {
     getBolusSuggestion(entry: Entry): Observable<BolusSuggestionAnswer> {
         return getLatestContextObservable(of(entry.timeStamp), this.store).pipe(
             map(x => {
+                if(!x.keFactor || !x.frameValue || !x.correctionFactors){
+                    throw new Error("momentan nur Bolus-Berechnung unterstützt, wenn Rahmenwerte, Korrekturfaktoren und KE_Faktoren angegeben sind!");
+                }
                 let intakes = [];
                 let simpleIntake = new SimpleInsulinIntake();
                 simpleIntake.semanticIdentifier = BaseInsulinIntakeSemantics.FOOD_BOLUS;
-                let takeCarbs = entry.foodIntakes.length ? entry.foodIntakes.map(x => x.amount).reduce((x, y) => x + y) : 0;
-                let hour = entry.timeStamp.getHours();
-                let strzing = entry.timeStamp.toISOString();
-                let utc = entry.timeStamp.toLocaleDateString();
-                let time = entry.timeStamp.toLocaleTimeString();
-                let factor = x.keFactor.dialyKeFactors[hour];
-                simpleIntake.units = factor * takeCarbs;
-                intakes.push(simpleIntake);
+                if (entry.foodIntakes.length) {
+                    let takeCarbs = entry.foodIntakes.length ? entry.foodIntakes.map(x => x.amount).reduce((x, y) => x + y) : 0;
+                    let hour = entry.timeStamp.getHours();
+                    let strzing = entry.timeStamp.toISOString();
+                    let utc = entry.timeStamp.toLocaleDateString();
+                    let time = entry.timeStamp.toLocaleTimeString();
+                    let factor = x.keFactor.dialyKeFactors[hour];
+                    simpleIntake.units = factor * takeCarbs;
+                    intakes.push(simpleIntake);
+                }
                 return new BolusSuggestionAnswer(intakes);
             }), delay(500));
     }

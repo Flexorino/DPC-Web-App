@@ -43,7 +43,7 @@ export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit, V
   loading = false;
   currentBS: Subject<number> = new Subject();
   currentSelectedDiary$;
-  lastConstruction : Entry;
+  lastConstruction: Entry;
 
   @ViewChild("stepper", { static: false }) private stepper: MatStepper;
 
@@ -53,7 +53,7 @@ export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit, V
     private formService: FormService,
     @Inject("IBolusUtilDao") private bolusDao: IBolusUtilDao,
     diaryNav: DiaryNavigationService
-  ) { 
+  ) {
     this.currentSelectedDiary$ = diaryNav.currentDiaryId$;
   }
 
@@ -80,7 +80,7 @@ export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit, V
       entry.timeStamp = this.timeStampControl.value.constructed;
       entry.bloodSuger = this.bsMeasureControl.value.constructed;
       let insulinIntakes = [];
-      if(this.correctionFoodBolusControl.value.constructed){
+      if (this.correctionFoodBolusControl.value.constructed) {
         insulinIntakes.push(this.correctionFoodBolusControl.value.constructed);
       }
       entry.insulinIntakes = insulinIntakes;
@@ -140,16 +140,17 @@ export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit, V
   registerOnTouched(fn: any): void {
   }
 
-  
+
   compare() {
     this.formService.notifyLeave();
   }
 
-  onBolusRequest() {
+  onBlous() {
     this.loading = true;
     this.bolusDao.getBolusSuggestion(this.lastConstruction).subscribe(x => {
       this.correctionFoodBolusControl.reset();
-      this.correctionFoodBolusControl.setValue(x.insulinIntakes.find(x => x.semanticIdentifier === BaseInsulinIntakeSemantics.CORRECTION_BOLUS && x instanceof SimpleInsulinIntake).units)
+      let intake = x.insulinIntakes.find(x => x.semanticIdentifier === BaseInsulinIntakeSemantics.CORRECTION_BOLUS && x instanceof SimpleInsulinIntake);
+      this.correctionFoodBolusControl.setValue(intake ? intake.units : null);
       this.loading = false;
     });
 

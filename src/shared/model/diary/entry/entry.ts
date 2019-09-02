@@ -16,7 +16,7 @@ export class Entry {
     public tags?: Array<TagAttribute> =[];
     public comment?: string;
     public timeStamp: Date;
-    public foodIntakes: FoodIntakeAttribute[];
+    public foodIntakes: FoodIntakeAttribute[] = [];
 
     //TODO: ändere mich um!
     public mealBolus?: InsulinAttribute;
