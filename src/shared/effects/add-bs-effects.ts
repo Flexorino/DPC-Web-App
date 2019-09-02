@@ -12,9 +12,9 @@ import { DiaryContextFrameValues } from '../model/diary/context/diary-context-fr
 import { InsulinEffect } from '../model/diary/insulin';
 import { Absorption, Food } from '../model/diary/food';
 import { CompletableAction } from '../actions/CompletableAction';
-import { Action } from 'rxjs/internal/scheduler/Action';
 import { GeneralEffectActions } from './general-effect-actions';
 import { Patch } from '../services/patcherino/patch';
+import { Action } from '@ngrx/store';
 
 @Injectable()
 export class AddBSEffects {

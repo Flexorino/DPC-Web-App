@@ -18,7 +18,7 @@ export class FormService {
     }
 
     public requestSubmit() {
-        this.formLeaveSubj.next();
+        this.submitRequestSubj.next();
     }
 
     public requestClose() {
