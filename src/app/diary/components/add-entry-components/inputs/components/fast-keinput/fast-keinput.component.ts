@@ -5,6 +5,7 @@ import { Validator, ControlValueAccessor, FormControl, FormGroup, FormBuilder, V
 import { Observable, of } from 'rxjs';
 import { map, delay, catchError } from 'rxjs/operators';
 import { ConstructionControlValue } from 'src/shared/util/construction-constrol-value';
+import { SettingsService } from 'src/shared/services/settings.service';
 
 @Component({
   selector: 'app-fast-keinput',
@@ -24,8 +25,12 @@ export class FastKEInputComponent implements OnInit, Validator, ControlValueAcce
 
   //CONSTRUCTION
   construction: Observable<ConstructionControlValue<FoodIntakeAttribute>>;
+  keFactor : number;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private settings: SettingsService) {
+    this.keFactor = this.settings.carbsFactorSubj.getValue();
+  }
+
 
   ngOnInit() {
     this.fastke = this.fb.control(null, [Validators.min(0.01), Validators.max(50)]);
@@ -58,7 +63,7 @@ export class FastKEInputComponent implements OnInit, Validator, ControlValueAcce
         this.fastke.setValue(null);
       } else {
         let z : FoodIntakeAttribute = obj.constructed;
-        this.fastke.setValue(z.amount.toFixed(2));
+        this.fastke.setValue((z.amount*this.keFactor).toFixed(2));
       }
     }
   }

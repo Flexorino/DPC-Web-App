@@ -1,5 +1,6 @@
 <div [formGroup]="group">
         <mat-form-field class="fullWidthInput">
             <input class="fullWidthInput" matInput placeholder="SchnelleKE" formControlName="ke" type="number">
+            <span matSuffix>{{1/keFactor | number:'1.0-1'}}Gramm KH = 1KE</span>
         </mat-form-field>
     </div>
