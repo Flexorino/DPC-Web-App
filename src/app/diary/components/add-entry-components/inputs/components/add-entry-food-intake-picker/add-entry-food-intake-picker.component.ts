@@ -82,7 +82,7 @@ export class AddEntryFoodIntakePicker implements OnInit, Validator, ControlValue
     this.formGroup.addControl('foodForm', this.selectedFoodControl);
     let obs = this.formGroup.valueChanges.pipe(map((() => {
       if (!this.keAmoutControl.value && !this.selectedFoodControl.value) {
-        return new ConstructionControlValue(this.formGroup, null);
+        return new ConstructionControlValue(this.formGroup.value, null);
       }
       let intake = new FoodIntakeAttribute();
       intake.amount = null;
@@ -93,12 +93,14 @@ export class AddEntryFoodIntakePicker implements OnInit, Validator, ControlValue
       } catch (e) {
         console.error("err");
       }
-      return new ConstructionControlValue(this.formGroup, intake);
+      return new ConstructionControlValue(this.formGroup.value , intake);
     })));
     obs.subscribe(x => this.construction.next(x));
     obs.subscribe((x: ConstructionControlValue<FoodIntakeAttribute>) => {
-      if (x.constructed.food) {
+      if (x.constructed) {
         this.currentSelectedFood = x.constructed.food;
+      } else {
+        this.currentSelectedFood = null;
       }
     });
     // this form is only for intern help usage!

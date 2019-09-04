@@ -1,11 +1,13 @@
+import { CustomValidators } from './../../../misc/custom-validators';
 import { ConstructionControlValue } from 'src/shared/util/construction-constrol-value';
 import { Component, OnInit, Input, ViewChildren, QueryList, AfterViewInit, forwardRef } from '@angular/core';
-import { FormGroup, FormBuilder, FormArray, Validators, NG_VALIDATORS, NG_VALUE_ACCESSOR, ControlValueAccessor, Validator } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray, Validators, NG_VALIDATORS, NG_VALUE_ACCESSOR, ControlValueAccessor, Validator, FormControl } from '@angular/forms';
 import { BehaviorSubject, Subscription, Observable, Subject } from 'rxjs';
 import { Food } from 'src/shared/model/diary/food';
 import { FoodIntakeAttribute } from 'src/shared/model/diary/entry/attributes/food-intake-attribute';
 import { IEntryFoodIntakePicker } from '../../interfaces/IEntryFoodIntakePicker';
 import { IEntryFoodIntakeListPicker } from '../../interfaces/IEntryFoodIntakeListPicker';
+import { map, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'add-entry-food-intake-list-picker',
@@ -16,54 +18,38 @@ import { IEntryFoodIntakeListPicker } from '../../interfaces/IEntryFoodIntakeLis
     { provide: NG_VALIDATORS, useExisting: forwardRef(() => AddEnetryFoodIntakeListPicker), multi: true }
   ]
 })
-export class AddEnetryFoodIntakeListPicker implements OnInit, AfterViewInit, ControlValueAccessor, Validator {
+export class AddEnetryFoodIntakeListPicker implements OnInit, ControlValueAccessor, Validator {
 
   //CONSTRUCTION
   private construction: Subject<ConstructionControlValue<Array<FoodIntakeAttribute>>> = new Subject();
 
-  @ViewChildren("foodyMcFoodStone") foodIntakeInputs: QueryList<IEntryFoodIntakePicker>;
   group: FormGroup = new FormGroup({});
-
-  foodIntakeSubscriptions: Array<Subscription> = [];
-  foodIntakeSubjects: Array<BehaviorSubject<FoodIntakeAttribute>> = [];
 
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
-    this.group.addControl("meals", this.fb.array([]))
-  }
-
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.updateFoodIntakeSubscriptions();
-      this.foodIntakeInputs.changes.subscribe(y => {
-        this.updateFoodIntakeSubscriptions();
+    this.group.addControl("meals", this.fb.array([]));
+    let obs = this.group.valueChanges.pipe(map(() => {
+      let intakes = [];
+      this.meals.controls.forEach(element => {
+        if (element.get("foodIntake").value && element.get("foodIntake").value.constructed) {
+          intakes.push(element.get("foodIntake").value.constructed);
+        }
       });
-    });
+      return new ConstructionControlValue(this.group.value, intakes);
+    }
+    ));
+    obs.subscribe((x: ConstructionControlValue<FoodIntakeAttribute[]>) => this.construction.next(x));
   }
 
+  private handleSubscriptions() {
+
+  }
 
   addMeal() {
-    let grp: FormGroup = this.fb.group({ KE: ['', [Validators.required, Validators.min(1), Validators.max(999)]] });
+    let grp: FormGroup = this.fb.group({});
+    grp.addControl('foodIntake',new FormControl(null,[CustomValidators.required]))
     this.meals.push(grp);
-  }
-
-  updateFoodIntakeSubscriptions() {
-    this.foodIntakeSubscriptions.forEach(x => x.unsubscribe());
-    this.foodIntakeSubscriptions = [];
-    this.foodIntakeSubjects = [];
-    this.foodIntakeInputs.forEach(x => {
-      this.foodIntakeSubjects.push(x.foodIntake);
-      this.foodIntakeSubscriptions.push(x.foodIntake.subscribe(x => {
-        let intakes: FoodIntakeAttribute[] = [];
-        this.foodIntakeSubjects.map(x => x.getValue()).filter(x => x).forEach(x => intakes.push(x));
-        this.construction.next(new ConstructionControlValue(this.group.value, intakes));
-      }));
-    })
-    console.log("update");
-    let intakes: FoodIntakeAttribute[] = [];
-    this.foodIntakeSubjects.map(x => x.getValue()).filter(x => x).forEach(x => intakes.push(x));
-    this.construction.next(new ConstructionControlValue(this.group.value, intakes));
   }
 
   remove(i: number) {
@@ -77,6 +63,7 @@ export class AddEnetryFoodIntakeListPicker implements OnInit, AfterViewInit, Con
   validate(control: import("@angular/forms").AbstractControl): import("@angular/forms").ValidationErrors {
     return this.group.valid ? null : { curruptedControlState: null };
   }
+
   writeValue(obj: any): void {
 
   }
