@@ -78,7 +78,7 @@ export class AddEntryFoodIntakePicker implements OnInit, Validator, ControlValue
   }
 
   ngOnInit() {
-    this.formGroup.addControl('KE', this.fb.control(''));
+    this.formGroup.addControl('KE', this.keAmoutControl);
     this.formGroup.addControl('foodForm', this.selectedFoodControl);
     let obs = this.formGroup.valueChanges.pipe(map((() => {
       if (!this.keAmoutControl.value && !this.selectedFoodControl.value) {
