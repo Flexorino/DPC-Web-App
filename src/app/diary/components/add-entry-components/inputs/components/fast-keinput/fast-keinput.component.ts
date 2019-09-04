@@ -35,8 +35,7 @@ export class FastKEInputComponent implements OnInit, Validator, ControlValueAcce
   ngOnInit() {
     this.fastke = this.fb.control(null, [Validators.min(0.01), Validators.max(50)]);
     this.group.addControl("ke", this.fastke);
-    this.construction = this.fastke.valueChanges.pipe(delay(0), map(x => 
-      
+    this.construction = this.fastke.valueChanges.pipe(delay(0), map(x =>  
       {
         if(!this.fastke.value) {
           return new ConstructionControlValue(this.group.value,null);

@@ -86,7 +86,7 @@ export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit, V
       if (this.correctionFoodBolusControl.value.constructed) {
         insulinIntakes.push(this.correctionFoodBolusControl.value.constructed);
       }
-      if(this.fastKE.value.constructed){
+      if (this.fastKE.value.constructed) {
         entry.foodIntakes.push(this.fastKE.value.constructed);
       }
       entry.insulinIntakes = insulinIntakes;
@@ -155,16 +155,22 @@ export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit, V
     this.loading = true;
     this.bolusDao.getBolusSuggestion(this.lastConstruction).subscribe(x => {
       this.correctionFoodBolusControl.reset();
-      this.fastKE.reset();
-      let intake = x.insulinIntakes.find(x => x.semanticIdentifier === BaseInsulinIntakeSemantics.CORRECTION_BOLUS && x instanceof SimpleInsulinIntake);
-      this.correctionFoodBolusControl.setValue(new ConstructionControlValue(null, intake));
-      if(x.fastKE){
-        let foodIntake = new FoodIntakeAttribute();
-        foodIntake.amount = x.fastKE;
-        this.fastKE.setValue(new ConstructionControlValue(null, foodIntake))
-      }
+      setTimeout(() => {
+        this.fastKE.reset();;
+        if (x.fastKE) {
+          let foodIntake = new FoodIntakeAttribute();
+          foodIntake.amount = x.fastKE;
+          this.fastKE.setValue(new ConstructionControlValue(null, foodIntake))
+        }
+      });
+      setTimeout(() => {
+        let intake = x.insulinIntakes.find(x => x.semanticIdentifier === BaseInsulinIntakeSemantics.CORRECTION_BOLUS && x instanceof SimpleInsulinIntake);
+        if (intake) {
+          this.correctionFoodBolusControl.setValue(new ConstructionControlValue(null, intake));
+        }
+      });
       this.loading = false;
-      console.log("REQQ:"+JSON.stringify(x));
+      console.log("REQQ:" + JSON.stringify(x));
     }, err => { alert(err); this.loading = false; });
 
   }
