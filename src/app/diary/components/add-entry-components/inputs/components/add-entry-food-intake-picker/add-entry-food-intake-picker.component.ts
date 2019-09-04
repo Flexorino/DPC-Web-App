@@ -13,7 +13,6 @@ import { ErrorStateMatcher } from '@angular/material/core';
 import { SettingsService } from 'src/shared/services/settings.service';
 import { Store, select } from '@ngrx/store';
 import { Diary } from 'src/web-api';
-import { FoodIntakeAttribute } from 'src/shared/model/diary/entry/attributes/food-intake-attribute';
 import { ConstructionControlValue } from 'src/shared/util/construction-constrol-value';
 import { map } from 'rxjs/operators';
 import { group } from '@angular/animations';
@@ -50,7 +49,6 @@ export class AddEntryFoodIntakePicker implements OnInit, Validator, ControlValue
   //--
 
   @Output("close") close = new EventEmitter();
-
   @ViewChild("mealSel", { static: false }) ref: ElementRef;
 
   mealCalcHelpForm: FormGroup;
@@ -81,8 +79,8 @@ export class AddEntryFoodIntakePicker implements OnInit, Validator, ControlValue
 
   ngOnInit() {
     this.formGroup.addControl('KE', this.fb.control(''));
-    this.formGroup.addControl('foodForm', this.foodFormGroup);
-    this.formGroup.valueChanges.pipe(map((() => {
+    this.formGroup.addControl('foodForm', this.selectedFoodControl);
+    let obs = this.formGroup.valueChanges.pipe(map((() => {
       if (!this.keAmoutControl.value && !this.selectedFoodControl.value) {
         return new ConstructionControlValue(this.formGroup, null);
       }
@@ -96,7 +94,13 @@ export class AddEntryFoodIntakePicker implements OnInit, Validator, ControlValue
         console.error("err");
       }
       return new ConstructionControlValue(this.formGroup, intake);
-    }))).subscribe(x => this.construction.next(x));
+    })));
+    obs.subscribe(x => this.construction.next(x));
+    obs.subscribe((x: ConstructionControlValue<FoodIntakeAttribute>) => {
+      if (x.constructed.food) {
+        this.currentSelectedFood = x.constructed.food;
+      }
+    });
     // this form is only for intern help usage!
     this.mealCalcHelpForm = this.fb.group({
       carbsFactor: ['', [Validators.required, Validators.max(100), Validators.min(1)]],
@@ -114,7 +118,6 @@ export class AddEntryFoodIntakePicker implements OnInit, Validator, ControlValue
   }
 
   removeFood() {
-    this.currentSelectedFood = null;
     this.selectedFoodControl.setValue(null);
   }
 
@@ -122,16 +125,15 @@ export class AddEntryFoodIntakePicker implements OnInit, Validator, ControlValue
     const dialogRef = this.dialog.open(AddEntryFoodSelectionDecider, {
       width: '80%',
       height: '600px',
-      data: new AddEntryFoodSelectionDeciderInput(this.currentSelectedFood, this.foodFormGroup), panelClass: "full_screen_dialog"
+      data: new AddEntryFoodSelectionDeciderInput(this.selectedFoodControl.value, this.foodFormGroup), panelClass: "full_screen_dialog"
     });
     event.preventDefault();
     event.stopPropagation();
     dialogRef.componentInstance.food.subscribe(x => {
       if (x) {
-        this.currentSelectedFood = x;
         this.mealCalcHelpForm.get("carbsFactor").setValue(x.carbsFactor ? (x.carbsFactor * 100).toFixed(1) : null);
         this.carbsFactor = x.carbsFactor;
-        this.foodIntake.next({ food: x, amount: this.eatenCarbs })
+        this.selectedFoodControl.setValue(x);
       }
     });
     dialogRef.afterClosed().subscribe(x => setTimeout(x => this.ref.nativeElement.blur(), 1));
@@ -140,13 +142,14 @@ export class AddEntryFoodIntakePicker implements OnInit, Validator, ControlValue
   showFoodInfo() {
     const dialogRef = this.dialog.open(FoodInfoShowerPopupwrapperComponent, {
       width: '80%',
-      data: new FoodInfoShowerPopupwrapperComponentInput(this.currentSelectedFood), panelClass: "full_screen_dialog"
+      data: new FoodInfoShowerPopupwrapperComponentInput(this.selectedFoodControl.value), panelClass: "full_screen_dialog"
     });
   }
 
   validate(control: import("@angular/forms").AbstractControl): import("@angular/forms").ValidationErrors {
     return this.formGroup.valid ? null : { curruptedControlState: null };
   }
+
   writeValue(obj: any): void {
     if (!obj) {
       this.setToInitial();
@@ -155,20 +158,15 @@ export class AddEntryFoodIntakePicker implements OnInit, Validator, ControlValue
     if (!(obj instanceof ConstructionControlValue)) {
       throw new Error("Invalid Value");
     } else if (obj.raw) {
-      this.group.setValue(obj.raw);
+      this.formGroup.setValue(obj.raw);
     } else {
-      if (!obj.constructed) {
-        this.bolus.setValue(null);
-      } else {
-        let constr: ConstructionControlValue<SimpleInsulinIntake> = obj;
-        this.bolus.setValue(constr.constructed.units);
-      }
+      throw new Error("not implemented");
     }
   }
 
-  setToInitial(){
-      this.formGroup.reset();
-      
+  setToInitial() {
+    this.formGroup.reset();
+
   }
 
   registerOnChange(fn: any): void {
