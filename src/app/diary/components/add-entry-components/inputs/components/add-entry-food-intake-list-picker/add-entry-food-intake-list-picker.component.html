@@ -1,7 +1,7 @@
 <div [formGroup]="group">
     <div formArrayName="meals">
         <div *ngFor="let meal of meals.controls; let i=index">
-            <add-entry-food-intake-picker #foodyMcFoodStone (close)="remove(i)" [group]="meal"></add-entry-food-intake-picker>
+            <add-entry-food-intake-picker #foodyMcFoodStone (close)="remove(i)"></add-entry-food-intake-picker>
         </div>
     </div>
 </div>

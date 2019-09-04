@@ -1,17 +1,22 @@
+import { ConstructionConstrol } from './../../../../../../../shared/util/construction-control';
+import { FoodIntakeAttribute } from './../../../../../../../shared/model/diary/entry/attributes/food-intake-attribute';
 import { FoodInfoShowerPopupwrapperComponentInput } from './../../../../../../../shared/components/food-info-shower-popupwrapper/food-info-shower-popupwrapper.component';
 import { FoodInfoShowerPopupwrapperComponent } from 'src/shared/components/food-info-shower-popupwrapper/food-info-shower-popupwrapper.component';
 import { AddEntryFoodSelectionDecider, AddEntryFoodSelectionDeciderInput } from '../add-entry-food-selection-decider/add-entry-food-selection-decider.component';
 import { IEntryFoodIntakePicker } from '../../interfaces/IEntryFoodIntakePicker';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { Food } from 'src/shared/model/diary/food';
 import { MatDialog } from '@angular/material/dialog';
-import { FormBuilder, Validators, FormGroup, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
-import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
+import { FormBuilder, Validators, FormGroup, FormControl, FormGroupDirective, NgForm, NG_VALUE_ACCESSOR, NG_VALIDATORS, ControlValueAccessor, Validator } from '@angular/forms';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, forwardRef } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { SettingsService } from 'src/shared/services/settings.service';
 import { Store, select } from '@ngrx/store';
 import { Diary } from 'src/web-api';
 import { FoodIntakeAttribute } from 'src/shared/model/diary/entry/attributes/food-intake-attribute';
+import { ConstructionControlValue } from 'src/shared/util/construction-constrol-value';
+import { map } from 'rxjs/operators';
+import { group } from '@angular/animations';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -25,15 +30,28 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 @Component({
   selector: 'add-entry-food-intake-picker',
   templateUrl: './add-entry-food-intake-picker.component.html',
-  styleUrls: ['./add-entry-food-intake-picker.component.scss']
+  styleUrls: ['./add-entry-food-intake-picker.component.scss'],
+  providers: [
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => AddEntryFoodIntakePicker), multi: true },
+    { provide: NG_VALIDATORS, useExisting: forwardRef(() => AddEntryFoodIntakePicker), multi: true }
+  ]
 })
-export class AddEntryFoodIntakePicker implements OnInit, IEntryFoodIntakePicker {
+export class AddEntryFoodIntakePicker implements OnInit, Validator, ControlValueAccessor {
+
+  formGroup: FormGroup = new FormGroup({});
+
+  //CONSTRUCTION
+  private construction: Subject<ConstructionControlValue<FoodIntakeAttribute>> = new Subject();
+
+  //CONTROLS
+  private keAmoutControl = new FormControl();
+  private selectedFoodControl = new FormControl();
+
+  //--
 
   @Output("close") close = new EventEmitter();
-  @Input('group') formGroup: FormGroup;
-  @ViewChild("mealSel", { static: false }) ref: ElementRef;
 
-  foodIntake: BehaviorSubject<FoodIntakeAttribute> = new BehaviorSubject({ food: null, amount: null });
+  @ViewChild("mealSel", { static: false }) ref: ElementRef;
 
   mealCalcHelpForm: FormGroup;
   extrasMatcher = new MyErrorStateMatcher();
@@ -64,15 +82,21 @@ export class AddEntryFoodIntakePicker implements OnInit, IEntryFoodIntakePicker 
   ngOnInit() {
     this.formGroup.addControl('KE', this.fb.control(''));
     this.formGroup.addControl('foodForm', this.foodFormGroup);
-    this.formGroup.get("KE").valueChanges.subscribe(x => {
+    this.formGroup.valueChanges.pipe(map((() => {
+      if (!this.keAmoutControl.value && !this.selectedFoodControl.value) {
+        return new ConstructionControlValue(this.formGroup, null);
+      }
+      let intake = new FoodIntakeAttribute();
+      intake.amount = null;
+      intake.food = null;
       try {
-        this.eatenCarbs = Number.parseInt(x) / this.keFactor;
-        this.foodIntake.next({ food: this.currentSelectedFood, amount: this.eatenCarbs });
-
+        intake.amount = this.keAmoutControl.value ? this.keAmoutControl.value : 0 / this.keFactor;
+        intake.food = this.selectedFoodControl.value;
       } catch (e) {
         console.error("err");
       }
-    });
+      return new ConstructionControlValue(this.formGroup, intake);
+    }))).subscribe(x => this.construction.next(x));
     // this form is only for intern help usage!
     this.mealCalcHelpForm = this.fb.group({
       carbsFactor: ['', [Validators.required, Validators.max(100), Validators.min(1)]],
@@ -83,8 +107,6 @@ export class AddEntryFoodIntakePicker implements OnInit, IEntryFoodIntakePicker 
         this.carbsFactor = Number.parseFloat(this.mealCalcHelpForm.get("carbsFactor").value) * 0.01;
       }
     });
-
-
   }
 
   closeThis() {
@@ -93,7 +115,7 @@ export class AddEntryFoodIntakePicker implements OnInit, IEntryFoodIntakePicker 
 
   removeFood() {
     this.currentSelectedFood = null;
-    this.foodIntake.next({ food: this.currentSelectedFood, amount: this.eatenCarbs });
+    this.selectedFoodControl.setValue(null);
   }
 
   openDialog(event: Event): void {
@@ -120,6 +142,40 @@ export class AddEntryFoodIntakePicker implements OnInit, IEntryFoodIntakePicker 
       width: '80%',
       data: new FoodInfoShowerPopupwrapperComponentInput(this.currentSelectedFood), panelClass: "full_screen_dialog"
     });
+  }
+
+  validate(control: import("@angular/forms").AbstractControl): import("@angular/forms").ValidationErrors {
+    return this.formGroup.valid ? null : { curruptedControlState: null };
+  }
+  writeValue(obj: any): void {
+    if (!obj) {
+      this.setToInitial();
+      return;
+    }
+    if (!(obj instanceof ConstructionControlValue)) {
+      throw new Error("Invalid Value");
+    } else if (obj.raw) {
+      this.group.setValue(obj.raw);
+    } else {
+      if (!obj.constructed) {
+        this.bolus.setValue(null);
+      } else {
+        let constr: ConstructionControlValue<SimpleInsulinIntake> = obj;
+        this.bolus.setValue(constr.constructed.units);
+      }
+    }
+  }
+
+  setToInitial(){
+      this.formGroup.reset();
+      
+  }
+
+  registerOnChange(fn: any): void {
+    this.construction.subscribe(fn);
+    this.formGroup.setValue(this.formGroup.value);
+  }
+  registerOnTouched(fn: any): void {
   }
 
 }
