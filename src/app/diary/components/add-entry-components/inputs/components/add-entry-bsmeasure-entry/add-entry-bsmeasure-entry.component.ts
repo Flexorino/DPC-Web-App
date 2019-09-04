@@ -105,7 +105,7 @@ export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit, V
   }
 
   ngAfterViewInit(): void {
-    this.navUtil.synchroniceFragmentNavigation(this.stepper);
+    setTimeout(() => this.navUtil.synchroniceFragmentNavigation(this.stepper));
   }
 
   submit() {
