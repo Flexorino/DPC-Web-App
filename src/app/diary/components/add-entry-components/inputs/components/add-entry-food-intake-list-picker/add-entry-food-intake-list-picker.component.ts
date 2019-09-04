@@ -7,7 +7,7 @@ import { Food } from 'src/shared/model/diary/food';
 import { FoodIntakeAttribute } from 'src/shared/model/diary/entry/attributes/food-intake-attribute';
 import { IEntryFoodIntakePicker } from '../../interfaces/IEntryFoodIntakePicker';
 import { IEntryFoodIntakeListPicker } from '../../interfaces/IEntryFoodIntakeListPicker';
-import { map, filter } from 'rxjs/operators';
+import { map, filter, delay } from 'rxjs/operators';
 
 @Component({
   selector: 'add-entry-food-intake-list-picker',
@@ -29,7 +29,7 @@ export class AddEnetryFoodIntakeListPicker implements OnInit, ControlValueAccess
 
   ngOnInit() {
     this.group.addControl("meals", this.fb.array([]));
-    let obs = this.group.valueChanges.pipe(map(() => {
+    let obs = this.group.valueChanges.pipe(delay(0),map(() => {
       let intakes = [];
       this.meals.controls.forEach(element => {
         if (element.get("foodIntake").value && element.get("foodIntake").value.constructed) {
@@ -42,13 +42,9 @@ export class AddEnetryFoodIntakeListPicker implements OnInit, ControlValueAccess
     obs.subscribe((x: ConstructionControlValue<FoodIntakeAttribute[]>) => this.construction.next(x));
   }
 
-  private handleSubscriptions() {
-
-  }
-
   addMeal() {
     let grp: FormGroup = this.fb.group({});
-    grp.addControl('foodIntake',new FormControl(null,[CustomValidators.required]))
+    grp.addControl('foodIntake', new FormControl(null, [CustomValidators.required]))
     this.meals.push(grp);
   }
 
@@ -65,11 +61,11 @@ export class AddEnetryFoodIntakeListPicker implements OnInit, ControlValueAccess
   }
 
   writeValue(obj: any): void {
-
+    this.group.setValue(this.group.value);
   }
   registerOnChange(fn: any): void {
     this.construction.subscribe(fn);
-    // this.updateFoodIntakeSubscriptions();
+    this.group.setValue(this.group.value);
   }
   registerOnTouched(fn: any): void {
   }

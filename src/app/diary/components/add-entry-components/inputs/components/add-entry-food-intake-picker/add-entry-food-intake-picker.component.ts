@@ -14,7 +14,7 @@ import { SettingsService } from 'src/shared/services/settings.service';
 import { Store, select } from '@ngrx/store';
 import { Diary } from 'src/web-api';
 import { ConstructionControlValue } from 'src/shared/util/construction-constrol-value';
-import { map } from 'rxjs/operators';
+import { map, delay } from 'rxjs/operators';
 import { group } from '@angular/animations';
 
 /** Error when invalid control is dirty, touched, or submitted. */
@@ -80,7 +80,7 @@ export class AddEntryFoodIntakePicker implements OnInit, Validator, ControlValue
   ngOnInit() {
     this.formGroup.addControl('KE', this.keAmoutControl);
     this.formGroup.addControl('foodForm', this.selectedFoodControl);
-    let obs = this.formGroup.valueChanges.pipe(map((() => {
+    let obs = this.formGroup.valueChanges.pipe(delay(0),map((() => {
       if (!this.keAmoutControl.value && !this.selectedFoodControl.value) {
         return new ConstructionControlValue(this.formGroup.value, null);
       }

@@ -32,6 +32,7 @@ import { SaverTestService } from 'src/shared/services/savertest.service';
 import { FormUtil } from 'src/shared/util/form-util';
 import { IntervallInsulinIntake } from 'src/shared/model/diary/entry/attributes/intervall-insulin-intake';
 import { CurrentDiaryViewSerivce } from 'src/app/diary/services/CurrentDiaryView.service';
+import { group } from '@angular/animations';
 
 @Component({
   selector: 'app-add-ingestion',
@@ -59,7 +60,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
   selectedNormalBolus: BehaviorSubject<number> = new BehaviorSubject(null);
   loading = true;
   @ViewChild("stepper", { static: false }) private stepper: MatStepper;
-  currentSelectedDiary$ : Observable<string>;
+  currentSelectedDiary$: Observable<string>;
   entryInModification: Entry = new Entry(null);
 
   constructor(
@@ -76,29 +77,28 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
     @Inject("IBolusUtilDao") private bolusDao: IBolusUtilDao
   ) {
     this.currentSelectedDiary$ = diaryNav.currentDiaryId$;
-   }
+  }
 
   private handleSubFormSubsciptions() {
-    merge(this.timeStampControl.valueChanges, this.bsMeasureControl.valueChanges, this.foodIntakeListPicker.valueChanges,
-      this.simpleFoodBolusControl.valueChanges, this.intervallFoodBolusControl.valueChanges, this.correctionFoodBolusControl.valueChanges).subscribe(x => {
-        this.entryInModification = new Entry(null);
-        this.entryInModification.foodIntakes = this.foodIntakeListPicker.value.constructed;
-        let insulinIntake: Array<InsulinAttribute> = [];
-        if (this.simpleFoodBolusControl.value.constructed) {
-          insulinIntake.push(this.simpleFoodBolusControl.value.constructed);
-        }
-        if (this.intervallFoodBolusControl.value.constructed) {
-          insulinIntake.push(this.intervallFoodBolusControl.value.constructed);
-        }
-        if (this.correctionFoodBolusControl.value.constructed) {
-          insulinIntake.push(this.correctionFoodBolusControl.value.constructed);
-        }
-        this.entryInModification.insulinIntakes = insulinIntake;
-        this.entryInModification.bloodSuger = this.bsMeasureControl.value.constructed;
-        this.entryInModification.timeStamp = this.timeStampControl.value.constructed;
-        console.log("NEW ENTRY: " + JSON.stringify(this.entryInModification));
-        console.log("FFOORRMM: " + JSON.stringify(this.mainFormGroup.value));
-      });
+    FormUtil.getImmediateObservableFromRawControl(this.mainFormGroup).subscribe(x => {
+      this.entryInModification = new Entry(null);
+      this.entryInModification.foodIntakes = this.foodIntakeListPicker.value.constructed;
+      let insulinIntake: Array<InsulinAttribute> = [];
+      if (this.simpleFoodBolusControl.value.constructed) {
+        insulinIntake.push(this.simpleFoodBolusControl.value.constructed);
+      }
+      if (this.intervallFoodBolusControl.value.constructed) {
+        insulinIntake.push(this.intervallFoodBolusControl.value.constructed);
+      }
+      if (this.correctionFoodBolusControl.value.constructed) {
+        insulinIntake.push(this.correctionFoodBolusControl.value.constructed);
+      }
+      this.entryInModification.insulinIntakes = insulinIntake;
+      this.entryInModification.bloodSuger = this.bsMeasureControl.value.constructed;
+      this.entryInModification.timeStamp = this.timeStampControl.value.constructed;
+      console.log("NEW ENTRY: " + JSON.stringify(this.entryInModification));
+      console.log("FFOORRMM: " + JSON.stringify(this.mainFormGroup.value));
+    });
     FormUtil.getImmediateObservable(this.timeStampControl).subscribe(x => this.currentTimestamp.next(x));
     FormUtil.getImmediateObservable(this.simpleFoodBolusControl).subscribe(x => this.selectedNormalBolus.next(x ? x.units : null));
   }
@@ -108,7 +108,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    FormUtil.waitForInitialization(this.timeStampControl, this.bsMeasureControl, this.foodIntakeListPicker, this.simpleFoodBolusControl, this.intervallFoodBolusControl, this.correctionFoodBolusControl).subscribe(x => this.handleSubFormSubsciptions());
+    FormUtil.waitForInitialization(this.timeStampControl, this.foodIntakeListPicker, this.bsMeasureControl, this.simpleFoodBolusControl, this.intervallFoodBolusControl, this.correctionFoodBolusControl).subscribe(x => this.handleSubFormSubsciptions());
     this.initializeForms();
     //this.selectedNormalBolus = this.simpleFoodBolusControl.valueChanges.pipe(map(x => x.constructed ? x.constructed.units : null));
     let action = AddIngestionActions.OPENED(new CompletableAction(this));
