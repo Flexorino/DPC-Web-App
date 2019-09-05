@@ -16,7 +16,7 @@ import { NavUtil } from 'src/shared/util/navigation.util';
 export class BaseFullScreenModalComponent implements OnInit {
 
   constructor(private callBackService: ModalCallbackService, private router: Router, private currentDiaryService: DiaryNavigationService, private closer: FullScreenModalCloser, private deepNav : DepthNavigationService, private navUtil : NavUtil) {
-    closer.closeSubject.subscribe(this.close);
+    closer.closeSubject.subscribe(() => this.close());
   }
 
   ngOnInit() {

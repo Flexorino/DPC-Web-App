@@ -58,8 +58,8 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
   //MISC:
   currentTimestamp: BehaviorSubject<Date> = new BehaviorSubject(null);
   selectedNormalBolus: BehaviorSubject<number> = new BehaviorSubject(null);
-  foodIntakes: Subject<FoodIntakeAttribute[]> = new Subject();
-  currentBS: Subject<number> = new Subject();
+  foodIntakes: Subject<FoodIntakeAttribute[]> = new BehaviorSubject(null);
+  currentBS: Subject<number> = new BehaviorSubject(null);
   loading = true;
   @ViewChild("stepper", { static: false }) private stepper: MatStepper;
   currentSelectedDiary$: Observable<string>;

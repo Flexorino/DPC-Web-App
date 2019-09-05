@@ -182,7 +182,7 @@ export class AddEntryFoodIntakePicker implements OnInit, Validator, ControlValue
 
   setToInitial() {
     this.formGroup.reset();
-
+    this.formGroup.setValue(this.formGroup.value);
   }
 
   registerOnChange(fn: any): void {
