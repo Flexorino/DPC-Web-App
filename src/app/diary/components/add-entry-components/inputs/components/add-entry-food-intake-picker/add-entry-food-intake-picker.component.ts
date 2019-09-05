@@ -45,8 +45,12 @@ export class AddEntryFoodIntakePicker implements OnInit, Validator, ControlValue
   //CONTROLS
   private keAmoutControl = new FormControl();
   private selectedFoodControl = new FormControl();
+  private helpKHPartControl = new FormControl();
+  private helpKHAmountControl = new FormControl();
 
-  //--
+  //MISC
+  private internHelpKHPartControl = new FormControl();
+  private internHelpKHAmountControl = new FormControl();
 
   @Output("close") close = new EventEmitter();
   @ViewChild("mealSel", { static: false }) ref: ElementRef;
@@ -80,7 +84,9 @@ export class AddEntryFoodIntakePicker implements OnInit, Validator, ControlValue
   ngOnInit() {
     this.formGroup.addControl('KE', this.keAmoutControl);
     this.formGroup.addControl('foodForm', this.selectedFoodControl);
-    let obs = this.formGroup.valueChanges.pipe(delay(0),map((() => {
+    this.formGroup.addControl('help1', this.helpKHAmountControl);
+    this.formGroup.addControl('help2', this.helpKHPartControl);
+    let obs = this.formGroup.valueChanges.pipe(delay(0), map((() => {
       if (!this.keAmoutControl.value && !this.selectedFoodControl.value) {
         return new ConstructionControlValue(this.formGroup.value, null);
       }
@@ -93,7 +99,7 @@ export class AddEntryFoodIntakePicker implements OnInit, Validator, ControlValue
       } catch (e) {
         console.error("err");
       }
-      return new ConstructionControlValue(this.formGroup.value , intake);
+      return new ConstructionControlValue(this.formGroup.value, intake);
     })));
     obs.subscribe(x => this.construction.next(x));
     obs.subscribe((x: ConstructionControlValue<FoodIntakeAttribute>) => {
@@ -104,15 +110,21 @@ export class AddEntryFoodIntakePicker implements OnInit, Validator, ControlValue
       }
     });
     // this form is only for intern help usage!
+    let internCarbsPartHelpter = new FormControl('', [Validators.required, Validators.max(100), Validators.min(1)]);
+    let internCarbsAmoutHelper = new FormControl('', [Validators.required, Validators.min(1)]);
+    this.internHelpKHAmountControl = internCarbsAmoutHelper;
+    this.internHelpKHPartControl = internCarbsPartHelpter;
     this.mealCalcHelpForm = this.fb.group({
-      carbsFactor: ['', [Validators.required, Validators.max(100), Validators.min(1)]],
-      amount: ['', [Validators.required, Validators.min(1)]]
+      carbsFactor: internCarbsPartHelpter,
+      amount: internCarbsAmoutHelper
     });
     this.mealCalcHelpForm.get('carbsFactor').valueChanges.subscribe(x => {
       if (this.mealCalcHelpForm.get('carbsFactor').valid) {
         this.carbsFactor = Number.parseFloat(this.mealCalcHelpForm.get("carbsFactor").value) * 0.01;
       }
     });
+    internCarbsAmoutHelper.valueChanges.subscribe(x => this.helpKHAmountControl.setValue(internCarbsAmoutHelper.value));
+    internCarbsPartHelpter.valueChanges.subscribe(x => this.helpKHPartControl.setValue(internCarbsPartHelpter.value));
   }
 
   closeThis() {
@@ -161,6 +173,8 @@ export class AddEntryFoodIntakePicker implements OnInit, Validator, ControlValue
       throw new Error("Invalid Value");
     } else if (obj.raw) {
       this.formGroup.setValue(obj.raw);
+      this.internHelpKHAmountControl.setValue(this.helpKHAmountControl.value );
+      this.internHelpKHPartControl.setValue(this.helpKHPartControl.value);
     } else {
       throw new Error("not implemented");
     }
