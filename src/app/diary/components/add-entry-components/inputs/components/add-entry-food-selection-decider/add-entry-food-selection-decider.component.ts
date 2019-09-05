@@ -55,13 +55,15 @@ export class AddEntryFoodSelectionDecider implements OnInit, OnDestroy, IEntryFo
   }
 
   ngOnInit() {
-    if (this.data.food && !this.data.food.id) {
-      this.preselectedCustoMFood = this.data.food
-      this.mode = PickMode.CUSTOM;
-      this.selectedTabIndex = 1;
-    } else if (this.data.food && this.data.food.id) {
-      this.preselectedDBFood = this.data.food;
-    }
+    setTimeout(() => {
+      if (this.data.food && !this.data.food.id) {
+        this.preselectedCustoMFood = this.data.food
+        this.mode = PickMode.CUSTOM;
+        this.selectedTabIndex = 1;
+      } else if (this.data.food && this.data.food.id) {
+        this.preselectedDBFood = this.data.food;
+      }
+    });
   }
   onNoClick() {
     this.dialogRef.close();
