@@ -64,6 +64,8 @@ import { BSRatingViewComponent } from './diary/components/add-entry-components/m
 import { FastKEInputComponent } from './diary/components/add-entry-components/inputs/components/fast-keinput/fast-keinput.component';
 import { AbsorptionPipe } from 'src/shared/pipes/absorbtion.pipe';
 import { diaryReducerExport } from 'src/shared/model/redux/Diary';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 
 @NgModule({
@@ -122,7 +124,8 @@ import { diaryReducerExport } from 'src/shared/model/redux/Diary';
     EffectsModule.forRoot([DiaryEffects, UserEffects, AddIngestionEffects, AddBSEffects]),
     FormsModule,
     MaterialModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
 
   ],
   providers: [BloodSugarPipe, AbsorptionPipe, CarbsPipe, { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }, { provide: 'IBolusUtilDao', useClass: RestNetworkBolusUtilDAO }],
