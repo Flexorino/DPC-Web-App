@@ -12,6 +12,9 @@
                     <h3>Blutzucker</h3>
                     <add-entry-bs-picker formControlName="bsMeasure">
                     </add-entry-bs-picker>
+                    <app-bsrating-view [hidden]="!(currentBS | async)" [currentTimestamp]="currentTimestamp"
+                        [currentBS]="currentBS">
+                    </app-bsrating-view>
                 </div>
             </mat-step>
             <mat-step [stepControl]="secondFormGroup">
@@ -25,10 +28,11 @@
             <mat-step [stepControl]="thirdFormGroup">
                 <div [formGroup]="thirdFormGroup">
                     <ng-template matStepLabel>Bolus etc.</ng-template>
-                    <h3>Bolus berechnen</h3> 
+                    <h3>Bolus berechnen</h3>
                     <app-add-entry-simple-food-bolus-picker formControlName="simpleFoodBolusControl">
                     </app-add-entry-simple-food-bolus-picker>
-                    <app-add-entry-intervall-food-bolus-picker [selectedBolusObservable]="selectedNormalBolus" formControlName="intervallFoodBolus" [selectedBolusObservable]="selectedNormalBolus">
+                    <app-add-entry-intervall-food-bolus-picker [selectedBolusObservable]="selectedNormalBolus"
+                        formControlName="intervallFoodBolus" [selectedBolusObservable]="selectedNormalBolus">
                     </app-add-entry-intervall-food-bolus-picker>
                     <app-add-entry-simple-correction-bolus-picker formControlName="correctionFoodBolusControl">
                     </app-add-entry-simple-correction-bolus-picker>
@@ -37,8 +41,8 @@
                             [validation]="mainFormGroup.valid">
                         </app-bolus-calculator-button>
                     </div>
-                    <button class="fullWidthInput button" mat-raised-button color="primary"  routerLink="/diary/{{currentSelectedDiary$ | async}}/search"
-                        (click)="compare()">Vergleiche
+                    <button class="fullWidthInput button" mat-raised-button color="primary"
+                        routerLink="/diary/{{currentSelectedDiary$ | async}}/search" (click)="compare()">Vergleiche
                         mit
                         anderen Einträgen</button>
                     <mat-expansion-panel>

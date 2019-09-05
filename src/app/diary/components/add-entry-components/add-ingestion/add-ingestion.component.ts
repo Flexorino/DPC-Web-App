@@ -59,6 +59,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
   currentTimestamp: BehaviorSubject<Date> = new BehaviorSubject(null);
   selectedNormalBolus: BehaviorSubject<number> = new BehaviorSubject(null);
   foodIntakes: Subject<FoodIntakeAttribute[]> = new Subject();
+  currentBS: Subject<number> = new Subject();
   loading = true;
   @ViewChild("stepper", { static: false }) private stepper: MatStepper;
   currentSelectedDiary$: Observable<string>;
@@ -103,6 +104,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
     FormUtil.getImmediateObservable(this.timeStampControl).subscribe(x => this.currentTimestamp.next(x));
     FormUtil.getImmediateObservable(this.simpleFoodBolusControl).subscribe(x => this.selectedNormalBolus.next(x ? x.units : null));
     FormUtil.getImmediateObservable(this.foodIntakeListPicker).subscribe(x => this.foodIntakes.next(x));
+    FormUtil.getImmediateObservable(this.bsMeasureControl).subscribe(x => this.currentBS.next(x));
   }
 
   ngAfterViewInit(): void {
