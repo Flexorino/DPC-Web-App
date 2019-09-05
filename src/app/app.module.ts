@@ -64,6 +64,7 @@ import { SearchViewComponent } from './diary/components/search-view/search-view.
 import { AddBSEffects } from 'src/shared/effects/add-bs-effects';
 import { BSRatingViewComponent } from './diary/components/add-entry-components/misc/bsrating-view/bsrating-view.component';
 import { FastKEInputComponent } from './diary/components/add-entry-components/inputs/components/fast-keinput/fast-keinput.component';
+import { AbsorptionPipe } from 'src/shared/pipes/absorbtion.pipe';
 
 
 @NgModule({
@@ -108,11 +109,12 @@ import { FastKEInputComponent } from './diary/components/add-entry-components/in
     AddEntryBSMeasureEntryComponent,
     SearchViewComponent,
     BSRatingViewComponent,
-    FastKEInputComponent  
+    FastKEInputComponent,
+    AbsorptionPipe
   ],
   imports: [
     ReactiveFormsModule,
-    BrowserModule, 
+    BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     LayoutModule,
@@ -125,7 +127,7 @@ import { FastKEInputComponent } from './diary/components/add-entry-components/in
     BrowserAnimationsModule
 
   ],
-  providers: [BloodSugarPipe, CarbsPipe,{provide: MAT_DATE_LOCALE, useValue: 'en-GB'}, {provide: 'IBolusUtilDao', useClass: RestNetworkBolusUtilDAO}],
+  providers: [BloodSugarPipe, AbsorptionPipe, CarbsPipe, { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }, { provide: 'IBolusUtilDao', useClass: RestNetworkBolusUtilDAO }],
   bootstrap: [AppComponent],
   entryComponents: [AddEntryComponent, AddEntryFoodSelectionDecider, FoodInfoShowerPopupwrapperComponent]
 })
