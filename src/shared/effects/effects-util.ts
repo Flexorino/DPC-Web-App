@@ -4,7 +4,7 @@ import { Injectable } from "@angular/core";
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Observable, OperatorFunction } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
-import { PropsReturnType, FunctionWithParametersType, TypedAction, Creator } from '@ngrx/store/src/models';
+import { TypedAction } from '@ngrx/store/src/models';
 
 export class Doable<T> {
     public do: (handler: (x: T) => Observable<Action>) => Observable<Action>;
