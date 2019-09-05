@@ -1,10 +1,15 @@
-import { UserEffectsActions } from './../../effects/user-effects.actions';
-import { UserServiceActions } from './../../services/user.service.actions';
+
+import { createReducer, on, State, Action } from '@ngrx/store';
 import { User } from '../user/user';
-import { createReducer, on } from '@ngrx/store';
+import { UserEffectsActions } from 'src/shared/effects/user-effects.actions';
+
 
 export const initialState: User = new User();
 
-export const userReducer = createReducer(initialState, on(UserEffectsActions.MY_DIARIES_AND_GRANTS_LOADED, (state, action) =>
+export function userReducerExport(state: State<any> | undefined, action: Action) {
+    return userReducer(state, action);
+}
+
+export const userReducer = createReducer(initialState as any, on(UserEffectsActions.MY_DIARIES_AND_GRANTS_LOADED, (state, action) =>
     ({ ...state, myDiaries: action.myDiaries, grants: action.gants }))
 );

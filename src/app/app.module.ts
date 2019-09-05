@@ -5,7 +5,7 @@ import { AddEntryBSPicker } from './diary/components/add-entry-components/inputs
 
 
 import { BASE_PATH } from './../web-api/variables';
-import { ApiModule } from './../web-api/api.module';
+import { ApiModule, baseConfig } from './../web-api/api.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
@@ -30,7 +30,6 @@ import { EntryMainValueDisplayPipe } from 'src/shared/pipes/entry-main-value-dis
 import { EffectsModule } from '@ngrx/effects';
 import { DiaryEffects } from 'src/shared/effects/entries-effects';
 import { StoreModule } from '@ngrx/store';
-import { diaryReducer } from 'src/shared/model/redux/Diary';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddEntryComponent } from './diary/components/add-entry-components/add-entry/add-entry.component';
 import { MaterialModule } from './material-module';
@@ -65,6 +64,7 @@ import { AddBSEffects } from 'src/shared/effects/add-bs-effects';
 import { BSRatingViewComponent } from './diary/components/add-entry-components/misc/bsrating-view/bsrating-view.component';
 import { FastKEInputComponent } from './diary/components/add-entry-components/inputs/components/fast-keinput/fast-keinput.component';
 import { AbsorptionPipe } from 'src/shared/pipes/absorbtion.pipe';
+import { diaryReducerExport } from 'src/shared/model/redux/Diary';
 
 
 @NgModule({
@@ -118,9 +118,9 @@ import { AbsorptionPipe } from 'src/shared/pipes/absorbtion.pipe';
     AppRoutingModule,
     BrowserAnimationsModule,
     LayoutModule,
-    ApiModule.forRoot(() => new Configuration({ basePath: "http://localhost:8889" })),
+    ApiModule.forRoot(baseConfig),
     HttpClientModule,
-    StoreModule.forRoot({ diary: diaryReducer, user: userReducer }),
+    StoreModule.forRoot({ diary: diaryReducerExport, user: userReducer }),
     EffectsModule.forRoot([DiaryEffects, UserEffects, AddIngestionEffects, AddBSEffects]),
     FormsModule,
     MaterialModule,
