@@ -13,10 +13,10 @@ import { IEntryFoodPicker } from '../interfaces/IEntryFoodPicker';
 })
 export class ListFoodPickerComponent implements OnInit, IEntryFoodPicker {
   food: BehaviorSubject<Food> = new BehaviorSubject(null);
-  private currentSelectedFood: Food = null;
+  currentSelectedFood: Food = null;
   searchSnippet: string = ""
   filteredFood: Observable<Array<Food>>;
-  private searchChange: BehaviorSubject<String> = new BehaviorSubject("");
+  searchChange: BehaviorSubject<String> = new BehaviorSubject("");
 
   @Input("currentlySelecteFood") currentlySelecteFood: Food;
 

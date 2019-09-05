@@ -34,7 +34,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from './material-module';
 import { CollViewComponent } from './configs/component/coll-view/coll-view.component';
 import { UserEffects } from 'src/shared/effects/user-effects';
-import { userReducer } from 'src/shared/model/redux/user-reducer';
+import { userReducer, userReducerExport } from 'src/shared/model/redux/user-reducer';
 import { BaseFullScreenModalComponent } from 'src/shared/components/base-full-screen-modal/base-full-screen-modal.component';
 import { AddOverviewComponent } from './diary/components/add-overview/add-overview.component';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
@@ -118,7 +118,7 @@ import { diaryReducerExport } from 'src/shared/model/redux/Diary';
     LayoutModule,
     ApiModule.forRoot(baseConfig),
     HttpClientModule,
-    StoreModule.forRoot({ diary: diaryReducerExport, user: userReducer }),
+    StoreModule.forRoot({ diary: diaryReducerExport, user: userReducerExport }),
     EffectsModule.forRoot([DiaryEffects, UserEffects, AddIngestionEffects, AddBSEffects]),
     FormsModule,
     MaterialModule,

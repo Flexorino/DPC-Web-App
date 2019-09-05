@@ -31,9 +31,9 @@ export class AddEntryFoodSelectionDecider implements OnInit, OnDestroy, IEntryFo
 
   food: BehaviorSubject<Food> = new BehaviorSubject(null);
 
-  private mode: PickMode = PickMode.DB;
-  private preselectedDBFood: Food = null;
-  private preselectedCustoMFood: Food = null;
+  public mode: PickMode = PickMode.DB;
+  public preselectedDBFood: Food = null;
+  public preselectedCustoMFood: Food = null;
   selectedTabIndex: number;
   customFoodFormGroup: FormGroup = new FormGroup({});
 

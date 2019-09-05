@@ -3,7 +3,7 @@
 </div>
 <div id="content">
     <div>
-        <mat-horizontal-stepper [linear]="isLinear" #stepper [formGroup]="mainFormGroup">
+        <mat-horizontal-stepper #stepper [formGroup]="mainFormGroup">
             <mat-step [stepControl]="firstFormGroup">
                 <div [formGroup]="firstFormGroup">
                     <ng-template matStepLabel>Zeit & <br> Blutzucker</ng-template>

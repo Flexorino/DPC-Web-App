@@ -23,7 +23,7 @@ export class CollViewComponent implements OnInit, OnDestroy {
   private userSubscription: Subscription;
 
 
-  constructor(private diarySelectionService: DiaryNavigationService, private store: Store<{ user: User }>) {
+  constructor(public diarySelectionService: DiaryNavigationService, private store: Store<{ user: User }>) {
 
     }
 
