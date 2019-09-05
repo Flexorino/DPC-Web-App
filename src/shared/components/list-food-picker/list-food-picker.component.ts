@@ -26,6 +26,10 @@ export class ListFoodPickerComponent implements OnInit, IEntryFoodPicker {
   }
 
   ngOnInit() {
+    setTimeout(() => this.init());
+  }
+
+  init() {
     let unfilteredFood = this.store.pipe(select('diary'), select('food'));
     let searchRes: Observable<any> = combineLatest(unfilteredFood, this.searchChange);
     this.filteredFood = searchRes.pipe(map(x => {

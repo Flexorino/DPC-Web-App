@@ -6,6 +6,7 @@ import { IEntryFoodPicker } from '../interfaces/IEntryFoodPicker';
 import { Food } from 'src/shared/model/diary/food';
 import { BehaviorSubject } from 'rxjs';
 import { SettingsService } from 'src/shared/services/settings.service';
+import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-food-editor',
@@ -14,7 +15,7 @@ import { SettingsService } from 'src/shared/services/settings.service';
 })
 export class FoodEditorComponent implements OnInit, IEntryFoodPicker {
   food: BehaviorSubject<Food> = new BehaviorSubject(null);
-  @Input("form") form: FormGroup;
+  @Input("form") form: FormGroup = new FormGroup({});
   @Input("preselected") preselected: Food;
   foodInModification: Food = new Food(null);
 
@@ -43,7 +44,7 @@ export class FoodEditorComponent implements OnInit, IEntryFoodPicker {
     this.form.addControl("resorption", resorptionControl);
     this.form.addControl("description", descriptionControl);
     this.form.setValidators([x => (nameControl.value || carbsFactorControl.value || resorptionControl.value || descriptionControl.value) ? null : { "atLeastOneField": {} }]);
-    this.form.valueChanges.subscribe(x => {
+    this.form.valueChanges.pipe(delay(0)).subscribe(x => {
       this.foodInModification.name = nameControl.value ? nameControl.value : null;
       try {
         this.foodInModification.carbsFactor = carbsFactorControl.value ? Number.parseFloat(carbsFactorControl.value) * 0.01 : null;
@@ -53,6 +54,10 @@ export class FoodEditorComponent implements OnInit, IEntryFoodPicker {
       this.foodInModification.description = descriptionControl.value ? descriptionControl.value : null;
       this.food.next(this.foodInModification);
     });
+  }
+
+  init(){
+    
   }
 
 }

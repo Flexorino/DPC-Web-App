@@ -139,7 +139,7 @@ export class AddEntryFoodIntakePicker implements OnInit, Validator, ControlValue
     const dialogRef = this.dialog.open(AddEntryFoodSelectionDecider, {
       width: '80%',
       height: '600px',
-      data: new AddEntryFoodSelectionDeciderInput(this.selectedFoodControl.value, this.foodFormGroup), panelClass: "full_screen_dialog"
+      data: new AddEntryFoodSelectionDeciderInput(this.selectedFoodControl.value), panelClass: "full_screen_dialog"
     });
     event.preventDefault();
     event.stopPropagation();

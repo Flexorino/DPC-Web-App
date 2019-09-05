@@ -17,7 +17,7 @@ enum PickMode {
 }
 
 export class AddEntryFoodSelectionDeciderInput {
-  constructor(public readonly food: Food, public readonly: FormGroup) { }
+  constructor(public readonly food: Food) { }
 }
 
 @Component({
@@ -55,15 +55,16 @@ export class AddEntryFoodSelectionDecider implements OnInit, OnDestroy, IEntryFo
   }
 
   ngOnInit() {
-    setTimeout(() => {
-      if (this.data.food && !this.data.food.id) {
-        this.preselectedCustoMFood = this.data.food
-        this.mode = PickMode.CUSTOM;
-        this.selectedTabIndex = 1;
-      } else if (this.data.food && this.data.food.id) {
-        this.preselectedDBFood = this.data.food;
-      }
-    });
+    if (this.data.food && !this.data.food.id) {
+      this.preselectedCustoMFood = this.data.food
+      setTimeout(() =>
+        this.mode = PickMode.CUSTOM
+      );
+      this.selectedTabIndex = 1;
+    } else if (this.data.food && this.data.food.id) {
+      this.preselectedDBFood = this.data.food;
+    }
+
   }
   onNoClick() {
     this.dialogRef.close();
