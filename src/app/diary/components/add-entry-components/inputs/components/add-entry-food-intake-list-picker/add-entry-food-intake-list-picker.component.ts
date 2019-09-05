@@ -29,7 +29,7 @@ export class AddEnetryFoodIntakeListPicker implements OnInit, ControlValueAccess
 
   ngOnInit() {
     this.group.addControl("meals", this.fb.array([]));
-    let obs = this.group.valueChanges.pipe(delay(0),map(() => {
+    let obs = this.group.valueChanges.pipe(delay(0), map(() => {
       let intakes = [];
       this.meals.controls.forEach(element => {
         if (element.get("foodIntake").value && element.get("foodIntake").value.constructed) {
@@ -42,10 +42,11 @@ export class AddEnetryFoodIntakeListPicker implements OnInit, ControlValueAccess
     obs.subscribe((x: ConstructionControlValue<FoodIntakeAttribute[]>) => this.construction.next(x));
   }
 
-  addMeal() {
+  addMeal(): FormGroup {
     let grp: FormGroup = this.fb.group({});
     grp.addControl('foodIntake', new FormControl(null, [CustomValidators.required]))
     this.meals.push(grp);
+    return grp;
   }
 
   remove(i: number) {
@@ -61,8 +62,28 @@ export class AddEnetryFoodIntakeListPicker implements OnInit, ControlValueAccess
   }
 
   writeValue(obj: any): void {
-    this.group.setValue(this.group.value);
+
+    if (!obj) {
+      this.setToInitial();
+      return;
+    }
+    if (!(obj instanceof ConstructionControlValue)) {
+      throw new Error("Invalid Value");
+    } else if (obj.raw) {
+      obj.raw.meals.forEach(element => {
+        this.addMeal().setValue(element);
+      });
+    } else {
+      throw new Error("not implemented");
+    }
   }
+
+  private setToInitial() {
+    while (this.meals.length) {
+      this.meals.removeAt(0);
+    }
+  }
+
   registerOnChange(fn: any): void {
     this.construction.subscribe(fn);
     this.group.setValue(this.group.value);
