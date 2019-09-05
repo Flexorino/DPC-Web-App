@@ -31,7 +31,6 @@ import { EffectsModule } from '@ngrx/effects';
 import { DiaryEffects } from 'src/shared/effects/entries-effects';
 import { StoreModule } from '@ngrx/store';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AddEntryComponent } from './diary/components/add-entry-components/add-entry/add-entry.component';
 import { MaterialModule } from './material-module';
 import { CollViewComponent } from './configs/component/coll-view/coll-view.component';
 import { UserEffects } from 'src/shared/effects/user-effects';
@@ -82,7 +81,6 @@ import { diaryReducerExport } from 'src/shared/model/redux/Diary';
     CustomTimePipe,
     BSTendencyPipe,
     BloodSugarPipe,
-    AddEntryComponent,
     CollViewComponent,
     BaseFullScreenModalComponent,
     AddOverviewComponent,
@@ -129,6 +127,6 @@ import { diaryReducerExport } from 'src/shared/model/redux/Diary';
   ],
   providers: [BloodSugarPipe, AbsorptionPipe, CarbsPipe, { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }, { provide: 'IBolusUtilDao', useClass: RestNetworkBolusUtilDAO }],
   bootstrap: [AppComponent],
-  entryComponents: [AddEntryComponent, AddEntryFoodSelectionDecider, FoodInfoShowerPopupwrapperComponent]
+  entryComponents: [AddEntryFoodSelectionDecider, FoodInfoShowerPopupwrapperComponent]
 })
 export class AppModule { }

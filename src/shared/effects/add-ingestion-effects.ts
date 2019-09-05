@@ -14,7 +14,6 @@ import { AddIngestionActions } from 'src/app/diary/components/add-entry-componen
 import { GeneralEffectActions } from './general-effect-actions';
 import { Patch } from '../services/patcherino/patch';
 import { Absorption } from '../model/diary/food';
-import { AddEntryComponent } from 'src/app/diary/components/add-entry-components/add-entry/add-entry.component';
 import { Action } from '@ngrx/store';
 import { EffectsUtil } from './effects-util';
 import { when } from 'q';

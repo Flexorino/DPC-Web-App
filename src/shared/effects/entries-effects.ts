@@ -1,6 +1,5 @@
 import { DiaryNavActions } from './../../app/diary/diary-nav/diary-nav.actions';
 import { Action } from 'rxjs/internal/scheduler/Action';
-import { AddEntryActions } from '../../app/diary/components/add-entry-components/add-entry/add-entry.actions';
 import { DiaryListActions } from './../../app/diary/components/diary-list/diary-list.actions';
 import { Store } from '@ngrx/store';
 import { Entry } from 'src/shared/model/diary/entry/entry';
@@ -19,6 +18,7 @@ import { DiaryServiceActions } from '../services/diary.service.actions';
 
 @Injectable()
 export class DiaryEffects {
+    /*
     loadEntries$ = createEffect(() => this.actions$.pipe(
         ofType(DiaryListActions.OPENEND),
         mergeMap(action => {
@@ -81,4 +81,5 @@ export class DiaryEffects {
                 takeUntil(from(req.cancelPromise))
             );
     }
+    */
 }

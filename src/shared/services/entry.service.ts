@@ -11,7 +11,6 @@ import { EntryReprResponse } from 'src/web-api';
 import { EntryAttributeTypes } from '../model/diary/entry/entry-attribute-types';
 import { Injectable } from '@angular/core';
 import * as d3 from "d3";
-import { EntryInputData } from 'src/app/diary/components/add-entry-components/add-entry/entry-input-data';
 import { InsulinAttribute } from '../model/diary/entry/attributes/insulin-attribute';
 import { TempBasalChangeAttribute } from '../model/diary/entry/attributes/temp-basal-change-attribute';
 import { TagAttribute } from '../model/diary/entry/attributes/tag-attribute';
