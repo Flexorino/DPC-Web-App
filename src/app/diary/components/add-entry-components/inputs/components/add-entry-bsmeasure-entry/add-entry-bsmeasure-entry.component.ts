@@ -10,7 +10,7 @@ import { IBolusUtilDao } from 'src/shared/services/DAO/i-bolus-util-dao';
 import { ConstructionConstrol } from 'src/shared/util/construction-control';
 import { ConstructionControlValue } from 'src/shared/util/construction-constrol-value';
 import { FormUtil } from 'src/shared/util/form-util';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { Entry } from 'src/shared/model/diary/entry/entry';
 import { map, delay, startWith } from 'rxjs/operators';
 import { SimpleInsulinIntake } from 'src/shared/model/diary/entry/attributes/simple-Insulin-intake';
@@ -41,9 +41,9 @@ export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit, V
   mainFormGroup: FormGroup = new FormGroup({});
 
   //MISC
-  currentTimestamp: Subject<Date> = new Subject();
+  currentTimestamp: Subject<Date> = new BehaviorSubject(null);
   loading = false;
-  currentBS: Subject<number> = new Subject();
+  currentBS: Subject<number> = new BehaviorSubject(null);
   currentSelectedDiary$;
   lastConstruction: Entry;
 
