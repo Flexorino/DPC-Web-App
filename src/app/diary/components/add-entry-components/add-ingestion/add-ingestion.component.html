@@ -69,7 +69,7 @@
 
 
 <mat-toolbar *ngIf="currentStep ===1" class="mat-elevation-z4 BottomToolbar" color='primary'>
-    <app-food-intake-summation></app-food-intake-summation>
+    <app-food-intake-summation [foodIntakes]="foodIntakes"></app-food-intake-summation>
 </mat-toolbar>
 <mat-toolbar class="mat-elevation-z4 BottomToolbar" color='primary'>
     <div id="l">

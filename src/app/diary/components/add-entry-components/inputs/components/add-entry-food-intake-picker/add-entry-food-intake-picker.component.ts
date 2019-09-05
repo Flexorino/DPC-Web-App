@@ -94,7 +94,7 @@ export class AddEntryFoodIntakePicker implements OnInit, Validator, ControlValue
       intake.amount = null;
       intake.food = null;
       try {
-        intake.amount = this.keAmoutControl.value ? this.keAmoutControl.value : 0 / this.keFactor;
+        intake.amount = (this.keAmoutControl.value ? this.keAmoutControl.value : 0) / this.keFactor;
         intake.food = this.selectedFoodControl.value;
       } catch (e) {
         console.error("err");
