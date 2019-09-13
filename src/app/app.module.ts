@@ -66,7 +66,7 @@ import { AbsorptionPipe } from 'src/shared/pipes/absorbtion.pipe';
 import { diaryReducerExport } from 'src/shared/model/redux/Diary';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
-
+import createAuth0Client from '@auth0/auth0-spa-js';
 
 @NgModule({
   declarations: [
