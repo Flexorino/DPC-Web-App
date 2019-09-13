@@ -67,6 +67,8 @@ import { diaryReducerExport } from 'src/shared/model/redux/Diary';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import createAuth0Client from '@auth0/auth0-spa-js';
+import { LoginAndRegisterComponent } from './components/login-and-register/login-and-register.component';
+import { CallbackComponent } from './components/callback/callback.component';
 
 @NgModule({
   declarations: [
@@ -110,7 +112,9 @@ import createAuth0Client from '@auth0/auth0-spa-js';
     SearchViewComponent,
     BSRatingViewComponent,
     FastKEInputComponent,
-    AbsorptionPipe
+    AbsorptionPipe,
+    LoginAndRegisterComponent,
+    CallbackComponent
   ],
   imports: [
     ReactiveFormsModule,

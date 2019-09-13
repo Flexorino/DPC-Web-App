@@ -1,4 +1,5 @@
 
+
 import { state } from '@angular/animations';
 import { CallBackGuard } from './diary/services/callback-guard';
 
@@ -19,12 +20,14 @@ import { AddIngestionComponent } from './diary/components/add-entry-components/a
 import { ManualEntryAddComponent } from './diary/components/add-entry-components/manual-entry-add/manual-entry-add.component';
 import { AddBSMeasureComponent } from './diary/components/add-entry-components/add-bsmeasure/add-bsmeasure.component';
 import { SearchViewComponent } from './diary/components/search-view/search-view.component';
+import { LoginAndRegisterComponent } from './components/login-and-register/login-and-register.component';
+import { CallbackComponent } from './components/callback/callback.component';
 
 
 
 const routes: Routes = [
-  { path: "", component: BaseNavComponent, outlet: 'test' },
-
+  { path: "login", component: LoginAndRegisterComponent },
+  { path: "callback", component: CallbackComponent },
   {
     path: "", component: BaseNavComponent, children: [{
       path: "diary", children: [
