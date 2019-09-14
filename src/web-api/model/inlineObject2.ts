@@ -1,6 +1,6 @@
 /**
  * Diabetes Web-App
- * Die ist die vorl�ufige REST-artige Schnittstelle, f�r das Dia-PC Projekt. Diese Schnittstelle ist nicht REST, da sie nicht Hypermedialit�t benutzt - Das bedeutet, der Client muss selbt Anfragen konstruieren. 
+ * Die ist die vorläufige REST-artige Schnittstelle, für das Dia-PC Projekt. Diese Schnittstelle ist nicht REST, da sie nicht Hypermedialität benutzt - Das bedeutet, der Client muss selbt Anfragen konstruieren. 
  *
  * The version of the OpenAPI document: 1.0.0
  * 
@@ -9,10 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Right } from './right';
 
 
 export interface InlineObject2 { 
-    rights?: Array<Right>;
+    username?: string;
+    idToken?: string;
 }
 

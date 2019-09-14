@@ -9,20 +9,18 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { UserInfoPreferences } from './userInfoPreferences';
 
 
-export interface EntryReprResponseMealBolus { 
+export interface UserInfo { 
     /**
-     * Abgabe in IE
+     * name of the user
      */
-    units?: number;
+    name?: string;
     /**
-     * Die ID des Insulins
+     * Die Nutzer-Id
      */
-    insulin?: string;
-    /**
-     * Der Name des Insulins
-     */
-    insulinName?: string;
+    id?: string;
+    preferences?: UserInfoPreferences;
 }
 

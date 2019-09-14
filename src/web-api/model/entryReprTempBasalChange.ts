@@ -1,6 +1,6 @@
 /**
  * Diabetes Web-App
- * Die ist die vorl�ufige REST-artige Schnittstelle, f�r das Dia-PC Projekt. Diese Schnittstelle ist nicht REST, da sie nicht Hypermedialit�t benutzt - Das bedeutet, der Client muss selbt Anfragen konstruieren. 
+ * Die ist die vorläufige REST-artige Schnittstelle, für das Dia-PC Projekt. Diese Schnittstelle ist nicht REST, da sie nicht Hypermedialität benutzt - Das bedeutet, der Client muss selbt Anfragen konstruieren. 
  *
  * The version of the OpenAPI document: 1.0.0
  * 
@@ -13,11 +13,11 @@
 
 export interface EntryReprTempBasalChange { 
     /**
-     * Die Zeit in der die Basalrate der Pumpe ge�ndert werden soll in Sekunden
+     * Die Zeit in der die Basalrate der Pumpe geändert werden soll in Sekunden
      */
     duration?: number;
     /**
-     * Die Prozent, um wie viel die Rate ge�ndert werden soll.
+     * Die Prozent, um wie viel die Rate geändert werden soll.
      */
     percentage?: number;
 }

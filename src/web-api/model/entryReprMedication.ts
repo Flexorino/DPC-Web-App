@@ -1,6 +1,6 @@
 /**
  * Diabetes Web-App
- * Die ist die vorl�ufige REST-artige Schnittstelle, f�r das Dia-PC Projekt. Diese Schnittstelle ist nicht REST, da sie nicht Hypermedialit�t benutzt - Das bedeutet, der Client muss selbt Anfragen konstruieren. 
+ * Die ist die vorläufige REST-artige Schnittstelle, für das Dia-PC Projekt. Diese Schnittstelle ist nicht REST, da sie nicht Hypermedialität benutzt - Das bedeutet, der Client muss selbt Anfragen konstruieren. 
  *
  * The version of the OpenAPI document: 1.0.0
  * 
@@ -17,7 +17,7 @@ export interface EntryReprMedication {
      */
     medicationID?: string;
     /**
-     * Kleiner Text, in welchem Details zur Einnahme notiert werden k�nnen.
+     * Kleiner Text, in welchem Details zur Einnahme notiert werden können.
      */
     intakeDescription?: string;
 }

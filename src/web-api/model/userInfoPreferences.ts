@@ -11,18 +11,10 @@
  */
 
 
-export interface EntryReprResponseMealBolus { 
+export interface UserInfoPreferences { 
     /**
-     * Abgabe in IE
+     * Das Tagebuch, dass der Nutzer standarmäßig ausgewählt haben möchte
      */
-    units?: number;
-    /**
-     * Die ID des Insulins
-     */
-    insulin?: string;
-    /**
-     * Der Name des Insulins
-     */
-    insulinName?: string;
+    defaultDiary?: string;
 }
 

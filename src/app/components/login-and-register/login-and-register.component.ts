@@ -14,7 +14,7 @@ export class LoginAndRegisterComponent implements OnInit {
   }
 
   login() {
-    this.auth.login();
+    this.auth.login("/profile-loading");
   }
 
 }

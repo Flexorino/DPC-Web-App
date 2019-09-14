@@ -1,5 +1,6 @@
 
 
+
 import { state } from '@angular/animations';
 import { CallBackGuard } from './diary/services/callback-guard';
 
@@ -22,12 +23,14 @@ import { AddBSMeasureComponent } from './diary/components/add-entry-components/a
 import { SearchViewComponent } from './diary/components/search-view/search-view.component';
 import { LoginAndRegisterComponent } from './components/login-and-register/login-and-register.component';
 import { CallbackComponent } from './components/callback/callback.component';
+import { ProfileLoaderComponent } from './components/profile-loader/profile-loader.component';
 
 
 
 const routes: Routes = [
   { path: "login", component: LoginAndRegisterComponent },
   { path: "callback", component: CallbackComponent },
+  { path: "profile-loading", component: ProfileLoaderComponent },
   {
     path: "", component: BaseNavComponent, children: [{
       path: "diary", children: [

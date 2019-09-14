@@ -1,6 +1,6 @@
+
 import { Rights } from './../model/user/rights/grant-rights';
 import { UserReference } from './../model/user/user-reference';
-import { ListedGrantAnswer } from './../../web-api/model/listedGrantAnswer';
 import { GrantManagementService } from './../../web-api/api/grantManagement.service';
 import { UserManagementService } from './../../web-api/api/userManagement.service';
 import { Injectable } from "@angular/core";
@@ -17,7 +17,7 @@ export class UserService {
     }
 
     public getMyDiaries() : Observable<Array<DiaryReference>>{
-        return this.userManService.getUserDiaries().pipe(map(x => 
+        return this.userManService.getUserDiaries("").pipe(map(x => 
             {
                 let references = [];
                 x.references.forEach(y => {
@@ -32,8 +32,8 @@ export class UserService {
     }
 
     public getMyGrants(): Observable<Array<Grant>>{
-        return this.grantService.getMyGrantsThatWereGivenToMe().pipe(
-            map( (x : ListedGrantAnswer) => {
+        return this.grantService.getGrantsForUser().pipe(
+            map( (x : any) => {
                 let grants = [];
                 x.grants.forEach(y => {
                     let grant = new Grant();

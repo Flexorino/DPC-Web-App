@@ -26,6 +26,7 @@ export class AuthService {
     return this.auth0Client$.pipe(
       concatMap((client: Auth0Client) => from(client.getTokenSilently(options)))
     );
+    
   }
 
   // Define observables for SDK methods that return promises by default

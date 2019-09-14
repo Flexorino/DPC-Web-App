@@ -68,6 +68,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { LoginAndRegisterComponent } from './components/login-and-register/login-and-register.component';
 import { CallbackComponent } from './components/callback/callback.component';
+import { ProfileLoaderComponent } from './components/profile-loader/profile-loader.component';
 
 @NgModule({
   declarations: [
@@ -113,7 +114,8 @@ import { CallbackComponent } from './components/callback/callback.component';
     FastKEInputComponent,
     AbsorptionPipe,
     LoginAndRegisterComponent,
-    CallbackComponent
+    CallbackComponent,
+    ProfileLoaderComponent
   ],
   imports: [
     ReactiveFormsModule,
