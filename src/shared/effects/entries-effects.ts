@@ -18,7 +18,7 @@ import { DiaryServiceActions } from '../services/diary.service.actions';
 
 @Injectable()
 export class DiaryEffects {
-    /*
+    
     loadEntries$ = createEffect(() => this.actions$.pipe(
         ofType(DiaryListActions.OPENEND),
         mergeMap(action => {
@@ -26,32 +26,7 @@ export class DiaryEffects {
         })
     )
     );
-    addEntry$ = createEffect(() => this.actions$.pipe(
-        ofType(AddEntryActions.CONFIRM),
-        mergeMap((action) => this.entryService.addEntry(this.currentDiaryService.currentDiaryId$.getValue(), action.entry)
-            .pipe(
-                map(
-                    (entry: Entry) => {
-                        action.resolve();
-                        return (EntryServiceActions.ENTRY_ADDED({ entry: entry }));
-                    }),
-                catchError((e) => EMPTY),
-            ))
-    )
-        , { dispatch: true });
 
-    // Sorgt dafür, dass alle notwendigen Daten wie z.B. Medikamente geladen werden
-    addEntryViewLoadedEffect = createEffect(() => this.actions$.pipe(
-        ofType(AddEntryActions.OPENED),
-        mergeMap((action) => this.diaryService.getDrugs(this.currentDiaryService.currentDiaryId$.getValue()).pipe(
-            tap(answer => action.resolve(null)),
-            flatMap(x => EMPTY),
-            catchError((e) => {
-                action.reject(null);
-                return EMPTY;
-            })
-        ))
-    ));
 
     diaryNavViewLoadedEffect$ = createEffect(() => this.actions$.pipe(
         ofType(DiaryNavActions.OPEN),
@@ -81,5 +56,5 @@ export class DiaryEffects {
                 takeUntil(from(req.cancelPromise))
             );
     }
-    */
+    
 }
