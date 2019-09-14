@@ -1,3 +1,4 @@
+import { AuthGuard } from './../shared/guards/auth.guard';
 
 
 
@@ -11,7 +12,7 @@ import { CanActivateDiaryViewGuard } from './../shared/guards/can-activate-diary
 import { BaseNavComponent } from './components/base-nav/base-nav.component';
 import { DiaryHeaderExtensionComponent } from './diary/diary-header-extension/diary-header-extension.component';
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, CanActivateChild } from '@angular/router';
 import { DiaryOverviewComponent } from './diary/components/diary-overview/diary-overview.component';
 import { DiaryNavComponent } from './diary/diary-nav/diary-nav.component';
 import { DiaryStatisticsComponent } from './diary/components/diary-statistics/diary-statistics.component';
@@ -32,7 +33,7 @@ const routes: Routes = [
   { path: "callback", component: CallbackComponent },
   { path: "profile-loading", component: ProfileLoaderComponent },
   {
-    path: "", component: BaseNavComponent, children: [{
+    path: "", component: BaseNavComponent, canActivateChild: [AuthGuard],children: [{
       path: "diary", children: [
         { path: "", component: DiaryHeaderExtensionComponent, outlet: "base-nav-extension" },
         {
