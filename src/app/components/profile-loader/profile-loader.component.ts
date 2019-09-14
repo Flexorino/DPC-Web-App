@@ -15,7 +15,7 @@ export class ProfileLoaderComponent implements OnInit {
   ngOnInit() {
     this.auth.getTokenSilently$().subscribe(x => {
       console.log("READY");
-      this.userAPI.tokenToUserMatcherPost({ iDtoken: x });
+      this.userAPI.tokenToUserMatcherPost({ iDtoken: x }).subscribe(x => console.log(x));
   });
 }
 
