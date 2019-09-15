@@ -15,6 +15,7 @@ export class AppComponent implements OnInit {
   constructor(private auth: AuthService, private loginService: LoginService, private router: Router){}
 
   ngOnInit(): void {
+    /*
     this.auth.localAuthSetup();
     this.loginService.loginInformation$.pipe(skip(1)).subscribe(x => 
       {
@@ -29,7 +30,7 @@ export class AppComponent implements OnInit {
       } else {
         this.router.navigateByUrl("login");
       }
-      */
+
     });
     this.auth.isAuthenticated$.subscribe(x => {
       if(x){
@@ -39,5 +40,6 @@ export class AppComponent implements OnInit {
         console.log("not auth");
       }
     })
+    */
   }
 }

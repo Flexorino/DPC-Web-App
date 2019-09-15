@@ -20,7 +20,7 @@ export class LoginAndRegisterComponent implements OnInit {
   }
 
   test() {
-    this.loginService.currentUserInformation = new LoginInformation("kekoroni", "kekus");
+    //this.loginService.currentUserInformation = new LoginInformation("kekoroni", "kekus");
   }
 
 }
