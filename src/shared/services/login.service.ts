@@ -2,7 +2,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Injectable } from "@angular/core";
 
 export class LoginInformation {
-    constructor(public userId: string) { }
+    constructor(public userId: string, public defaultDiary: string) { }
 }
 
 @Injectable({ providedIn: "root" })
