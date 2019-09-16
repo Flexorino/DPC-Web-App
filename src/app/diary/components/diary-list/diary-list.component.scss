@@ -53,9 +53,10 @@ mat-card {
 .timeDisplay {
     background: lightblue;
     padding: 0.2rem;
-    margin-right: 1rem;
+    margin-right: 0.4rem;
+    flex-shrink: 0;
 }
 
 .entry_attribute {
-    margin-left: 1rem;
+    margin-left: 0.4rem;
 }

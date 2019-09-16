@@ -8,7 +8,7 @@
             <mat-card-title> {{aggr.day |customTime:"date"}}
             </mat-card-title>
             <div class="entry" *ngFor="let entry of aggr.entries">
-                <div class="timeDisplay">{{entry.timeStamp |customTime:"dayTime" }} </div>
+                <div class="timeDisplay">{{entry.timeStamp |customTime:"dayTime" }} Uhr</div>
                 <div class="entry_attribute">
                     <app-entry-overview-visualizer [entry]="entry"></app-entry-overview-visualizer>
                 </div>
