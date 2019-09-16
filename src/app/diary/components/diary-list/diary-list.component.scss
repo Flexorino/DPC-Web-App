@@ -9,6 +9,7 @@
     border-bottom: 1px solid gray;
     position: relative;
     transition: all 1s;
+    height: 18px;
 }
 
 #graphShowButton {
@@ -17,13 +18,14 @@
     width: 2rem;
     height: 2rem;
     left: calc(50% - 1rem);
-    background: blanchedalmond;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 50%;
     border: 1px solid gray;
     z-index: 999;
+    background-color: white;
+    transform: rotate(180deg);
 
 }
 

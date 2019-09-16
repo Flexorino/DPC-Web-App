@@ -1,6 +1,6 @@
 /**
  * Diabetes Web-App
- * Die ist die vorl�ufige REST-artige Schnittstelle, f�r das Dia-PC Projekt. Diese Schnittstelle ist nicht REST, da sie nicht Hypermedialit�t benutzt - Das bedeutet, der Client muss selbt Anfragen konstruieren. 
+ * Die ist die vorläufige REST-artige Schnittstelle, für das Dia-PC Projekt. Diese Schnittstelle ist nicht REST, da sie nicht Hypermedialität benutzt - Das bedeutet, der Client muss selbt Anfragen konstruieren. 
  *
  * The version of the OpenAPI document: 1.0.0
  * 
@@ -13,15 +13,13 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent }                           from '@angular/common/http';
-import { CustomHttpUrlEncodingCodec }                        from '../encoder';
-
+         HttpResponse, HttpEvent, HttpParameterCodec }       from '@angular/common/http';
+import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { InlineObject1 } from '../model/inlineObject1';
-import { InlineResponse2003 } from '../model/inlineResponse2003';
-import { InlineResponse201 } from '../model/inlineResponse201';
-import { ListedDiaryReferences } from '../model/listedDiaryReferences';
+import { InlineResponse2004 } from '../model/inlineResponse2004';
+import { UserInfo } from '../model/userInfo';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -35,49 +33,42 @@ export class UserManagementService {
     protected basePath = 'https://dia-pc.flexus.click/v1';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
+    public encoder: HttpParameterCodec;
 
     constructor(protected httpClient: HttpClient, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
-
         if (configuration) {
             this.configuration = configuration;
-            this.configuration.basePath = configuration.basePath || basePath || this.basePath;
-
-        } else {
-            this.configuration.basePath = basePath || this.basePath;
         }
-    }
-
-    /**
-     * @param consumes string[] mime-types
-     * @return true: consumes contains 'multipart/form-data', false: otherwise
-     */
-    private canConsumeForm(consumes: string[]): boolean {
-        const form = 'multipart/form-data';
-        for (const consume of consumes) {
-            if (form === consume) {
-                return true;
+        if (typeof this.configuration.basePath !== 'string') {
+            if (typeof basePath !== 'string') {
+                basePath = this.basePath;
             }
+            this.configuration.basePath = basePath;
         }
-        return false;
+        this.encoder = this.configuration.encoder || new CustomHttpParameterCodec();
     }
 
 
+
     /**
-     * Bekomme Referenzen auf Tageb�cher, die durch den momentanen Nutzer verwaltet werden.
-     * 
+     * Erhalte Basisfnformationen und Präferenzen eines Nutzer anhand dessen Id-Tokens
+     * Erhalte Basisfnformationen und Präferenzen eines Nutzer anhand dessen Id-Tokens
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getUserDiaries(observe?: 'body', reportProgress?: boolean): Observable<ListedDiaryReferences>;
-    public getUserDiaries(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ListedDiaryReferences>>;
-    public getUserDiaries(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ListedDiaryReferences>>;
-    public getUserDiaries(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getSelf(observe?: 'body', reportProgress?: boolean): Observable<UserInfo>;
+    public getSelf(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserInfo>>;
+    public getSelf(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserInfo>>;
+    public getSelf(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
-        // authentication (basicAuth) required
-        if (this.configuration.username || this.configuration.password) {
-            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        // authentication (bearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
         }
         // to determine the Accept header
         const httpHeaderAccepts: string[] = [
@@ -88,11 +79,8 @@ export class UserManagementService {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
 
-        return this.httpClient.get<ListedDiaryReferences>(`${this.configuration.basePath}/user/diaries`,
+        return this.httpClient.get<UserInfo>(`${this.configuration.basePath}/self`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -103,21 +91,62 @@ export class UserManagementService {
     }
 
     /**
-     * Erhalte Basis Informationen �ber Nutzer.
-     * 
+     * Get the diaries of the current user (from which the current user is the owner)
+     * @param searchSnipptet TODO: spezifiziere den Filter genauer
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getUserDiaries(searchSnipptet: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public getUserDiaries(searchSnipptet: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public getUserDiaries(searchSnipptet: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public getUserDiaries(searchSnipptet: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (searchSnipptet === null || searchSnipptet === undefined) {
+            throw new Error('Required parameter searchSnipptet was null or undefined when calling getUserDiaries.');
+        }
+
+        let queryParameters = new HttpParams({encoder: this.encoder});
+        if (searchSnipptet !== undefined && searchSnipptet !== null) {
+            queryParameters = queryParameters.set('searchSnipptet', <any>searchSnipptet);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        const httpHeaderAccepts: string[] = [
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+
+        return this.httpClient.get<any>(`${this.configuration.basePath}/user/diaries`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Erhalte Basisfnformationen über Nutzer.
+     * Dieser Endpunkt soll genutzt werden, um Nutzer zu suchen, um diesen Freigaben zu geben. Dmentsprechend muss imeer ein Searchsnippet mitgelifert werden, um die Auswahl einzuschränken
      * @param searchSnipptet Es werden alle User mit den Namen ausgegeben, die diese Snippet enthalten.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getUsers(searchSnipptet: string, observe?: 'body', reportProgress?: boolean): Observable<InlineResponse2003>;
-    public getUsers(searchSnipptet: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<InlineResponse2003>>;
-    public getUsers(searchSnipptet: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<InlineResponse2003>>;
+    public getUsers(searchSnipptet: string, observe?: 'body', reportProgress?: boolean): Observable<InlineResponse2004>;
+    public getUsers(searchSnipptet: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<InlineResponse2004>>;
+    public getUsers(searchSnipptet: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<InlineResponse2004>>;
     public getUsers(searchSnipptet: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (searchSnipptet === null || searchSnipptet === undefined) {
             throw new Error('Required parameter searchSnipptet was null or undefined when calling getUsers.');
         }
 
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        let queryParameters = new HttpParams({encoder: this.encoder});
         if (searchSnipptet !== undefined && searchSnipptet !== null) {
             queryParameters = queryParameters.set('searchSnipptet', <any>searchSnipptet);
         }
@@ -133,11 +162,8 @@ export class UserManagementService {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
 
-        return this.httpClient.get<InlineResponse2003>(`${this.configuration.basePath}/users`,
+        return this.httpClient.get<InlineResponse2004>(`${this.configuration.basePath}/users`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -150,14 +176,14 @@ export class UserManagementService {
 
     /**
      * Registirere einen neuen Nutzer
-     * Der Nutzer wird erstellt. Daraufhin, kann der Nutzer sich mit den angegebenen Nutzernamen und Passwort registrieren.
+     * Der Nutzer wird erstellt. Daraufhin, kann der Nutzer sich mit den angegebenen Nutzernamen und Passwort registrieren. &lt;br&gt; Bei der Registrierung wird ein ID-Token sowie der gewünschte Nutzername übergeben. 
      * @param inlineObject1 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public registerUser(inlineObject1?: InlineObject1, observe?: 'body', reportProgress?: boolean): Observable<InlineResponse201>;
-    public registerUser(inlineObject1?: InlineObject1, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<InlineResponse201>>;
-    public registerUser(inlineObject1?: InlineObject1, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<InlineResponse201>>;
+    public registerUser(inlineObject1?: InlineObject1, observe?: 'body', reportProgress?: boolean): Observable<UserInfo>;
+    public registerUser(inlineObject1?: InlineObject1, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserInfo>>;
+    public registerUser(inlineObject1?: InlineObject1, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserInfo>>;
     public registerUser(inlineObject1?: InlineObject1, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -171,6 +197,7 @@ export class UserManagementService {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
+
         // to determine the Content-Type header
         const consumes: string[] = [
             'application/json'
@@ -180,7 +207,7 @@ export class UserManagementService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.post<InlineResponse201>(`${this.configuration.basePath}/users`,
+        return this.httpClient.post<UserInfo>(`${this.configuration.basePath}/users`,
             inlineObject1,
             {
                 withCredentials: this.configuration.withCredentials,

@@ -9,10 +9,17 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { InlineResponse200Tags } from './inlineResponse200Tags';
 
 
-export interface InlineResponse200 { 
-    tags: Array<InlineResponse200Tags>;
+export interface FrameValueAttribute { 
+    id?: string;
+    lowerBSLimit?: number;
+    higherBSLimit?: number;
+    hyperglycemiaLimit?: number;
+    hypoglycemiaLimit?: number;
+    /**
+     * Es liegt am Client herauszufinden, ob der Nutzer einen statischen Wert hat, wenn z.B. alle Werte glei sind
+     */
+    dailyBSGoalValues?: Array<number>;
 }
 

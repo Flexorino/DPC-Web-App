@@ -9,10 +9,18 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { InlineResponse200Tags } from './inlineResponse200Tags';
+import { UserInfoPreferences } from './userInfoPreferences';
 
 
-export interface InlineResponse200 { 
-    tags: Array<InlineResponse200Tags>;
+export interface UserInfo { 
+    /**
+     * name of the user
+     */
+    name?: string;
+    /**
+     * Die Nutzer-Id
+     */
+    id?: string;
+    preferences?: UserInfoPreferences;
 }
 

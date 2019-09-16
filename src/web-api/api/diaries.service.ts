@@ -1,6 +1,6 @@
 /**
  * Diabetes Web-App
- * Die ist die vorl�ufige REST-artige Schnittstelle, f�r das Dia-PC Projekt. Diese Schnittstelle ist nicht REST, da sie nicht Hypermedialit�t benutzt - Das bedeutet, der Client muss selbt Anfragen konstruieren. 
+ * Die ist die vorläufige REST-artige Schnittstelle, für das Dia-PC Projekt. Diese Schnittstelle ist nicht REST, da sie nicht Hypermedialität benutzt - Das bedeutet, der Client muss selbt Anfragen konstruieren. 
  *
  * The version of the OpenAPI document: 1.0.0
  * 
@@ -13,15 +13,13 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent }                           from '@angular/common/http';
-import { CustomHttpUrlEncodingCodec }                        from '../encoder';
-
+         HttpResponse, HttpEvent, HttpParameterCodec }       from '@angular/common/http';
+import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { Diary } from '../model/diary';
 import { FullDiary } from '../model/fullDiary';
 import { InlineObject } from '../model/inlineObject';
-import { InlineResponse200 } from '../model/inlineResponse200';
 import { InlineResponse2001 } from '../model/inlineResponse2001';
 import { InlineResponse200Tags } from '../model/inlineResponse200Tags';
 
@@ -37,37 +35,27 @@ export class DiariesService {
     protected basePath = 'https://dia-pc.flexus.click/v1';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
+    public encoder: HttpParameterCodec;
 
     constructor(protected httpClient: HttpClient, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
-
         if (configuration) {
             this.configuration = configuration;
-            this.configuration.basePath = configuration.basePath || basePath || this.basePath;
-
-        } else {
-            this.configuration.basePath = basePath || this.basePath;
         }
-    }
-
-    /**
-     * @param consumes string[] mime-types
-     * @return true: consumes contains 'multipart/form-data', false: otherwise
-     */
-    private canConsumeForm(consumes: string[]): boolean {
-        const form = 'multipart/form-data';
-        for (const consume of consumes) {
-            if (form === consume) {
-                return true;
+        if (typeof this.configuration.basePath !== 'string') {
+            if (typeof basePath !== 'string') {
+                basePath = this.basePath;
             }
+            this.configuration.basePath = basePath;
         }
-        return false;
+        this.encoder = this.configuration.encoder || new CustomHttpParameterCodec();
     }
+
 
 
     /**
      * Erzeuge ein neues Tagebuch.
-     * Der Owner wird automatisch durch die Authentifizierung ermittelt. Generell sollten Name und Patient bei Repr�sentation angegeben werden, k�nnen aber auch leer (\&quot;\&quot;) bleiben.
-     * @param diary Eine Tagebuch Repr�sentation
+     * Der Owner wird automatisch durch die Authentifizierung ermittelt. Generell sollten Name und Patient bei Repräsentation angegeben werden, können aber auch leer (\&quot;\&quot;) bleiben.
+     * @param diary Eine Tagebuch Repräsentation
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -91,6 +79,7 @@ export class DiariesService {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
+
         // to determine the Content-Type header
         const consumes: string[] = [
             'application/json'
@@ -113,7 +102,7 @@ export class DiariesService {
 
     /**
      * Erstelle einen neuen Kontext.
-     * Es muss nur der Zeitstempel angegeben werden, ab welchem der Kontext gelten soll. Weiterhin sollten dann nur Attribute engegeben werden m�ssen, die sich ge�ndert haben. Alle weiteren Werte bleiben unver�ndert und werden somit (sofern vorhanden) aus dem alten Kontext �bernommen. Das h�ngt u.a. damit zusammen wie die Serverseite diese �nderung bearbeitet. Der Server oder DB wird vermutlich nur bei jedem einzelenn Attribut z.B. KE-Faktoren speichern wann es sich ge�ndert hat und nicht ein komplett neuen Kontext speichern, in welchem alle Werte die gleichgeblieben sind wiederholt werden. Auf der Client-Seite w�re so eine Darstellung aber vermutlich nicht angebracht, da ein Nutzer oder Client immer nur diskret sehen m�chte wann sich �berhaupt etwas ge�ndert hat. Eine Auschl�sselung auf verschiedene Attribute w�re vermutlich zu viel.
+     * Es muss nur der Zeitstempel angegeben werden, ab welchem der Kontext gelten soll. Weiterhin sollten dann nur Attribute engegeben werden müssen, die sich geändert haben. Alle weiteren Werte bleiben unverändert und werden somit (sofern vorhanden) aus dem alten Kontext übernommen. Das hängt u.a. damit zusammen wie die Serverseite diese Änderung bearbeitet. Der Server oder DB wird vermutlich nur bei jedem einzelenn Attribut z.B. KE-Faktoren speichern wann es sich geändert hat und nicht ein komplett neuen Kontext speichern, in welchem alle Werte die gleichgeblieben sind wiederholt werden. Auf der Client-Seite wäre so eine Darstellung aber vermutlich nicht angebracht, da ein Nutzer oder Client immer nur diskret sehen möchte wann sich überhaupt etwas geändert hat. Eine Auschlüsselung auf verschiedene Attribute wäre vermutlich zu viel.
      * @param diaryId Die Id des Tagebuches.
      * @param insulinId ID des Insulins
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -140,9 +129,6 @@ export class DiariesService {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
 
         return this.httpClient.post<any>(`${this.configuration.basePath}/diaries/${encodeURIComponent(String(diaryId))}/contexts`,
             null,
@@ -185,9 +171,6 @@ export class DiariesService {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
 
         return this.httpClient.post<InlineResponse200Tags>(`${this.configuration.basePath}/diaries/${encodeURIComponent(String(diaryId))}/drugs`,
             null,
@@ -226,9 +209,6 @@ export class DiariesService {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
 
         return this.httpClient.post<InlineResponse200Tags>(`${this.configuration.basePath}/diaries/${encodeURIComponent(String(diaryId))}/insulins`,
             null,
@@ -242,53 +222,8 @@ export class DiariesService {
     }
 
     /**
-     * Erstelle ein neues Tag f�r ein Tagebuch.
-     * ...
-     * @param diaryId Die Id des Tagebuches.
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public addDiaryTag(diaryId: string, observe?: 'body', reportProgress?: boolean): Observable<InlineResponse200Tags>;
-    public addDiaryTag(diaryId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<InlineResponse200Tags>>;
-    public addDiaryTag(diaryId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<InlineResponse200Tags>>;
-    public addDiaryTag(diaryId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-        if (diaryId === null || diaryId === undefined) {
-            throw new Error('Required parameter diaryId was null or undefined when calling addDiaryTag.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // authentication (basicAuth) required
-        if (this.configuration.username || this.configuration.password) {
-            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
-        }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected !== undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.post<InlineResponse200Tags>(`${this.configuration.basePath}/diaries/${encodeURIComponent(String(diaryId))}/tags`,
-            null,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Ein Tagebuch l�schen.
-     * Nur der Besitzer eines Tagebuches kann auch das Tagebuch l�schen. Dieses Recht wird implizit aus der Authentifizierung abgeleitet und kann nicht delegiert werden.
+     * Ein Tagebuch löschen.
+     * Nur der Besitzer eines Tagebuches kann auch das Tagebuch löschen. Dieses Recht wird implizit aus der Authentifizierung abgeleitet und kann nicht delegiert werden.
      * @param diaryId Die Id des Tagebuches.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -315,9 +250,6 @@ export class DiariesService {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
 
         return this.httpClient.delete<any>(`${this.configuration.basePath}/diaries/${encodeURIComponent(String(diaryId))}`,
             {
@@ -330,8 +262,8 @@ export class DiariesService {
     }
 
     /**
-     * L�sche ein Medikament
-     * �berp�fen, ob �berhaupt machbar wegen L�sch-Problematik.
+     * Lösche ein Medikament
+     * Überpüfen, ob überhaupt machbar wegen Lösch-Problematik.
      * @param diaryId Die Id des Tagebuches.
      * @param drugId ID des Medikaments
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -358,9 +290,6 @@ export class DiariesService {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
 
         return this.httpClient.delete<any>(`${this.configuration.basePath}/diaries/${encodeURIComponent(String(diaryId))}/drugs/${encodeURIComponent(String(drugId))}`,
             {
@@ -373,8 +302,8 @@ export class DiariesService {
     }
 
     /**
-     * L�sche ein Insulin
-     * �berp�fen, ob �berhaupt machbar wegen L�sch-Problematik.
+     * Lösche ein Insulin
+     * Überpüfen, ob überhaupt machbar wegen Lösch-Problematik.
      * @param diaryId Die Id des Tagebuches.
      * @param insulinId ID des Insulins
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -401,9 +330,6 @@ export class DiariesService {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
 
         return this.httpClient.delete<any>(`${this.configuration.basePath}/diaries/${encodeURIComponent(String(diaryId))}/insulins/${encodeURIComponent(String(insulinId))}`,
             {
@@ -416,65 +342,18 @@ export class DiariesService {
     }
 
     /**
-     * L�sche ein Tag
-     * �berp�fen, ob �berhaupt machbar wegen L�sch-Problematik.
-     * @param diaryId Die Id des Tagebuches.
-     * @param tagID ID des Tags.
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public deleteDiaryTag(diaryId: string, tagID: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public deleteDiaryTag(diaryId: string, tagID: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public deleteDiaryTag(diaryId: string, tagID: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public deleteDiaryTag(diaryId: string, tagID: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-        if (diaryId === null || diaryId === undefined) {
-            throw new Error('Required parameter diaryId was null or undefined when calling deleteDiaryTag.');
-        }
-        if (tagID === null || tagID === undefined) {
-            throw new Error('Required parameter tagID was null or undefined when calling deleteDiaryTag.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // authentication (basicAuth) required
-        if (this.configuration.username || this.configuration.password) {
-            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
-        }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected !== undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.delete<any>(`${this.configuration.basePath}/diaries/${encodeURIComponent(String(diaryId))}/tags/${encodeURIComponent(String(tagID))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Bekomme alle statischen Informationen �ber ein Tagebuch.
-     * Zu den statischen Informationen z�hlen Name des Tagebuchs, Patient, Medikamente und Insuline. Diese Informationen werden nicht zeitlich versioniert.
+     * Bekomme alle statischen Informationen über ein Tagebuch.
+     * Zu den statischen Informationen zählen Name des Tagebuchs, Patient, Medikamente und Insuline. Diese Informationen werden nicht zeitlich versioniert.
      * @param diaryId Die Id des Tagebuches.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getDiary(diaryId: string, observe?: 'body', reportProgress?: boolean): Observable<FullDiary>;
-    public getDiary(diaryId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<FullDiary>>;
-    public getDiary(diaryId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<FullDiary>>;
-    public getDiary(diaryId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getDiary2(diaryId: string, observe?: 'body', reportProgress?: boolean): Observable<FullDiary>;
+    public getDiary2(diaryId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<FullDiary>>;
+    public getDiary2(diaryId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<FullDiary>>;
+    public getDiary2(diaryId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (diaryId === null || diaryId === undefined) {
-            throw new Error('Required parameter diaryId was null or undefined when calling getDiary.');
+            throw new Error('Required parameter diaryId was null or undefined when calling getDiary2.');
         }
 
         let headers = this.defaultHeaders;
@@ -492,9 +371,6 @@ export class DiariesService {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
 
         return this.httpClient.get<FullDiary>(`${this.configuration.basePath}/diaries/${encodeURIComponent(String(diaryId))}`,
             {
@@ -507,51 +383,8 @@ export class DiariesService {
     }
 
     /**
-     * Erhalte eine �bersicht aller Kontexte.
-     * Schaue hier welche Informationen in der Liste angzeigt werden sollen..
-     * @param diaryId Die Id des Tagebuches.
-     * @param insulinId ID des Insulins
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getDiaryContexts(diaryId: string, insulinId: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getDiaryContexts(diaryId: string, insulinId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getDiaryContexts(diaryId: string, insulinId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getDiaryContexts(diaryId: string, insulinId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-        if (diaryId === null || diaryId === undefined) {
-            throw new Error('Required parameter diaryId was null or undefined when calling getDiaryContexts.');
-        }
-        if (insulinId === null || insulinId === undefined) {
-            throw new Error('Required parameter insulinId was null or undefined when calling getDiaryContexts.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected !== undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.get<any>(`${this.configuration.basePath}/diaries/${encodeURIComponent(String(diaryId))}/contexts`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
      * Erhalte eine Auflistung der verwendeten Medikamente eines Tagebuches.
-     * Dieser Punkt hat auch erst einmal geringer Priorit�t. Es muss geguckt werden, ob es einen eigenen get End-Point f�r ein Medikament geben muss. Genauso wie bei Tags und Insulinen ergibt sich hier eine L�sch-Problematik.
+     * Dieser Punkt hat auch erst einmal geringer Priorität. Es muss geguckt werden, ob es einen eigenen get End-Point für ein Medikament geben muss. Genauso wie bei Tags und Insulinen ergibt sich hier eine Lösch-Problematik.
      * @param diaryId Die Id des Tagebuches.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -579,9 +412,6 @@ export class DiariesService {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
 
         return this.httpClient.get<InlineResponse2001>(`${this.configuration.basePath}/diaries/${encodeURIComponent(String(diaryId))}/drugs`,
             {
@@ -595,7 +425,7 @@ export class DiariesService {
 
     /**
      * Erhalte eine Auflistung der verwendeten Insuline eines Tagebuches
-     * Tags sollen daf�r benutzt werden, dass der Nutzer selbst Zuordnungen machen kann. Z.B. k�nnte ein Nutzer ein Tag \&#39;Vor dem Essen\&#39; machen. Da die Informationen zu einem Tag kurz sind, gibt es keine eigenen Get Tag \&#39;ID\&#39; Endpoint sondern dieser wird nur zum Aktualisieren und l�schen eines Tags benutzt.
+     * Tags sollen dafür benutzt werden, dass der Nutzer selbst Zuordnungen machen kann. Z.B. könnte ein Nutzer ein Tag \&#39;Vor dem Essen\&#39; machen. Da die Informationen zu einem Tag kurz sind, gibt es keine eigenen Get Tag \&#39;ID\&#39; Endpoint sondern dieser wird nur zum Aktualisieren und löschen eines Tags benutzt.
      * @param diaryId Die Id des Tagebuches.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -618,9 +448,6 @@ export class DiariesService {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
 
         return this.httpClient.get<any>(`${this.configuration.basePath}/diaries/${encodeURIComponent(String(diaryId))}/insulins`,
             {
@@ -633,52 +460,8 @@ export class DiariesService {
     }
 
     /**
-     * Erhalte eine Auflistung der verwendeten Tags eines Tagebuches
-     * Tags sollen daf�r benutzt werden, dass der Nutzer selbst Zuordnungen machen kann. Z.B. k�nnte ein Nutzer ein Tag \&#39;Vor dem Essen\&#39; machen. Da die Informationen zu einem Tag kurz sind, gibt es keine eigenen Get Tag \&#39;ID\&#39; Endpoint sondern dieser wird nur zum Aktualisieren und l�schen eines Tags benutzt. &lt;br&gt; Je nachdem wie L�sch-Problematik gel�st wird, w�re evtl. hier eine Filterung nach aktiven und nicht aktiven Tags durch ein Query-Parameter sinnvoll. &lt;br&gt; Die Umsetzung von Tags sollte jedoch erst einmal eine untergeordnete Rolle spielen.
-     * @param diaryId Die Id des Tagebuches.
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getDiaryTags(diaryId: string, observe?: 'body', reportProgress?: boolean): Observable<InlineResponse200>;
-    public getDiaryTags(diaryId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<InlineResponse200>>;
-    public getDiaryTags(diaryId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<InlineResponse200>>;
-    public getDiaryTags(diaryId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-        if (diaryId === null || diaryId === undefined) {
-            throw new Error('Required parameter diaryId was null or undefined when calling getDiaryTags.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // authentication (basicAuth) required
-        if (this.configuration.username || this.configuration.password) {
-            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
-        }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected !== undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.get<InlineResponse200>(`${this.configuration.basePath}/diaries/${encodeURIComponent(String(diaryId))}/tags`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
      * Die statischen Tagebuch infomrationen aktualisieren.
-     * An dieser Stelle k�nnen die Basis Informationen eines Tagebuches aktualisiert werden. Um Medikamente, Insuline oder Tags zu aktualisieren, m�ssen die einzelnen Sub-Ressourcen verwendet werden. An dieser Stelle ist zu sehen, dass es nicht vorgesehen ist, den Besitzer eines Tagebuches zu �ndern.
+     * An dieser Stelle können die Basis Informationen eines Tagebuches aktualisiert werden. Um Medikamente, Insuline oder Tags zu aktualisieren, müssen die einzelnen Sub-Ressourcen verwendet werden. An dieser Stelle ist zu sehen, dass es nicht vorgesehen ist, den Besitzer eines Tagebuches zu ändern.
      * @param diaryId Die Id des Tagebuches.
      * @param inlineObject 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -707,6 +490,7 @@ export class DiariesService {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
+
         // to determine the Content-Type header
         const consumes: string[] = [
             'application/json'
@@ -729,7 +513,7 @@ export class DiariesService {
 
     /**
      * Aktualisiere die Informationen eines Medikaments
-     * Diese Funktion muss erst einmal nicht umgesetzt werden. Es k�nnte sowieso nur der Name ge�ndert werden.
+     * Diese Funktion muss erst einmal nicht umgesetzt werden. Es könnte sowieso nur der Name geändert werden.
      * @param diaryId Die Id des Tagebuches.
      * @param drugId ID des Medikaments
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -756,9 +540,6 @@ export class DiariesService {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
 
         return this.httpClient.patch<any>(`${this.configuration.basePath}/diaries/${encodeURIComponent(String(diaryId))}/drugs/${encodeURIComponent(String(drugId))}`,
             null,
@@ -773,7 +554,7 @@ export class DiariesService {
 
     /**
      * Aktualisiere die Informationen eines Medikaments
-     * Diese Funktion muss erst einmal nicht umgesetzt werden. Es k�nnte sowieso nur der Name ge�ndert werden.
+     * Diese Funktion muss erst einmal nicht umgesetzt werden. Es könnte sowieso nur der Name geändert werden.
      * @param diaryId Die Id des Tagebuches.
      * @param insulinId ID des Insulins
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -800,60 +581,8 @@ export class DiariesService {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
 
         return this.httpClient.patch<any>(`${this.configuration.basePath}/diaries/${encodeURIComponent(String(diaryId))}/insulins/${encodeURIComponent(String(insulinId))}`,
-            null,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Aktualisiere die Informationen eines Tags eines Tagebuches.
-     * Diese Funktion muss erst einmal nicht umgesetzt werden. Es k�nnte sowieso nur der Name ge�ndert werden. Die Idee dahinter ist, dass Tags auch sp�ter als komplexere Objekte mit z.B. Bild oder Icon bestehen k�nnten, was aber in der Arbeit nicht umgesetzt werden.
-     * @param diaryId Die Id des Tagebuches.
-     * @param tagID ID des Tags.
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public updateDiaryTag(diaryId: string, tagID: string, observe?: 'body', reportProgress?: boolean): Observable<InlineResponse200Tags>;
-    public updateDiaryTag(diaryId: string, tagID: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<InlineResponse200Tags>>;
-    public updateDiaryTag(diaryId: string, tagID: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<InlineResponse200Tags>>;
-    public updateDiaryTag(diaryId: string, tagID: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-        if (diaryId === null || diaryId === undefined) {
-            throw new Error('Required parameter diaryId was null or undefined when calling updateDiaryTag.');
-        }
-        if (tagID === null || tagID === undefined) {
-            throw new Error('Required parameter tagID was null or undefined when calling updateDiaryTag.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // authentication (basicAuth) required
-        if (this.configuration.username || this.configuration.password) {
-            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
-        }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected !== undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.patch<InlineResponse200Tags>(`${this.configuration.basePath}/diaries/${encodeURIComponent(String(diaryId))}/tags/${encodeURIComponent(String(tagID))}`,
             null,
             {
                 withCredentials: this.configuration.withCredentials,

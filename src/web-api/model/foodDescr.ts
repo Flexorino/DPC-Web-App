@@ -9,10 +9,21 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { InlineResponse200Tags } from './inlineResponse200Tags';
 
 
-export interface InlineResponse200 { 
-    tags: Array<InlineResponse200Tags>;
+export interface FoodDescr { 
+    id?: string;
+    resorption?: FoodDescr.ResorptionEnum;
+    carbsFactor?: number;
+    comment?: string;
 }
+export namespace FoodDescr {
+    export type ResorptionEnum = 'fast' | 'medium' | 'slow';
+    export const ResorptionEnum = {
+        Fast: 'fast' as ResorptionEnum,
+        Medium: 'medium' as ResorptionEnum,
+        Slow: 'slow' as ResorptionEnum
+    };
+}
+
 

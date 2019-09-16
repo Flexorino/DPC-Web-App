@@ -23,10 +23,9 @@ export class DiaryService {
 
     public getDiaryInformation(diaryId: string): Observable<Diary> {
 
-        return this.networkService.getDiary(diaryId).pipe(map(
+        return this.networkService.getDiary2(diaryId).pipe(map(
             x => {
                 const diary = new Diary([]);
-                diary.name = x.name;
                 return diary;
             }
         ));

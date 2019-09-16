@@ -9,10 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { InlineResponse200Tags } from './inlineResponse200Tags';
+import { InlineResponse2004Users } from './inlineResponse2004Users';
 
 
-export interface InlineResponse200 { 
-    tags: Array<InlineResponse200Tags>;
+export interface InlineResponse2004 { 
+    users?: Array<InlineResponse2004Users>;
 }
 

@@ -9,10 +9,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { InlineResponse200Tags } from './inlineResponse200Tags';
 
 
-export interface InlineResponse200 { 
-    tags: Array<InlineResponse200Tags>;
+export interface KEFactors { 
+    id?: string;
+    /**
+     * Es liegt am Client herauszufinden, ob der Nutzer einen statischen Wert hat, wenn z.B. alle Werte glei sind
+     */
+    dailyKEFactors?: Array<number>;
 }
 

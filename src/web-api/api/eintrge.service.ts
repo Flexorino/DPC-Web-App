@@ -1,6 +1,6 @@
 /**
  * Diabetes Web-App
- * Die ist die vorl�ufige REST-artige Schnittstelle, f�r das Dia-PC Projekt. Diese Schnittstelle ist nicht REST, da sie nicht Hypermedialit�t benutzt - Das bedeutet, der Client muss selbt Anfragen konstruieren. 
+ * Die ist die vorläufige REST-artige Schnittstelle, für das Dia-PC Projekt. Diese Schnittstelle ist nicht REST, da sie nicht Hypermedialität benutzt - Das bedeutet, der Client muss selbt Anfragen konstruieren. 
  *
  * The version of the OpenAPI document: 1.0.0
  * 
@@ -13,12 +13,10 @@
 
 import { Inject, Injectable, Optional }                      from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams,
-         HttpResponse, HttpEvent }                           from '@angular/common/http';
-import { CustomHttpUrlEncodingCodec }                        from '../encoder';
-
+         HttpResponse, HttpEvent, HttpParameterCodec }       from '@angular/common/http';
+import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
-import { EntryRepr } from '../model/entryRepr';
 import { EntryReprResponse } from '../model/entryReprResponse';
 import { InlineResponse2002 } from '../model/inlineResponse2002';
 
@@ -34,45 +32,35 @@ export class EintrgeService {
     protected basePath = 'https://dia-pc.flexus.click/v1';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
+    public encoder: HttpParameterCodec;
 
     constructor(protected httpClient: HttpClient, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
-
         if (configuration) {
             this.configuration = configuration;
-            this.configuration.basePath = configuration.basePath || basePath || this.basePath;
-
-        } else {
-            this.configuration.basePath = basePath || this.basePath;
         }
-    }
-
-    /**
-     * @param consumes string[] mime-types
-     * @return true: consumes contains 'multipart/form-data', false: otherwise
-     */
-    private canConsumeForm(consumes: string[]): boolean {
-        const form = 'multipart/form-data';
-        for (const consume of consumes) {
-            if (form === consume) {
-                return true;
+        if (typeof this.configuration.basePath !== 'string') {
+            if (typeof basePath !== 'string') {
+                basePath = this.basePath;
             }
+            this.configuration.basePath = basePath;
         }
-        return false;
+        this.encoder = this.configuration.encoder || new CustomHttpParameterCodec();
     }
+
 
 
     /**
      * Erstelle einen neuen Eintrag in dem Tagebuch.
-     * Generell muss nur ein Zeitstempel angegeben werden und die anderen Attribute sind optional. Das bedeutet, dass z.B. bei einer BZ-Messung nur der Zeitstempel und Blutzcker-Wert �bergeben werden muss. Der Aufrufer dieser Methode muss selbst darauf achten, dass die richtigen Medikamenten und Insulin-IDs �bertragen werden. Falsche IDs f�hren zu einem Fehler.
-     * @param diaryId Die ID des Tagebuches, bei welchem ein Eintrag hinzugef�gt werden soll.
-     * @param entryRepr Eine Repr�sentation des zu erstellenden Tagebuch-Eintrages
+     * Generell muss nur ein Zeitstempel angegeben werden und die anderen Attribute sind optional. Das bedeutet, dass z.B. bei einer BZ-Messung nur der Zeitstempel und Blutzcker-Wert übergeben werden muss. Der Aufrufer dieser Methode muss selbst darauf achten, dass die richtigen Medikamenten und Insulin-IDs übertragen werden. Falsche IDs führen zu einem Fehler.
+     * @param diaryId Die ID des Tagebuches, bei welchem ein Eintrag hinzugefügt werden soll.
+     * @param entryReprResponse Eine Repräsentation des zu erstellenden Tagebuch-Eintrages
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public addDiaryEntry(diaryId: string, entryRepr?: EntryRepr, observe?: 'body', reportProgress?: boolean): Observable<EntryReprResponse>;
-    public addDiaryEntry(diaryId: string, entryRepr?: EntryRepr, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EntryReprResponse>>;
-    public addDiaryEntry(diaryId: string, entryRepr?: EntryRepr, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EntryReprResponse>>;
-    public addDiaryEntry(diaryId: string, entryRepr?: EntryRepr, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public addDiaryEntry(diaryId: string, entryReprResponse?: EntryReprResponse, observe?: 'body', reportProgress?: boolean): Observable<EntryReprResponse>;
+    public addDiaryEntry(diaryId: string, entryReprResponse?: EntryReprResponse, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EntryReprResponse>>;
+    public addDiaryEntry(diaryId: string, entryReprResponse?: EntryReprResponse, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EntryReprResponse>>;
+    public addDiaryEntry(diaryId: string, entryReprResponse?: EntryReprResponse, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (diaryId === null || diaryId === undefined) {
             throw new Error('Required parameter diaryId was null or undefined when calling addDiaryEntry.');
         }
@@ -88,6 +76,7 @@ export class EintrgeService {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
+
         // to determine the Content-Type header
         const consumes: string[] = [
             'application/json'
@@ -98,7 +87,7 @@ export class EintrgeService {
         }
 
         return this.httpClient.post<EntryReprResponse>(`${this.configuration.basePath}/diaries/${encodeURIComponent(String(diaryId))}/entries`,
-            entryRepr,
+            entryReprResponse,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -109,8 +98,8 @@ export class EintrgeService {
     }
 
     /**
-     * L�sche einen Eintrag
-     * Hier muss nochmal �berlegt werden, ob und wie Eintr�ge gel�scht werden. Ein anderer Ansatz w�re, dass Eintr�ge ein active Flag haben, dass bei einem Patch gesetzt wird - Das bei einem Delete auszuf�hren w�re vermutlich laut Rest falsch.
+     * Lösche einen Eintrag
+     * Hier muss nochmal überlegt werden, ob und wie Einträge gelöscht werden. Ein anderer Ansatz wäre, dass Einträge ein active Flag haben, dass bei einem Patch gesetzt wird - Das bei einem Delete auszuführen wäre vermutlich laut Rest falsch.
      * @param diaryId Die Id des Tagebuches.
      * @param entryId ID des Eintrages
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -137,9 +126,6 @@ export class EintrgeService {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
 
         return this.httpClient.delete<any>(`${this.configuration.basePath}/diaries/${encodeURIComponent(String(diaryId))}/entries/${encodeURIComponent(String(entryId))}`,
             {
@@ -152,14 +138,14 @@ export class EintrgeService {
     }
 
     /**
-     * Erhalte alle Entries. Optional sollten Such-Kriterien oder Filter angegeben werden k�nnen.
-     * &lt;ul&gt; &lt;li&gt; Allgemeine (einache) Suchparameter, werden in der URL-Quey angegeben. &lt;/li&gt; &lt;li&gt; Komplexe Such-Abfragen werden im Body angegeben. Hier m�sste man dann gucken, wie das umsetzbar ist (vorallem mit Caches) da Bodies in Get-Anfragen un�blich sind. &lt;ul&gt; &lt;li&gt; Es muss auch �berlegt werden, ob eine Filterung nach bestimmten Kriterien �berhaupt Serverseitig passieren soll, oder clientseitig. &lt;/li&gt; &lt;li&gt; Nat�rlich unterst�tzt Swagger keine Bodies in Get anfragen. -&gt; Entweder selbst h�ndisch im Code einf�gen, oder in Post und Get aufteilen (Post Filter-Daten, Kriege Such ID zur�ck, mache Get auf Such-Ressource mit ID. ISt f�r Cachen aber auch nicht gut). &lt;/li&gt; &lt;/ul&gt; &lt;/li&gt; &lt;li&gt; Es muss noch �berpr�ft werden, ob die Entries in dieser Liste nur ein Subset der Informationen enthalten sollen und alle Informationen eines Eintrages erst mit dem Get-Request zu dem spezifischen Entry einsehbar sind. &lt;/li&gt; &lt;/ul&gt;
+     * Erhalte alle Entries. Optional sollten Such-Kriterien oder Filter angegeben werden können.
+     * &lt;ul&gt; &lt;li&gt; Allgemeine (einache) Suchparameter, werden in der URL-Quey angegeben. &lt;/li&gt; &lt;li&gt; Komplexe Such-Abfragen werden im Body angegeben. Hier müsste man dann gucken, wie das umsetzbar ist (vorallem mit Caches) da Bodies in Get-Anfragen unüblich sind. &lt;ul&gt; &lt;li&gt; Es muss auch überlegt werden, ob eine Filterung nach bestimmten Kriterien überhaupt Serverseitig passieren soll, oder clientseitig. &lt;/li&gt; &lt;li&gt; Natürlich unterstützt Swagger keine Bodies in Get anfragen. -&gt; Entweder selbst händisch im Code einfügen, oder in Post und Get aufteilen (Post Filter-Daten, Kriege Such ID zurück, mache Get auf Such-Ressource mit ID. ISt für Cachen aber auch nicht gut). &lt;/li&gt; &lt;/ul&gt; &lt;/li&gt; &lt;li&gt; Es muss noch überprüft werden, ob die Entries in dieser Liste nur ein Subset der Informationen enthalten sollen und alle Informationen eines Eintrages erst mit dem Get-Request zu dem spezifischen Entry einsehbar sind. &lt;/li&gt; &lt;/ul&gt;
      * @param diaryId Die Id des Tagebuches.
-     * @param from Zeit in Unix-Zeit (Einschlie�lich)
-     * @param to Zeit in Unix-Zeit (Einschlie�lich)
-     * @param limit Die Anzahl der maximalen Eintr�ge, die zur�ckgegeben werden sollen. Ist nur mit order g�ltig.
-     * @param order Ob die Eintr�ge beginnend von dem �ltesten oder neusten Eintrag sortiert zur�ckgegeben werden sollen.
-     * @param showDeactivatedEntries Je nachdem, wie das L�schen umgesetzt wird, w�re dieses Parameter evtl. sinnvoll.
+     * @param from Zeit in Unix-Zeit (Einschließlich)
+     * @param to Zeit in Unix-Zeit (Einschließlich)
+     * @param limit Die Anzahl der maximalen Einträge, die zurückgegeben werden sollen. Ist nur mit order gültig.
+     * @param order Ob die Einträge beginnend von dem ältesten oder neusten Eintrag sortiert zurückgegeben werden sollen.
+     * @param showDeactivatedEntries Je nachdem, wie das Löschen umgesetzt wird, wäre dieses Parameter evtl. sinnvoll.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -171,7 +157,7 @@ export class EintrgeService {
             throw new Error('Required parameter diaryId was null or undefined when calling getDiaryEntries.');
         }
 
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        let queryParameters = new HttpParams({encoder: this.encoder});
         if (from !== undefined && from !== null) {
             queryParameters = queryParameters.set('from', <any>from);
         }
@@ -199,9 +185,6 @@ export class EintrgeService {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
 
         return this.httpClient.get<InlineResponse2002>(`${this.configuration.basePath}/diaries/${encodeURIComponent(String(diaryId))}/entries`,
             {
@@ -215,8 +198,8 @@ export class EintrgeService {
     }
 
     /**
-     * Erhalte eine Detaillierte Repr�sentation eines Eintrages.
-     * Hier sollten alle ausf�hrlichen Informationen gezeigt werden, die es zu einem Eintrag gibt. Eventuell w�re es auch sinnvoll aufzuzeigen oder zu verlinken, wer was gemacht hat [Aber erst sp�ter]. &lt;br&gt; Evtl. ist dieser Endpoint sp�ter auch nur noch n�tzlich, um f�r einen Eintrag eine Historie anzuzeigen. 
+     * Erhalte eine Detaillierte Repräsentation eines Eintrages.
+     * Hier sollten alle ausführlichen Informationen gezeigt werden, die es zu einem Eintrag gibt. Eventuell wäre es auch sinnvoll aufzuzeigen oder zu verlinken, wer was gemacht hat [Aber erst später]. &lt;br&gt; Evtl. ist dieser Endpoint später auch nur noch nützlich, um für einen Eintrag eine Historie anzuzeigen. 
      * @param diaryId Die Id des Tagebuches.
      * @param entryId ID des Eintrages
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -244,9 +227,6 @@ export class EintrgeService {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
 
         return this.httpClient.get<EntryReprResponse>(`${this.configuration.basePath}/diaries/${encodeURIComponent(String(diaryId))}/entries/${encodeURIComponent(String(entryId))}`,
             {
@@ -260,7 +240,7 @@ export class EintrgeService {
 
     /**
      * Aktualisiere einen Eintrag.
-     * Hier sollten nat�rlich nur die Felder angegeben werden, die auch aktualisiert werden sollen.
+     * Hier sollten natürlich nur die Felder angegeben werden, die auch aktualisiert werden sollen.
      * @param diaryId Die Id des Tagebuches.
      * @param entryId ID des Eintrages
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -287,9 +267,6 @@ export class EintrgeService {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
 
         return this.httpClient.patch<any>(`${this.configuration.basePath}/diaries/${encodeURIComponent(String(diaryId))}/entries/${encodeURIComponent(String(entryId))}`,
             null,

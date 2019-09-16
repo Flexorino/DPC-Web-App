@@ -9,10 +9,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { InlineResponse200Tags } from './inlineResponse200Tags';
+import { FrameValueAttribute } from './frameValueAttribute';
+import { KEFactors } from './kEFactors';
+import { CorrectionsFactors } from './correctionsFactors';
 
 
-export interface InlineResponse200 { 
-    tags: Array<InlineResponse200Tags>;
+export interface Context { 
+    id?: string;
+    frameValues?: FrameValueAttribute;
+    keFactors?: KEFactors;
+    correctionsFactors?: CorrectionsFactors;
 }
 

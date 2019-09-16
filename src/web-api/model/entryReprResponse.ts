@@ -1,6 +1,6 @@
 /**
  * Diabetes Web-App
- * Die ist die vorl�ufige REST-artige Schnittstelle, f�r das Dia-PC Projekt. Diese Schnittstelle ist nicht REST, da sie nicht Hypermedialit�t benutzt - Das bedeutet, der Client muss selbt Anfragen konstruieren. 
+ * Die ist die vorläufige REST-artige Schnittstelle, für das Dia-PC Projekt. Diese Schnittstelle ist nicht REST, da sie nicht Hypermedialität benutzt - Das bedeutet, der Client muss selbt Anfragen konstruieren. 
  *
  * The version of the OpenAPI document: 1.0.0
  * 
@@ -10,10 +10,11 @@
  * Do not edit the class manually.
  */
 import { EntryReprAcitvity } from './entryReprAcitvity';
-import { EntryReprResponseCorrectionBolus } from './entryReprResponseCorrectionBolus';
-import { EntryReprResponseMealBolus } from './entryReprResponseMealBolus';
 import { EntryReprResponseMedication } from './entryReprResponseMedication';
+import { FoodIntake } from './foodIntake';
+import { IntervallInsulinIntake } from './intervallInsulinIntake';
 import { EntryReprResponseTags } from './entryReprResponseTags';
+import { TimeStampInsulinIntake } from './timeStampInsulinIntake';
 import { EntryReprTempBasalChange } from './entryReprTempBasalChange';
 
 
@@ -21,7 +22,7 @@ export interface EntryReprResponse {
     /**
      * Die ID des Eintrages
      */
-    selfID?: string;
+    id?: string;
     /**
      * Unix-Zeit
      */
@@ -30,14 +31,8 @@ export interface EntryReprResponse {
      * Blutzucker in mmol/l
      */
     bloodSugar?: number;
-    mealBolus?: EntryReprResponseMealBolus;
-    correctionBolus?: EntryReprResponseCorrectionBolus;
-    basal?: EntryReprResponseMealBolus;
-    /**
-     * Eingenommene KH in Austauscheinheiten
-     */
-    mealUnits?: number;
-    mealDescription?: string;
+    insulinIntakes?: Array<TimeStampInsulinIntake | IntervallInsulinIntake>;
+    foodIntakes?: Array<FoodIntake>;
     comment?: string;
     tempBasalChange?: EntryReprTempBasalChange;
     medication?: EntryReprResponseMedication;

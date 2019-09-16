@@ -9,10 +9,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { InlineResponse200Tags } from './inlineResponse200Tags';
+import { FoodDescr } from './foodDescr';
 
 
-export interface InlineResponse200 { 
-    tags: Array<InlineResponse200Tags>;
+export interface FoodIntake { 
+    /**
+     * in KH nicht in KE!
+     */
+    amount?: string;
+    food?: FoodDescr | string;
 }
 

@@ -1,6 +1,6 @@
 /**
  * Diabetes Web-App
- * Die ist die vorl�ufige REST-artige Schnittstelle, f�r das Dia-PC Projekt. Diese Schnittstelle ist nicht REST, da sie nicht Hypermedialit�t benutzt - Das bedeutet, der Client muss selbt Anfragen konstruieren. 
+ * Die ist die vorläufige REST-artige Schnittstelle, für das Dia-PC Projekt. Diese Schnittstelle ist nicht REST, da sie nicht Hypermedialität benutzt - Das bedeutet, der Client muss selbt Anfragen konstruieren. 
  *
  * The version of the OpenAPI document: 1.0.0
  * 
@@ -11,15 +11,15 @@
  */
 import { FulldiaryDrugs } from './fulldiaryDrugs';
 import { FulldiaryOwner } from './fulldiaryOwner';
+import { FoodDescr } from './foodDescr';
 
 
 export interface FullDiary { 
-    selfId: string;
-    owner: FulldiaryOwner;
-    name: string;
-    patient: string;
-    drugs: Array<FulldiaryDrugs>;
-    insulins: Array<FulldiaryDrugs>;
-    tags: Array<FulldiaryDrugs>;
+    id?: string;
+    owner?: FulldiaryOwner;
+    food?: Array<FoodDescr>;
+    drugs?: Array<FulldiaryDrugs>;
+    insulins?: Array<FulldiaryDrugs>;
+    tags?: Array<FulldiaryDrugs>;
 }
 

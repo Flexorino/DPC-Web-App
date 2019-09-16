@@ -17,6 +17,7 @@ import { HttpClient, HttpHeaders, HttpParams,
 import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
+import { FullDiary } from '../model/fullDiary';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -25,7 +26,7 @@ import { Configuration }                                     from '../configurat
 @Injectable({
   providedIn: 'root'
 })
-export class UtilService {
+export class TagebcherEssensdatenbankService {
 
     protected basePath = 'https://dia-pc.flexus.click/v1';
     public defaultHeaders = new HttpHeaders();
@@ -48,33 +49,29 @@ export class UtilService {
 
 
     /**
-     * Bekomme einen Bolus-Vorschlag
-     * Dieser End-Point muss eigentlich mit einen GET-Verb arbeiten, jedoch wird aus Realisierungsgründen wie z.B. Swagger ein overloaded Post verwendet. &lt;br&gt; 
-     * @param diary Die Id des Tagebuches
-     * @param _for (Optional) Für welchen Zeitpunkt soll der Vorschlag sein. Als Default Wert wird der jetzige Zeitpunkt genommen.
+     * Bekomme alle Nahrungen des 
+     * Zu den statischen Informationen zählen Name des Tagebuchs, Patient, Medikamente und Insuline. Diese Informationen werden nicht zeitlich versioniert.
+     * @param diaryId Die Id des Tagebuches.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getBolusCalculatorBolusRecommendation(diary: string, _for?: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getBolusCalculatorBolusRecommendation(diary: string, _for?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getBolusCalculatorBolusRecommendation(diary: string, _for?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getBolusCalculatorBolusRecommendation(diary: string, _for?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-        if (diary === null || diary === undefined) {
-            throw new Error('Required parameter diary was null or undefined when calling getBolusCalculatorBolusRecommendation.');
-        }
-
-        let queryParameters = new HttpParams({encoder: this.encoder});
-        if (diary !== undefined && diary !== null) {
-            queryParameters = queryParameters.set('diary', <any>diary);
-        }
-        if (_for !== undefined && _for !== null) {
-            queryParameters = queryParameters.set('for', <any>_for);
+    public getDiary(diaryId: string, observe?: 'body', reportProgress?: boolean): Observable<FullDiary>;
+    public getDiary(diaryId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<FullDiary>>;
+    public getDiary(diaryId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<FullDiary>>;
+    public getDiary(diaryId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (diaryId === null || diaryId === undefined) {
+            throw new Error('Required parameter diaryId was null or undefined when calling getDiary.');
         }
 
         let headers = this.defaultHeaders;
 
+        // authentication (basicAuth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
         // to determine the Accept header
         const httpHeaderAccepts: string[] = [
+            'application/json'
         ];
         const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         if (httpHeaderAcceptSelected !== undefined) {
@@ -82,10 +79,8 @@ export class UtilService {
         }
 
 
-        return this.httpClient.post<any>(`${this.configuration.basePath}/util/bolusCalculator/bolusRecommendation`,
-            null,
+        return this.httpClient.get<FullDiary>(`${this.configuration.basePath}/diaries/${encodeURIComponent(String(diaryId))}/food`,
             {
-                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

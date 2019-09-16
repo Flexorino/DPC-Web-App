@@ -9,10 +9,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { InlineResponse200Tags } from './inlineResponse200Tags';
 
 
-export interface InlineResponse200 { 
-    tags: Array<InlineResponse200Tags>;
+export interface IntervallInsulinIntake { 
+    semanticIdentefier?: string;
+    amount?: number;
+    endTimeStamp?: number;
+    canceledTimestamp?: number;
 }
 
