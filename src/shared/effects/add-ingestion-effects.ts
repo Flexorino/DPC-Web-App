@@ -55,15 +55,15 @@ export class AddIngestionEffects {
 
         let context: DiaryContext = new DiaryContext("contextID");
         let correctionFactors: DiaryCorrectionFactors = new DiaryCorrectionFactors("correctionFactorsId");
-        correctionFactors.dialyCorrectionFactors = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
+        correctionFactors.dialyCorrectionFactors = [2, 2, 2, 2, 2.2, 2.2, 2.2, 2.2, 2, 2, 2, 2, 2.2, 2.2, 2.2, 1.7, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4];
         let keFactors: DiaryContextKEFactors = new DiaryContextKEFactors("adsasdasd");
         keFactors.dialyKeFactors = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2];
         let frameValues: DiaryContextFrameValues = new DiaryContextFrameValues("frame values");
-        frameValues.dailyBSGoalValues = [1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6];
-        frameValues.higherBSLimit = 3;
-        frameValues.lowerBSLimit = 1;
-        frameValues.hypoglycemiaLimit = 0.5;
-        frameValues.hyperglycemiaLimit = 3;
+        frameValues.dailyBSGoalValues = [5.6, 5.3, 5.2, 5, 5, 6, 5.7, 6, 6, 5, 5, 6, 5.3, 5.3, 5.3, 4, 5, 6, 5.3, 5.4, 5.3, 4, 5, 6];
+        frameValues.higherBSLimit = 7.2;
+        frameValues.lowerBSLimit = 4.4;
+        frameValues.hypoglycemiaLimit = 3.3;
+        frameValues.hyperglycemiaLimit = 10.5;
         context.validFrom = new Date(1553334757 * 1000);
         context.correctionFactors = correctionFactors;
         context.keFactor = keFactors;
