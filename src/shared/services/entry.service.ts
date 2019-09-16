@@ -14,7 +14,7 @@ import { InlineResponse2002 } from './../../web-api/model/inlineResponse2002';
 import { map, timestamp } from 'rxjs/operators';
 import { EintrgeService } from './../../web-api/api/eintrge.service';
 import { Observable } from 'rxjs';
-import { EntryReprResponse } from 'src/web-api';
+import { EntryReprResponse, IntervallInsulinIntakeAttr } from 'src/web-api';
 import { EntryAttributeTypes } from '../model/diary/entry/entry-attribute-types';
 import { Injectable } from '@angular/core';
 import * as d3 from "d3";
@@ -23,6 +23,7 @@ import { TempBasalChangeAttribute } from '../model/diary/entry/attributes/temp-b
 import { TagAttribute } from '../model/diary/entry/attributes/tag-attribute';
 import { DiaryNavigationService } from './diary.navigation.service';
 import { Food } from '../model/diary/food';
+import { IntervallInsulinIntake } from '../model/diary/entry/attributes/intervall-insulin-intake';
 @Injectable({ providedIn: "root" })
 export class EntryService {
 
@@ -82,7 +83,14 @@ export class EntryService {
             webEntry.insulinIntakes.forEach(x => {
                 let query: any = x;
                 if (query.endTimeStamp) {
-
+                    let intake: IntervallInsulinIntakeAttr = x;
+                    let simpleInsulinIntake = new IntervallInsulinIntake();
+                    if (intake.semanticIdentefier) {
+                        simpleInsulinIntake.semanticIdentifier = intake.semanticIdentefier == "mealBolus" ? BaseInsulinIntakeSemantics.FOOD_BOLUS : intake.semanticIdentefier == "correctionsBolus" ? BaseInsulinIntakeSemantics.CORRECTION_BOLUS : BaseInsulinIntakeSemantics.BASAL;
+                    }
+                    simpleInsulinIntake.units = intake.amount;
+                    simpleInsulinIntake.endTimeStamp = new Date(intake.endTimeStamp * 1000);
+                    newEntry.insulinIntakes.push(simpleInsulinIntake);
                 } else {
                     let intake: TimeStampInsulinIntake = x;
                     let simpleInsulinIntake = new SimpleInsulinIntake();
@@ -132,7 +140,23 @@ export class EntryService {
             webEntry.bloodSugar = entry.bloodSuger;
         }
 
-        if (entry.foodIntakes) {
+        if (entry.insulinIntakes && entry.insulinIntakes.length) {
+            let intakes = [];
+            entry.insulinIntakes.forEach(x => {
+                if (x instanceof SimpleInsulinIntake) {
+                    let identifier = x.semanticIdentifier === BaseInsulinIntakeSemantics.FOOD_BOLUS ? "mealBolus" : x.semanticIdentifier === BaseInsulinIntakeSemantics.CORRECTION_BOLUS ? "correctionBolus" : "bolus";
+                    let intake = { semanticIdentefier: identifier, amount: x.units };
+                    intakes.push(intake);
+                } else if (x instanceof IntervallInsulinIntake) {
+                    let identifier = x.semanticIdentifier === BaseInsulinIntakeSemantics.FOOD_BOLUS ? "mealBolus" : x.semanticIdentifier === BaseInsulinIntakeSemantics.CORRECTION_BOLUS ? "correctionBolus" : "bolus";
+                    let intake: IntervallInsulinIntakeAttr = { semanticIdentefier: identifier, amount: x.units, endTimeStamp: x.endTimeStamp.getTime() / 1000 };
+                    intakes.push(intake);
+                }
+            })
+            webEntry.insulinIntakes = intakes;
+        }
+
+        if (entry.foodIntakes && entry.foodIntakes.length) {
             let intakes = [];
             entry.foodIntakes.forEach(x => {
                 let intake: FoodIntake = { amount: x.amount };

@@ -12,7 +12,7 @@
 import { EntryReprAcitvity } from './entryReprAcitvity';
 import { EntryReprResponseMedication } from './entryReprResponseMedication';
 import { FoodIntake } from './foodIntake';
-import { IntervallInsulinIntake } from './intervallInsulinIntake';
+import { IntervallInsulinIntakeAttr } from './intervallInsulinIntake';
 import { EntryReprResponseTags } from './entryReprResponseTags';
 import { TimeStampInsulinIntake } from './timeStampInsulinIntake';
 import { EntryReprTempBasalChange } from './entryReprTempBasalChange';
@@ -31,7 +31,7 @@ export interface EntryReprResponse {
      * Blutzucker in mmol/l
      */
     bloodSugar?: number;
-    insulinIntakes?: Array<TimeStampInsulinIntake | IntervallInsulinIntake>;
+    insulinIntakes?: Array<TimeStampInsulinIntake | IntervallInsulinIntakeAttr>;
     foodIntakes?: Array<FoodIntake>;
     comment?: string;
     tempBasalChange?: EntryReprTempBasalChange;

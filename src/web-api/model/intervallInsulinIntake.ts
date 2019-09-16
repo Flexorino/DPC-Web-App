@@ -11,7 +11,7 @@
  */
 
 
-export interface IntervallInsulinIntake { 
+export interface IntervallInsulinIntakeAttr { 
     semanticIdentefier?: string;
     amount?: number;
     endTimeStamp?: number;

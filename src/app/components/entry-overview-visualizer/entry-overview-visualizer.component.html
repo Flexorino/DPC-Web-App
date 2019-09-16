@@ -1,5 +1,4 @@
 <div id="overview"> 
-    {{json}}
         <div *ngIf="entry.bloodSuger" class="flex">
                 <mat-icon>colorize</mat-icon>
                 <div> {{entry.bloodSuger * bsUnit.factor | number:'1.0-1'}} {{bsUnit.identifier}} </div>
