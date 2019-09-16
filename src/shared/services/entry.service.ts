@@ -1,3 +1,7 @@
+import { Absorption } from './../model/diary/food';
+import { FoodDescr } from './../../web-api/model/foodDescr';
+import { FoodIntakeAttribute } from './../model/diary/entry/attributes/food-intake-attribute';
+import { FoodIntake } from './../../web-api/model/foodIntake';
 import { EntryReprMealBolus } from './../../web-api/model/entryReprMealBolus';
 import { EntryRepr } from './../../web-api/model/entryRepr';
 import { Entry } from 'src/shared/model/diary/entry/entry';
@@ -15,6 +19,7 @@ import { InsulinAttribute } from '../model/diary/entry/attributes/insulin-attrib
 import { TempBasalChangeAttribute } from '../model/diary/entry/attributes/temp-basal-change-attribute';
 import { TagAttribute } from '../model/diary/entry/attributes/tag-attribute';
 import { DiaryNavigationService } from './diary.navigation.service';
+import { Food } from '../model/diary/food';
 @Injectable({ providedIn: "root" })
 export class EntryService {
 
@@ -54,11 +59,11 @@ export class EntryService {
 
     }
 
-    public mapEntriesToDays(entries: Array<Entry>): Array<{ day: number, entries: Array<Entry> }> {
+    public mapEntriesToDays(entries: Array<Entry>): Array<{ day: Date, entries: Array<Entry> }> {
         let map: Array<{ day: number, entries: Array<Entry> }> = [];
-        let curMap = d3.nest().key(function (d) {
-            return Number.parseInt((d.timeStamp / 86400).toFixed(0)) * 86400;
-        }).entries(entries).map((x) => { return { day: x.key, entries: x.values }; }).sort((a, b) => a.day - b.day);
+        let curMap = d3.nest().key(function (d: Entry) {
+            return Number.parseInt(((d.timeStamp.getTime() / 1000) / 86400).toFixed(0)) * 86400;
+        }).entries(entries).map((x) => { return { day: new Date(x.key * 1000), entries: x.values }; }).sort((a, b) => b.day - a.day);
         return curMap;
     }
 
@@ -67,6 +72,25 @@ export class EntryService {
         newEntry.timeStamp = new Date(webEntry.timeStamp * 1000);
         if (webEntry.bloodSugar) {
             newEntry.bloodSuger = webEntry.bloodSugar;
+        }
+
+        if (webEntry.foodIntakes) {
+            newEntry.foodIntakes = [];
+            webEntry.foodIntakes.forEach(x => {
+                let foodIntake = new FoodIntakeAttribute();
+                foodIntake.amount = x.amount;
+                if (x.food) {
+                    let webFood: FoodDescr = x.food as FoodDescr;
+                    let food = new Food(webEntry.id);
+                    if (webFood.resorption) {
+                        food.absorption = webFood.resorption == "fast" ? Absorption.FAST : webFood.resorption == "medium" ? Absorption.MEDIUM : Absorption.SLOW;
+                    }
+                    food.description = webFood.comment;
+                    food.carbsFactor = webFood.carbsFactor;
+                    foodIntake.food = food;
+                }
+                newEntry.foodIntakes.push(foodIntake);
+            });
         }
 
         if (webEntry.tempBasalChange) {
@@ -80,9 +104,33 @@ export class EntryService {
 
     private convertInternatlEntryToNEtworkEntry(entry: Entry): EntryReprResponse {
         const webEntry: EntryReprResponse = { timeStamp: 0 };
-        webEntry.timeStamp = Math.round(entry.timeStamp.getTime() / 1000);
+        webEntry.timeStamp = Math.round(entry.timeStamp.getTime() / 1000);;
         if (entry.bloodSuger) {
             webEntry.bloodSugar = entry.bloodSuger;
+        }
+
+        if (entry.foodIntakes) {
+            let intakes = [];
+            entry.foodIntakes.forEach(x => {
+                let intake: FoodIntake = { amount: x.amount };
+                if (x.food) {
+                    if (x.food.id) {
+                        intake.food = x.food.id;
+                    } else {
+                        let descr: FoodDescr = {};
+                        descr.carbsFactor = x.food.carbsFactor;
+                        descr.comment = x.food.description;
+                        if (x.food.absorption) {
+                            descr.resorption = x.food.absorption === Absorption.FAST ? "fast" : x.food.absorption === Absorption.MEDIUM ? "medium" : "slow";
+                        }
+                        intake.food = descr;
+                    }
+                }
+                intakes.push(intake);
+            })
+
+            webEntry.foodIntakes = intakes;
+
         }
 
         if (entry.comment) {

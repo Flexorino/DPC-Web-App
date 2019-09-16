@@ -16,7 +16,7 @@ export interface FoodIntake {
     /**
      * in KH nicht in KE!
      */
-    amount?: string;
+    amount?: number;
     food?: FoodDescr | string;
 }
 

@@ -66,6 +66,7 @@ import { AbsorptionPipe } from 'src/shared/pipes/absorbtion.pipe';
 import { diaryReducerExport } from 'src/shared/model/redux/Diary';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { EntryOverviewVisualizerComponent } from './components/entry-overview-visualizer/entry-overview-visualizer.component';
 
 
 @NgModule({
@@ -110,7 +111,8 @@ import { environment } from '../environments/environment';
     SearchViewComponent,
     BSRatingViewComponent,
     FastKEInputComponent,
-    AbsorptionPipe
+    AbsorptionPipe,
+    EntryOverviewVisualizerComponent
   ],
   imports: [
     ReactiveFormsModule,

@@ -10,7 +10,7 @@
             <div class="entry" *ngFor="let entry of aggr.entries">
                 <div class="timeDisplay">{{entry.timeStamp |customTime:"dayTime" }} </div>
                 <div class="entry_attribute">
-                    {{entry.attributes}}
+                    <app-entry-overview-visualizer [entry]="entry"></app-entry-overview-visualizer>
                 </div>
             </div>
         </mat-card>
