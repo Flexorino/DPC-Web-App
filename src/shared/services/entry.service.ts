@@ -1,3 +1,6 @@
+import { BaseInsulinIntakeSemantics } from './../model/diary/entry/attributes/insulin-attribute';
+import { SimpleInsulinIntake } from './../model/diary/entry/attributes/simple-Insulin-intake';
+import { TimeStampInsulinIntake } from './../../web-api/model/timeStampInsulinIntake';
 import { Absorption } from './../model/diary/food';
 import { FoodDescr } from './../../web-api/model/foodDescr';
 import { FoodIntakeAttribute } from './../model/diary/entry/attributes/food-intake-attribute';
@@ -72,6 +75,24 @@ export class EntryService {
         newEntry.timeStamp = new Date(webEntry.timeStamp * 1000);
         if (webEntry.bloodSugar) {
             newEntry.bloodSuger = webEntry.bloodSugar;
+        }
+
+        if (webEntry.insulinIntakes && webEntry.insulinIntakes.length) {
+            newEntry.insulinIntakes = [];
+            webEntry.insulinIntakes.forEach(x => {
+                let query: any = x;
+                if (query.endTimeStamp) {
+
+                } else {
+                    let intake: TimeStampInsulinIntake = x;
+                    let simpleInsulinIntake = new SimpleInsulinIntake();
+                    if (intake.semanticIdentefier) {
+                        simpleInsulinIntake.semanticIdentifier = intake.semanticIdentefier == "mealBolus" ? BaseInsulinIntakeSemantics.FOOD_BOLUS : intake.semanticIdentefier == "correctionsBolus" ? BaseInsulinIntakeSemantics.CORRECTION_BOLUS : BaseInsulinIntakeSemantics.BASAL;
+                    }
+                    simpleInsulinIntake.units = intake.amount;
+
+                }
+            });
         }
 
         if (webEntry.foodIntakes) {
