@@ -90,6 +90,7 @@ export class EntryService {
                         simpleInsulinIntake.semanticIdentifier = intake.semanticIdentefier == "mealBolus" ? BaseInsulinIntakeSemantics.FOOD_BOLUS : intake.semanticIdentefier == "correctionsBolus" ? BaseInsulinIntakeSemantics.CORRECTION_BOLUS : BaseInsulinIntakeSemantics.BASAL;
                     }
                     simpleInsulinIntake.units = intake.amount;
+                    newEntry.insulinIntakes.push(simpleInsulinIntake);
 
                 }
             });
