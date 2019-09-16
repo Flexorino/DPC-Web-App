@@ -82,7 +82,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private handleSubFormSubsciptions() {
-    FormUtil.getImmediateObservableFromRawControl(this.mainFormGroup).subscribe(x => {
+    FormUtil.getImmediateObservableFromRawControl(this.mainFormGroup).pipe(delay(0)).subscribe(x => {
       this.entryInModification = new Entry(null);
       this.entryInModification.foodIntakes = this.foodIntakeListPicker.value.constructed;
       let insulinIntake: Array<InsulinAttribute> = [];
@@ -165,9 +165,15 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
   onBolusRequest() {
     this.loading = true;
     this.bolusDao.getBolusSuggestion(this.entryInModification).subscribe(x => {
-      this.simpleFoodBolusControl.setValue(x.insulinIntakes.find(x => x.semanticIdentifier === BaseInsulinIntakeSemantics.FOOD_BOLUS && x instanceof SimpleInsulinIntake).units)
+      this.correctionFoodBolusControl.setValue(null);
+      setTimeout(() => {
+        let intake = x.insulinIntakes.find(x => x.semanticIdentifier === BaseInsulinIntakeSemantics.CORRECTION_BOLUS && x instanceof SimpleInsulinIntake);
+        if (intake) {
+          this.correctionFoodBolusControl.setValue(new ConstructionControlValue(null, intake));
+        }
+      });
       this.loading = false;
-    });
+    }, err => { alert(err); this.loading = false; });
 
   }
 
