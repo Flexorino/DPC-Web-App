@@ -63,7 +63,8 @@ export class EntryService {
     }
 
     private convertNetworkEntryToInternalEntry(webEntry: EntryReprResponse): Entry {
-        const newEntry: Entry = new Entry(webEntry.timeStamp);
+        const newEntry: Entry = new Entry(webEntry.id);
+        newEntry.timeStamp = new Date(webEntry.timeStamp * 1000);
         if (webEntry.bloodSugar) {
             newEntry.bloodSuger = webEntry.bloodSugar;
         }
@@ -79,11 +80,11 @@ export class EntryService {
 
     private convertInternatlEntryToNEtworkEntry(entry: Entry): EntryReprResponse {
         const webEntry: EntryReprResponse = { timeStamp: 0 };
-        webEntry.timeStamp = null;
+        webEntry.timeStamp = Math.round(entry.timeStamp.getTime() / 1000);
         if (entry.bloodSuger) {
             webEntry.bloodSugar = entry.bloodSuger;
         }
-     
+
         if (entry.comment) {
             webEntry.comment = entry.comment;
         }

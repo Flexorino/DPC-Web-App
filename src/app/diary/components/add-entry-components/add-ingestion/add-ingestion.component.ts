@@ -152,7 +152,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
 
   submit() {
     if (this.mainFormGroup.valid) {
-      let action = new AddEntryActionsProps(this, new Entry(123));
+      let action = new AddEntryActionsProps(this, this.entryInModification);
       this.store.dispatch(AddIngestionActions.CONFIRM(action));
       this.loading = true;
       action.then(x => this.closer.close()).catch(err => {

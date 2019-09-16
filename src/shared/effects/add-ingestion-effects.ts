@@ -1,3 +1,5 @@
+import { DiaryNavigationService } from './../services/diary.navigation.service';
+import { AddEntryActionsProps } from './../../app/diary/components/add-entry-components/sharedActionsProps.ts/add-entry-props';
 import { DiaryContext } from './../model/diary/context/diary-context';
 import { AddIngestionComponent } from './../../app/diary/components/add-entry-components/add-ingestion/add-ingestion.component';
 
@@ -7,7 +9,7 @@ import { Insulin, InsulinEffect } from './../model/diary/insulin';
 
 import { Injectable } from '@angular/core';
 import { createEffect, ofType, Actions } from '@ngrx/effects';
-import { mergeMap, delay, tap, finalize } from 'rxjs/operators';
+import { mergeMap, delay, tap, finalize, flatMap } from 'rxjs/operators';
 import { DiaryListActions } from 'src/app/diary/components/diary-list/diary-list.actions';
 import { EMPTY, Observable, of, empty } from 'rxjs';
 import { AddIngestionActions } from 'src/app/diary/components/add-entry-components/add-ingestion/add-ingestion.actions';
@@ -20,11 +22,17 @@ import { when } from 'q';
 import { DiaryCorrectionFactors } from '../model/diary/context/diary-correction-factors';
 import { DiaryContextKEFactors } from '../model/diary/context/diary-context-KE-factors';
 import { DiaryContextFrameValues } from '../model/diary/context/diary-context-frame-values';
+import { EntryService } from '../services/entry.service';
 
 @Injectable()
 export class AddIngestionEffects {
     openedListener$;
     confirmListener$;
+
+    private handleSubmit(props: AddEntryActionsProps<AddIngestionActions>): Observable<Action> {
+        console.log("POOST");
+        return this.entryService.addEntry(this.diaryNav.currentDiaryId$.getValue(), props.entryToAdd).pipe(tap(x => props.resolve(null)), flatMap(x => EMPTY));
+    }
 
     private handleOpened(props: CompletableAction<AddIngestionComponent, void>): Observable<Action> {
         let f = new Food("asd");
@@ -56,7 +64,7 @@ export class AddIngestionEffects {
         frameValues.lowerBSLimit = 1;
         frameValues.hypoglycemiaLimit = 0.5;
         frameValues.hyperglycemiaLimit = 3;
-        context.validFrom = new Date(1553334757*1000);
+        context.validFrom = new Date(1553334757 * 1000);
         context.correctionFactors = correctionFactors;
         context.keFactor = keFactors;
         context.frameValue = frameValues;
@@ -70,11 +78,9 @@ export class AddIngestionEffects {
     }
 
     constructor(
-        private actions$: Actions, private util: EffectsUtil
+        private actions$: Actions, private util: EffectsUtil, private entryService: EntryService, private diaryNav: DiaryNavigationService
     ) {
-        this.openedListener$ = util.when(AddIngestionActions.OPENED).do(this.handleOpened);
-        this.confirmListener$ = util.when(AddIngestionActions.CONFIRM).do(x => {
-            return EMPTY.pipe().pipe(delay(2000), finalize(() => x.resolve(null)));
-        });
+        this.openedListener$ = util.when(AddIngestionActions.OPENED).do(x => this.handleOpened(x));
+        this.confirmListener$ = util.when(AddIngestionActions.CONFIRM).do(x => this.handleSubmit(x));
     }
 }
