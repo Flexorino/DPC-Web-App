@@ -1,5 +1,5 @@
 import { BaseInsulinIntakeSemantics } from './../../../../../../../shared/model/diary/entry/attributes/insulin-attribute';
-import { Component, OnInit, Input, forwardRef } from '@angular/core';
+import { Component, OnInit, Input, forwardRef, Output, EventEmitter } from '@angular/core';
 import { IEntryIntervallInsulinIntakePicker } from '../../interfaces/IEntryIntervallInsulinIntakePicker';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { IntervallInsulinIntake } from 'src/shared/model/diary/entry/attributes/intervall-insulin-intake';
@@ -33,6 +33,7 @@ export class AddEntryIntervallFoodBolusPickerComponent implements OnInit, Valida
   currentSelectedNormalBolus = 0;
   currentSumBolus = 0;
   currentTimeIntervall = 0;
+  @Output("minusBolus") minusBolus: EventEmitter<number> = new EventEmitter();
 
   constructor(private fb: FormBuilder) { }
 
@@ -41,6 +42,14 @@ export class AddEntryIntervallFoodBolusPickerComponent implements OnInit, Valida
     this.absolutePart = this.fb.control('', [Validators.min(1), Validators.max(50)]);
     this.time = this.fb.control('00:00', [(x: AbstractControl) => this.getTimeIntervallInMinutes() ? this.getTimeIntervallInMinutes() > 5 ? null : { timeIntervallToSmol: null } : null]);
     this.activated = this.fb.control(false);
+
+    this.relativPart.valueChanges.subscribe(x => {
+      if (x) {
+        this.minusBolus.next(Number.parseFloat(x));
+      } else {
+        this.minusBolus.next(null);
+      }
+    });
 
     this.group.addControl('relativePortionControl', this.relativPart);
     this.group.addControl('fixPortionControl', this.absolutePart);

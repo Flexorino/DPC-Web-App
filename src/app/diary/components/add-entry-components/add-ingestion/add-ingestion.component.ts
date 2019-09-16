@@ -58,6 +58,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
   //MISC:
   currentTimestamp: BehaviorSubject<Date> = new BehaviorSubject(null);
   selectedNormalBolus: BehaviorSubject<number> = new BehaviorSubject(null);
+  minusBolus: BehaviorSubject<number> = new BehaviorSubject(null);
   foodIntakes: Subject<FoodIntakeAttribute[]> = new BehaviorSubject([]);
   currentBS: Subject<number> = new BehaviorSubject(null);
   loading = true;
@@ -160,6 +161,10 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
         this.closer.close();
       })
     }
+  }
+
+  onMinusBolus($event) {
+    this.minusBolus.next($event);
   }
 
   onBolusRequest() {
