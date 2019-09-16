@@ -66,8 +66,14 @@ export class EntryService {
     public mapEntriesToDays(entries: Array<Entry>): Array<{ day: Date, entries: Array<Entry> }> {
         let map: Array<{ day: number, entries: Array<Entry> }> = [];
         let curMap = d3.nest().key(function (d: Entry) {
-            return Number.parseInt(((d.timeStamp.getTime() / 1000) / 86400).toFixed(0)) * 86400;
-        }).entries(entries).map((x) => { return { day: new Date(x.key * 1000), entries: x.values }; }).sort((a, b) => b.day - a.day);
+            return d.timeStamp.getFullYear()+":"+d.timeStamp.getMonth()+":"+d.timeStamp.getDate() ;
+        }).entries(entries).map((x) => { 
+            let splitter = x.key.split(":");
+            let date = new Date(0);
+            date.setFullYear(Number.parseInt(splitter[0]));
+            date.setMonth(Number.parseInt(splitter[1]));
+            date.setDate(Number.parseInt(splitter[2]));
+            return { day: date, entries: x.values }; }).sort((a, b) => b.day - a.day);
         return curMap;
     }
 

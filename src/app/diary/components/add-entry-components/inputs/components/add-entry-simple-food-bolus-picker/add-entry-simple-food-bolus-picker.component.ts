@@ -41,7 +41,7 @@ export class AddEntrySimpleFoodBolusPickerComponent implements OnInit, Validator
       z.semanticIdentifier = BaseInsulinIntakeSemantics.FOOD_BOLUS;
       if (control.value) {
         try {
-          z.units = Number.parseInt(control.value);
+          z.units = Number.parseFloat(control.value) - this.currentMinus;
         } catch (e) {
           z.units = null;
         }
@@ -50,11 +50,14 @@ export class AddEntrySimpleFoodBolusPickerComponent implements OnInit, Validator
       }
       return new ConstructionControlValue(this.group.value, z);
     }));
-    if (this.minusBolus) {
-      this.minusBolus.subscribe(x => {
-        this.currentMinus = ((x !== null) ? x : 0);
-      })
-    }
+    setTimeout(x => {
+      if (this.minusBolus) {
+        this.minusBolus.subscribe(x => {
+          this.currentMinus = ((x !== null) ? x : 0);
+          this.bolus.setValue(this.bolus.value);
+        })
+      }
+    }, 100);
   }
 
   validate(control: import("@angular/forms").AbstractControl): import("@angular/forms").ValidationErrors {
