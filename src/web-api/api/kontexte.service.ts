@@ -17,6 +17,7 @@ import { HttpClient, HttpHeaders, HttpParams,
 import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
+import { InlineResponse2003 } from '../model/inlineResponse2003';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -25,7 +26,7 @@ import { Configuration }                                     from '../configurat
 @Injectable({
   providedIn: 'root'
 })
-export class UtilService {
+export class KontexteService {
 
     protected basePath = 'https://dia-pc.flexus.click/v1';
     public defaultHeaders = new HttpHeaders();
@@ -48,33 +49,41 @@ export class UtilService {
 
 
     /**
-     * Bekomme einen Bolus-Vorschlag
-     * Dieser End-Point muss eigentlich mit einen GET-Verb arbeiten, jedoch wird aus Realisierungsgründen wie z.B. Swagger ein overloaded Post verwendet. &lt;br&gt; 
-     * @param diary Die Id des Tagebuches
-     * @param _for (Optional) Für welchen Zeitpunkt soll der Vorschlag sein. Als Default Wert wird der jetzige Zeitpunkt genommen.
+     * Ehralte Kontexte für Zeitraum.
+     * Es werden alle Kontexte für den ausgewählten Zeitraum zurückgegeben. Ist der KOntext für einen Zeitpunkt gewünscht sind End- und Startzeitpunkt gleich einzugeben. &lt;br&gt; Attribute der Kontexte weisen Redundanzen auf, auch wenn es sich um gleiche Attribute handelt. Es ist diese Aufgabe diese Redundanzen ggf. zu behandeln. &lt;br&gt; Falls es für einen Zeitraum keinen Nutzer spezifizierten Kontext gibt, so greigt der Root-Kontext ohne Gültigkeitszeitstempel. 
+     * @param diaryId Die Id des Tagebuches.
+     * @param from Ab welchen Zeitpunkt (Unix Timestamp)
+     * @param to Bis welchen Zeitpunkt (Unix Timestamp)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getBolusCalculatorBolusRecommendation(diary: string, _for?: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getBolusCalculatorBolusRecommendation(diary: string, _for?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getBolusCalculatorBolusRecommendation(diary: string, _for?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getBolusCalculatorBolusRecommendation(diary: string, _for?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-        if (diary === null || diary === undefined) {
-            throw new Error('Required parameter diary was null or undefined when calling getBolusCalculatorBolusRecommendation.');
+    public getDiaryContexts(diaryId: string, from: number, to: number, observe?: 'body', reportProgress?: boolean): Observable<InlineResponse2003>;
+    public getDiaryContexts(diaryId: string, from: number, to: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<InlineResponse2003>>;
+    public getDiaryContexts(diaryId: string, from: number, to: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<InlineResponse2003>>;
+    public getDiaryContexts(diaryId: string, from: number, to: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+        if (diaryId === null || diaryId === undefined) {
+            throw new Error('Required parameter diaryId was null or undefined when calling getDiaryContexts.');
+        }
+        if (from === null || from === undefined) {
+            throw new Error('Required parameter from was null or undefined when calling getDiaryContexts.');
+        }
+        if (to === null || to === undefined) {
+            throw new Error('Required parameter to was null or undefined when calling getDiaryContexts.');
         }
 
         let queryParameters = new HttpParams({encoder: this.encoder});
-        if (diary !== undefined && diary !== null) {
-            queryParameters = queryParameters.set('diary', <any>diary);
+        if (from !== undefined && from !== null) {
+            queryParameters = queryParameters.set('from', <any>from);
         }
-        if (_for !== undefined && _for !== null) {
-            queryParameters = queryParameters.set('for', <any>_for);
+        if (to !== undefined && to !== null) {
+            queryParameters = queryParameters.set('to', <any>to);
         }
 
         let headers = this.defaultHeaders;
 
         // to determine the Accept header
         const httpHeaderAccepts: string[] = [
+            'application/json'
         ];
         const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         if (httpHeaderAcceptSelected !== undefined) {
@@ -82,8 +91,7 @@ export class UtilService {
         }
 
 
-        return this.httpClient.post<any>(`${this.configuration.basePath}/util/bolusCalculator/bolusRecommendation`,
-            null,
+        return this.httpClient.get<InlineResponse2003>(`${this.configuration.basePath}/diaries/${encodeURIComponent(String(diaryId))}/contexts`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

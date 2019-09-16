@@ -18,9 +18,7 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { InlineObject1 } from '../model/inlineObject1';
-import { InlineObject2 } from '../model/inlineObject2';
-import { InlineResponse2003 } from '../model/inlineResponse2003';
-import { InlineResponse201 } from '../model/inlineResponse201';
+import { InlineResponse2004 } from '../model/inlineResponse2004';
 import { UserInfo } from '../model/userInfo';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -53,6 +51,46 @@ export class UserManagementService {
 
 
     /**
+     * Erhalte Basisfnformationen und Präferenzen eines Nutzer anhand dessen Id-Tokens
+     * Erhalte Basisfnformationen und Präferenzen eines Nutzer anhand dessen Id-Tokens
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getSelf(observe?: 'body', reportProgress?: boolean): Observable<UserInfo>;
+    public getSelf(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserInfo>>;
+    public getSelf(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserInfo>>;
+    public getSelf(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        const httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+
+        return this.httpClient.get<UserInfo>(`${this.configuration.basePath}/self`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Get the diaries of the current user (from which the current user is the owner)
      * @param searchSnipptet TODO: spezifiziere den Filter genauer
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -73,10 +111,6 @@ export class UserManagementService {
 
         let headers = this.defaultHeaders;
 
-        // authentication (basicAuth) required
-        if (this.configuration.username || this.configuration.password) {
-            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
-        }
         // to determine the Accept header
         const httpHeaderAccepts: string[] = [
         ];
@@ -104,9 +138,9 @@ export class UserManagementService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getUsers(searchSnipptet: string, observe?: 'body', reportProgress?: boolean): Observable<InlineResponse2003>;
-    public getUsers(searchSnipptet: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<InlineResponse2003>>;
-    public getUsers(searchSnipptet: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<InlineResponse2003>>;
+    public getUsers(searchSnipptet: string, observe?: 'body', reportProgress?: boolean): Observable<InlineResponse2004>;
+    public getUsers(searchSnipptet: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<InlineResponse2004>>;
+    public getUsers(searchSnipptet: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<InlineResponse2004>>;
     public getUsers(searchSnipptet: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (searchSnipptet === null || searchSnipptet === undefined) {
             throw new Error('Required parameter searchSnipptet was null or undefined when calling getUsers.');
@@ -119,10 +153,6 @@ export class UserManagementService {
 
         let headers = this.defaultHeaders;
 
-        // authentication (basicAuth) required
-        if (this.configuration.username || this.configuration.password) {
-            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
-        }
         // to determine the Accept header
         const httpHeaderAccepts: string[] = [
             'application/json'
@@ -133,7 +163,7 @@ export class UserManagementService {
         }
 
 
-        return this.httpClient.get<InlineResponse2003>(`${this.configuration.basePath}/users`,
+        return this.httpClient.get<InlineResponse2004>(`${this.configuration.basePath}/users`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -147,69 +177,17 @@ export class UserManagementService {
     /**
      * Registirere einen neuen Nutzer
      * Der Nutzer wird erstellt. Daraufhin, kann der Nutzer sich mit den angegebenen Nutzernamen und Passwort registrieren. &lt;br&gt; Bei der Registrierung wird ein ID-Token sowie der gewünschte Nutzername übergeben. 
-     * @param inlineObject2 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public registerUser(inlineObject2?: InlineObject2, observe?: 'body', reportProgress?: boolean): Observable<InlineResponse201>;
-    public registerUser(inlineObject2?: InlineObject2, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<InlineResponse201>>;
-    public registerUser(inlineObject2?: InlineObject2, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<InlineResponse201>>;
-    public registerUser(inlineObject2?: InlineObject2, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        let headers = this.defaultHeaders;
-
-        // authentication (basicAuth) required
-        if (this.configuration.username || this.configuration.password) {
-            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
-        }
-        // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected !== undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.post<InlineResponse201>(`${this.configuration.basePath}/users`,
-            inlineObject2,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Erhalte Basisfnformationen und Präferenzen eines Nutzer anhand dessen Id-Tokens
-     * Erhalte Basisfnformationen und Präferenzen eines Nutzer anhand dessen Id-Tokens
      * @param inlineObject1 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public tokenToUserMatcherPost(inlineObject1?: InlineObject1, observe?: 'body', reportProgress?: boolean): Observable<UserInfo>;
-    public tokenToUserMatcherPost(inlineObject1?: InlineObject1, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserInfo>>;
-    public tokenToUserMatcherPost(inlineObject1?: InlineObject1, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserInfo>>;
-    public tokenToUserMatcherPost(inlineObject1?: InlineObject1, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public registerUser(inlineObject1?: InlineObject1, observe?: 'body', reportProgress?: boolean): Observable<UserInfo>;
+    public registerUser(inlineObject1?: InlineObject1, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserInfo>>;
+    public registerUser(inlineObject1?: InlineObject1, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserInfo>>;
+    public registerUser(inlineObject1?: InlineObject1, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
-        // authentication (basicAuth) required
-        if (this.configuration.username || this.configuration.password) {
-            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
-        }
         // to determine the Accept header
         const httpHeaderAccepts: string[] = [
             'application/json'
@@ -229,7 +207,7 @@ export class UserManagementService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.post<UserInfo>(`${this.configuration.basePath}/tokenToUserMatcher`,
+        return this.httpClient.post<UserInfo>(`${this.configuration.basePath}/users`,
             inlineObject1,
             {
                 withCredentials: this.configuration.withCredentials,

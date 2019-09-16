@@ -9,10 +9,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { FrameValueAttribute } from './frameValueAttribute';
+import { KEFactors } from './kEFactors';
+import { CorrectionsFactors } from './correctionsFactors';
 
 
-export interface InlineResponse201 { 
-    selfID?: string;
-    username?: string;
+export interface Context { 
+    id?: string;
+    frameValues?: FrameValueAttribute;
+    keFactors?: KEFactors;
+    correctionsFactors?: CorrectionsFactors;
 }
 

@@ -9,10 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { InlineResponse2003Users } from './inlineResponse2003Users';
+import { Context } from './context';
 
 
 export interface InlineResponse2003 { 
-    users?: Array<InlineResponse2003Users>;
+    contexts?: Array<Context>;
 }
 

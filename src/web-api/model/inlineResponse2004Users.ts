@@ -11,7 +11,7 @@
  */
 
 
-export interface InlineResponse2003Users { 
+export interface InlineResponse2004Users { 
     userID?: string;
     userName?: string;
 }

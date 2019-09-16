@@ -11,8 +11,11 @@
  */
 
 
-export interface InlineObject1 { 
-    username?: string;
-    idToken?: string;
+export interface KEFactors { 
+    id?: string;
+    /**
+     * Es liegt am Client herauszufinden, ob der Nutzer einen statischen Wert hat, wenn z.B. alle Werte glei sind
+     */
+    dailyKEFactors?: Array<number>;
 }
 

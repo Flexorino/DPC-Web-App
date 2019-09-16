@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { DiariesService } from './api/diaries.service';
 import { EintrgeService } from './api/eintrge.service';
 import { GrantManagementService } from './api/grantManagement.service';
+import { KontexteService } from './api/kontexte.service';
 import { TagebcherEssensdatenbankService } from './api/tagebcherEssensdatenbank.service';
 import { TagebcherTagsService } from './api/tagebcherTags.service';
 import { UserManagementService } from './api/userManagement.service';
@@ -19,6 +20,7 @@ import { UtilService } from './api/util.service';
     DiariesService,
     EintrgeService,
     GrantManagementService,
+    KontexteService,
     TagebcherEssensdatenbankService,
     TagebcherTagsService,
     UserManagementService,

@@ -11,8 +11,11 @@
  */
 
 
-export interface InlineObject2 { 
-    username?: string;
-    idToken?: string;
+export interface CorrectionsFactors { 
+    id?: string;
+    /**
+     * Es liegt am Client herauszufinden, ob der Nutzer einen statischen Wert hat, wenn z.B. alle Werte glei sind
+     */
+    dailyCorrectionFactors?: Array<number>;
 }
 

@@ -9,6 +9,17 @@ import { DiaryReference } from '../model/user/diary-reference';
 import { map } from 'rxjs/operators';
 import { Grant } from '../model/user/grant';
 
+export interface UserInfo { 
+    /**
+     * name of the user
+     */
+    name?: string;
+    /**
+     * Die Nutzer-Id
+     */
+    id?: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class UserService {
 
@@ -16,28 +27,33 @@ export class UserService {
 
     }
 
-    public getMyDiaries() : Observable<Array<DiaryReference>>{
-        return this.userManService.getUserDiaries("").pipe(map(x => 
-            {
-                let references = [];
-                x.references.forEach(y => {
-                    let reference = new DiaryReference();
-                    reference.diaryId = y.diaryId;
-                    reference.diaryName = y.diaryName;
-                    references.push(reference);
-                });
-                return references;
-            }
-            ))
+
+    
+    public getSelfInformation(): Observable<UserInfo> {
+        return this.userManService.getSelf();
     }
 
-    public getMyGrants(): Observable<Array<Grant>>{
+    public getMyDiaries(): Observable<Array<DiaryReference>> {
+        return this.userManService.getUserDiaries("").pipe(map(x => {
+            let references = [];
+            x.references.forEach(y => {
+                let reference = new DiaryReference();
+                reference.diaryId = y.diaryId;
+                reference.diaryName = y.diaryName;
+                references.push(reference);
+            });
+            return references;
+        }
+        ))
+    }
+
+    public getMyGrants(): Observable<Array<Grant>> {
         return this.grantService.getGrantsForUser().pipe(
-            map( (x : any) => {
+            map((x: any) => {
                 let grants = [];
                 x.grants.forEach(y => {
                     let grant = new Grant();
-                    grant.userReference = new UserReference(y.user.name,y.user.id);
+                    grant.userReference = new UserReference(y.user.name, y.user.id);
                     grant.rights = [Rights.FULL_ACCESS];
                     let diaryRef = new DiaryReference();
                     diaryRef.diaryId = y.diaryReference.diaryId;
@@ -48,5 +64,5 @@ export class UserService {
                 return grants;
             })
         );
-    } 
+    }
 }

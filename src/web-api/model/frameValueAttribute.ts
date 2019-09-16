@@ -11,8 +11,15 @@
  */
 
 
-export interface InlineObject1 { 
-    username?: string;
-    idToken?: string;
+export interface FrameValueAttribute { 
+    id?: string;
+    lowerBSLimit?: number;
+    higherBSLimit?: number;
+    hyperglycemiaLimit?: number;
+    hypoglycemiaLimit?: number;
+    /**
+     * Es liegt am Client herauszufinden, ob der Nutzer einen statischen Wert hat, wenn z.B. alle Werte glei sind
+     */
+    dailyBSGoalValues?: Array<number>;
 }
 
