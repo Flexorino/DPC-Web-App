@@ -6,8 +6,8 @@
         <div *ngIf="foodOverView" class="flex">
                 <mat-icon>restaurant_menu</mat-icon>
                 <div> {{foodOverView.amount * keFactor | number:'1.0-1'}} KE </div>
-                <div *ngIf="foodOverView.name"> ,{{foodOverView.name}} </div>
-                <div *ngIf="foodOverView.more"> ,... </div>
+                <div *ngIf="foodOverView.name"> &nbsp; ,{{foodOverView.name}} </div>
+                <div *ngIf="foodOverView.more"> , &nbsp;... </div>
         </div> 
 
 
