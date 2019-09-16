@@ -16,6 +16,7 @@ export interface FoodDescr {
     resorption?: FoodDescr.ResorptionEnum;
     carbsFactor?: number;
     comment?: string;
+    name?: string;
 }
 export namespace FoodDescr {
     export type ResorptionEnum = 'fast' | 'medium' | 'slow';

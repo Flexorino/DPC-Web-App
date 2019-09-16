@@ -87,6 +87,7 @@ export class EntryService {
                     }
                     food.description = webFood.comment;
                     food.carbsFactor = webFood.carbsFactor;
+                    food.name = webFood.name;
                     foodIntake.food = food;
                 }
                 newEntry.foodIntakes.push(foodIntake);
@@ -120,6 +121,7 @@ export class EntryService {
                         let descr: FoodDescr = {};
                         descr.carbsFactor = x.food.carbsFactor;
                         descr.comment = x.food.description;
+                        descr.name = x.food.name;
                         if (x.food.absorption) {
                             descr.resorption = x.food.absorption === Absorption.FAST ? "fast" : x.food.absorption === Absorption.MEDIUM ? "medium" : "slow";
                         }
