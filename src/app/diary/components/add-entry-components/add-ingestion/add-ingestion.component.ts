@@ -165,11 +165,18 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
   onBolusRequest() {
     this.loading = true;
     this.bolusDao.getBolusSuggestion(this.entryInModification).subscribe(x => {
-      this.correctionFoodBolusControl.setValue(null);
       setTimeout(() => {
+        this.correctionFoodBolusControl.reset();
         let intake = x.insulinIntakes.find(x => x.semanticIdentifier === BaseInsulinIntakeSemantics.CORRECTION_BOLUS && x instanceof SimpleInsulinIntake);
         if (intake) {
           this.correctionFoodBolusControl.setValue(new ConstructionControlValue(null, intake));
+        }
+      });
+      setTimeout(() => {
+        this.simpleFoodBolusControl.reset(null,{emitEvent:false});
+        let intake = x.insulinIntakes.find(x => x.semanticIdentifier === BaseInsulinIntakeSemantics.FOOD_BOLUS && x instanceof SimpleInsulinIntake);
+        if (intake) {
+          this.simpleFoodBolusControl.setValue(new ConstructionControlValue(null, intake));
         }
       });
       this.loading = false;
