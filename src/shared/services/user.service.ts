@@ -45,6 +45,10 @@ export class UserService {
         return EMPTY;
     }
 
+    public getSelfInformation(): Observable<UserInfo> {
+        return this.userManService.getSelf();
+    }
+
     public getMyGrants(): Observable<Array<Grant>> {
         return this.grantService.getGrantsForUser().pipe(
             map((x: any) => {
