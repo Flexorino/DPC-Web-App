@@ -69,6 +69,8 @@ import { environment } from '../environments/environment';
 import { LoginAndRegisterComponent } from './components/login-and-register/login-and-register.component';
 import { CallbackComponent } from './components/callback/callback.component';
 import { ProfileLoaderComponent } from './components/profile-loader/profile-loader.component';
+import { EntryOverviewVisualizerComponent } from './components/entry-overview-visualizer/entry-overview-visualizer.component';
+
 
 @NgModule({
   declarations: [
@@ -115,7 +117,8 @@ import { ProfileLoaderComponent } from './components/profile-loader/profile-load
     AbsorptionPipe,
     LoginAndRegisterComponent,
     CallbackComponent,
-    ProfileLoaderComponent
+    ProfileLoaderComponent,
+    EntryOverviewVisualizerComponent
   ],
   imports: [
     ReactiveFormsModule,

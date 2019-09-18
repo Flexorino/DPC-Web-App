@@ -5,10 +5,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class CustomTimePipe implements PipeTransform {
 
-  transform(value: number, type? : string, precesion? : number): any {
+  transform(value: Date, type? : string, precesion? : number): any {
 
       if(type === "hours"){
-      return  (value/3600).toFixed(precesion? precesion: 1) + " Stunden";
+      return  value.getHours + " Stunden";
       }
       else{
         let time = this.timeConverter(value);
@@ -20,8 +20,8 @@ export class CustomTimePipe implements PipeTransform {
       }
   }
 
-  private timeConverter(UNIX_timestamp){
-    var a = new Date(UNIX_timestamp * 1000);
+  private timeConverter(date2: Date){
+    var a = date2;
     var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     var year = a.getFullYear();
     var month = months[a.getMonth()];

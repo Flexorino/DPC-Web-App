@@ -9,17 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { FulldiaryDrugs } from './fulldiaryDrugs';
-import { FulldiaryOwner } from './fulldiaryOwner';
-import { FoodDescr } from './foodDescr';
 
 
-export interface FullDiary { 
-    id?: string;
-    owner?: FulldiaryOwner;
-    food?: Array<FoodDescr>;
-    drugs?: Array<FulldiaryDrugs>;
-    insulins?: Array<FulldiaryDrugs>;
-    tags?: Array<FulldiaryDrugs>;
+export interface TimeStampInsulinIntake { 
+    semanticIdentefier?: string;
+    amount?: number;
 }
 

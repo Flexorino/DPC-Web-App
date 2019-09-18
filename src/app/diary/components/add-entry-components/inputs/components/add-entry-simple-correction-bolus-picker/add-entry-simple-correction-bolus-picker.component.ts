@@ -37,7 +37,7 @@ export class AddEntrySimpleCorrectionBolusPickerComponent implements OnInit, Val
       z.semanticIdentifier = BaseInsulinIntakeSemantics.CORRECTION_BOLUS;
       if (control.value) {
         try {
-          z.units = Number.parseInt(control.value);
+          z.units = Number.parseFloat(control.value);
         } catch (e) {
           z.units = null;
         }

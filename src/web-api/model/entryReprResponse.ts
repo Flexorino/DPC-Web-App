@@ -11,9 +11,10 @@
  */
 import { EntryReprAcitvity } from './entryReprAcitvity';
 import { EntryReprResponseMedication } from './entryReprResponseMedication';
-import { EntryReprResponseMealBolus } from './entryReprResponseMealBolus';
+import { FoodIntake } from './foodIntake';
+import { IntervallInsulinIntakeAttr } from './intervallInsulinIntake';
 import { EntryReprResponseTags } from './entryReprResponseTags';
-import { EntryReprResponseCorrectionBolus } from './entryReprResponseCorrectionBolus';
+import { TimeStampInsulinIntake } from './timeStampInsulinIntake';
 import { EntryReprTempBasalChange } from './entryReprTempBasalChange';
 
 
@@ -21,7 +22,7 @@ export interface EntryReprResponse {
     /**
      * Die ID des Eintrages
      */
-    selfID?: string;
+    id?: string;
     /**
      * Unix-Zeit
      */
@@ -30,14 +31,8 @@ export interface EntryReprResponse {
      * Blutzucker in mmol/l
      */
     bloodSugar?: number;
-    mealBolus?: EntryReprResponseMealBolus;
-    correctionBolus?: EntryReprResponseCorrectionBolus;
-    basal?: EntryReprResponseMealBolus;
-    /**
-     * Eingenommene KH in Austauscheinheiten
-     */
-    mealUnits?: number;
-    mealDescription?: string;
+    insulinIntakes?: Array<TimeStampInsulinIntake | IntervallInsulinIntakeAttr>;
+    foodIntakes?: Array<FoodIntake>;
     comment?: string;
     tempBasalChange?: EntryReprTempBasalChange;
     medication?: EntryReprResponseMedication;

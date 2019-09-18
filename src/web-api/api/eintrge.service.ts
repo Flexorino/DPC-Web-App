@@ -17,7 +17,6 @@ import { HttpClient, HttpHeaders, HttpParams,
 import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
-import { EntryRepr } from '../model/entryRepr';
 import { EntryReprResponse } from '../model/entryReprResponse';
 import { InlineResponse2002 } from '../model/inlineResponse2002';
 
@@ -54,14 +53,14 @@ export class EintrgeService {
      * Erstelle einen neuen Eintrag in dem Tagebuch.
      * Generell muss nur ein Zeitstempel angegeben werden und die anderen Attribute sind optional. Das bedeutet, dass z.B. bei einer BZ-Messung nur der Zeitstempel und Blutzcker-Wert übergeben werden muss. Der Aufrufer dieser Methode muss selbst darauf achten, dass die richtigen Medikamenten und Insulin-IDs übertragen werden. Falsche IDs führen zu einem Fehler.
      * @param diaryId Die ID des Tagebuches, bei welchem ein Eintrag hinzugefügt werden soll.
-     * @param entryRepr Eine Repräsentation des zu erstellenden Tagebuch-Eintrages
+     * @param entryReprResponse Eine Repräsentation des zu erstellenden Tagebuch-Eintrages
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public addDiaryEntry(diaryId: string, entryRepr?: EntryRepr, observe?: 'body', reportProgress?: boolean): Observable<EntryReprResponse>;
-    public addDiaryEntry(diaryId: string, entryRepr?: EntryRepr, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EntryReprResponse>>;
-    public addDiaryEntry(diaryId: string, entryRepr?: EntryRepr, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EntryReprResponse>>;
-    public addDiaryEntry(diaryId: string, entryRepr?: EntryRepr, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public addDiaryEntry(diaryId: string, entryReprResponse?: EntryReprResponse, observe?: 'body', reportProgress?: boolean): Observable<EntryReprResponse>;
+    public addDiaryEntry(diaryId: string, entryReprResponse?: EntryReprResponse, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<EntryReprResponse>>;
+    public addDiaryEntry(diaryId: string, entryReprResponse?: EntryReprResponse, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<EntryReprResponse>>;
+    public addDiaryEntry(diaryId: string, entryReprResponse?: EntryReprResponse, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (diaryId === null || diaryId === undefined) {
             throw new Error('Required parameter diaryId was null or undefined when calling addDiaryEntry.');
         }
@@ -88,7 +87,7 @@ export class EintrgeService {
         }
 
         return this.httpClient.post<EntryReprResponse>(`${this.configuration.basePath}/diaries/${encodeURIComponent(String(diaryId))}/entries`,
-            entryRepr,
+            entryReprResponse,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

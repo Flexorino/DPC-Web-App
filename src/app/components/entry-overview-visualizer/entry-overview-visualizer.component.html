@@ -1,0 +1,22 @@
+<div id="overview"> 
+        <div *ngIf="entry.bloodSuger" class="flex">
+                <mat-icon>colorize</mat-icon>
+                <div> {{entry.bloodSuger * bsUnit.factor | number:'1.0-1'}} {{bsUnit.identifier}} </div>
+        </div> 
+        <div *ngIf="foodOverView" class="flex">
+                <mat-icon>restaurant_menu</mat-icon>
+                <div> {{foodOverView.amount * keFactor | number:'1.0-1'}} KE </div>
+                <div *ngIf="foodOverView.name"> &nbsp; ,{{foodOverView.name}} </div>
+                <div *ngIf="foodOverView.more"> , &nbsp;... </div>
+        </div> 
+        <div *ngFor="let insulinIntake of insulinIntakes" class="flex">
+                <mat-icon>create</mat-icon>
+                <div> ({{insulinIntake.semantic}}) </div>
+                <div> &nbsp; {{insulinIntake.ie}} IE</div>
+        </div> 
+
+
+        
+
+
+</div>

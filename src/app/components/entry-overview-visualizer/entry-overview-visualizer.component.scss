@@ -1,0 +1,17 @@
+#overview {
+    display: flex;
+}
+
+.flex {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.flex:not(:last-child)::after {
+    content: "";
+    height: 90%;
+    border-left: 1px solid black;
+    margin-left: 10px;
+    margin-right: 10px;
+}

@@ -1,5 +1,4 @@
-<div [ngStyle]="{'flex-grow':graphViewActivated?1:0}" id="graphArea">asdas
-    {{graphViewActivated}}
+<div [ngStyle]="{'flex-grow':graphViewActivated?1:0}" id="graphArea">
     <div (click)="graphViewActivated= !graphViewActivated" id="graphShowButton" class="material-icons"> expand_less
     </div>
 </div>
@@ -9,9 +8,9 @@
             <mat-card-title> {{aggr.day |customTime:"date"}}
             </mat-card-title>
             <div class="entry" *ngFor="let entry of aggr.entries">
-                <div class="timeDisplay">{{entry.timeStamp |customTime:"dayTime" }} </div>
+                <div class="timeDisplay">{{entry.timeStamp |customTime:"dayTime" }} Uhr</div>
                 <div class="entry_attribute">
-                    {{entry.attributes}}
+                    <app-entry-overview-visualizer [entry]="entry"></app-entry-overview-visualizer>
                 </div>
             </div>
         </mat-card>

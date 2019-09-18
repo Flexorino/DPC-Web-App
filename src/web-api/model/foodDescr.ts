@@ -11,18 +11,20 @@
  */
 
 
-export interface EntryReprResponseMealBolus { 
-    /**
-     * Abgabe in IE
-     */
-    units?: number;
-    /**
-     * Die ID des Insulins
-     */
-    insulin?: string;
-    /**
-     * Der Name des Insulins
-     */
-    insulinName?: string;
+export interface FoodDescr { 
+    id?: string;
+    resorption?: FoodDescr.ResorptionEnum;
+    carbsFactor?: number;
+    comment?: string;
+    name?: string;
 }
+export namespace FoodDescr {
+    export type ResorptionEnum = 'fast' | 'medium' | 'slow';
+    export const ResorptionEnum = {
+        Fast: 'fast' as ResorptionEnum,
+        Medium: 'medium' as ResorptionEnum,
+        Slow: 'slow' as ResorptionEnum
+    };
+}
+
 

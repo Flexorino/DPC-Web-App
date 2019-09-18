@@ -58,6 +58,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
   //MISC:
   currentTimestamp: BehaviorSubject<Date> = new BehaviorSubject(null);
   selectedNormalBolus: BehaviorSubject<number> = new BehaviorSubject(null);
+  minusBolus: BehaviorSubject<number> = new BehaviorSubject(null);
   foodIntakes: Subject<FoodIntakeAttribute[]> = new BehaviorSubject([]);
   currentBS: Subject<number> = new BehaviorSubject(null);
   loading = true;
@@ -82,7 +83,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private handleSubFormSubsciptions() {
-    FormUtil.getImmediateObservableFromRawControl(this.mainFormGroup).subscribe(x => {
+    FormUtil.getImmediateObservableFromRawControl(this.mainFormGroup).pipe(delay(0)).subscribe(x => {
       this.entryInModification = new Entry(null);
       this.entryInModification.foodIntakes = this.foodIntakeListPicker.value.constructed;
       let insulinIntake: Array<InsulinAttribute> = [];
@@ -152,7 +153,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
 
   submit() {
     if (this.mainFormGroup.valid) {
-      let action = new AddEntryActionsProps(this, new Entry(123));
+      let action = new AddEntryActionsProps(this, this.entryInModification);
       this.store.dispatch(AddIngestionActions.CONFIRM(action));
       this.loading = true;
       action.then(x => this.closer.close()).catch(err => {
@@ -162,12 +163,29 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  onMinusBolus($event) {
+    this.minusBolus.next($event);
+  }
+
   onBolusRequest() {
     this.loading = true;
     this.bolusDao.getBolusSuggestion(this.entryInModification).subscribe(x => {
-      this.simpleFoodBolusControl.setValue(x.insulinIntakes.find(x => x.semanticIdentifier === BaseInsulinIntakeSemantics.FOOD_BOLUS && x instanceof SimpleInsulinIntake).units)
+      setTimeout(() => {
+        this.correctionFoodBolusControl.reset();
+        let intake = x.insulinIntakes.find(x => x.semanticIdentifier === BaseInsulinIntakeSemantics.CORRECTION_BOLUS && x instanceof SimpleInsulinIntake);
+        if (intake) {
+          this.correctionFoodBolusControl.setValue(new ConstructionControlValue(null, intake));
+        }
+      });
+      setTimeout(() => {
+        this.simpleFoodBolusControl.reset(null,{emitEvent:false});
+        let intake = x.insulinIntakes.find(x => x.semanticIdentifier === BaseInsulinIntakeSemantics.FOOD_BOLUS && x instanceof SimpleInsulinIntake);
+        if (intake) {
+          this.simpleFoodBolusControl.setValue(new ConstructionControlValue(null, intake));
+        }
+      });
       this.loading = false;
-    });
+    }, err => { alert(err); this.loading = false; });
 
   }
 

@@ -11,18 +11,10 @@
  */
 
 
-export interface EntryReprResponseCorrectionBolus { 
-    /**
-     * Abgabe in IE
-     */
-    units?: number;
-    /**
-     * Die ID des Insulin
-     */
-    insulin?: string;
-    /**
-     * Der Name des Insulins
-     */
-    insulinName?: string;
+export interface IntervallInsulinIntakeAttr { 
+    semanticIdentefier?: string;
+    amount?: number;
+    endTimeStamp?: number;
+    canceledTimestamp?: number;
 }
 

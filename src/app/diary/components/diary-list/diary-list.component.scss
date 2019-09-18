@@ -9,6 +9,8 @@
     border-bottom: 1px solid gray;
     position: relative;
     transition: all 1s;
+    flex-shrink: 0;
+    height: 18px;
 }
 
 #graphShowButton {
@@ -17,13 +19,14 @@
     width: 2rem;
     height: 2rem;
     left: calc(50% - 1rem);
-    background: blanchedalmond;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 50%;
     border: 1px solid gray;
     z-index: 999;
+    background-color: white;
+    transform: rotate(180deg);
 
 }
 
@@ -45,14 +48,16 @@ mat-card {
     border-top: 1px solid gray;
     border-bottom: 1px solid gray;
     align-items: center;
+    overflow: auto;
 }
 
 .timeDisplay {
     background: lightblue;
     padding: 0.2rem;
-    margin-right: 1rem;
+    margin-right: 0.4rem;
+    flex-shrink: 0;
 }
 
 .entry_attribute {
-    margin-left: 1rem;
+    margin-left: 0.4rem;
 }

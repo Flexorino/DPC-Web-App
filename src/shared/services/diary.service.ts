@@ -26,7 +26,6 @@ export class DiaryService {
         return this.networkService.getDiary2(diaryId).pipe(map(
             x => {
                 const diary = new Diary([]);
-                diary.name = x.name;
                 return diary;
             }
         ));

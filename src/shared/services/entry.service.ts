@@ -1,3 +1,10 @@
+import { BaseInsulinIntakeSemantics } from './../model/diary/entry/attributes/insulin-attribute';
+import { SimpleInsulinIntake } from './../model/diary/entry/attributes/simple-Insulin-intake';
+import { TimeStampInsulinIntake } from './../../web-api/model/timeStampInsulinIntake';
+import { Absorption } from './../model/diary/food';
+import { FoodDescr } from './../../web-api/model/foodDescr';
+import { FoodIntakeAttribute } from './../model/diary/entry/attributes/food-intake-attribute';
+import { FoodIntake } from './../../web-api/model/foodIntake';
 import { EntryReprMealBolus } from './../../web-api/model/entryReprMealBolus';
 import { EntryRepr } from './../../web-api/model/entryRepr';
 import { Entry } from 'src/shared/model/diary/entry/entry';
@@ -7,7 +14,7 @@ import { InlineResponse2002 } from './../../web-api/model/inlineResponse2002';
 import { map, timestamp } from 'rxjs/operators';
 import { EintrgeService } from './../../web-api/api/eintrge.service';
 import { Observable } from 'rxjs';
-import { EntryReprResponse } from 'src/web-api';
+import { EntryReprResponse, IntervallInsulinIntakeAttr } from 'src/web-api';
 import { EntryAttributeTypes } from '../model/diary/entry/entry-attribute-types';
 import { Injectable } from '@angular/core';
 import * as d3 from "d3";
@@ -15,6 +22,8 @@ import { InsulinAttribute } from '../model/diary/entry/attributes/insulin-attrib
 import { TempBasalChangeAttribute } from '../model/diary/entry/attributes/temp-basal-change-attribute';
 import { TagAttribute } from '../model/diary/entry/attributes/tag-attribute';
 import { DiaryNavigationService } from './diary.navigation.service';
+import { Food } from '../model/diary/food';
+import { IntervallInsulinIntake } from '../model/diary/entry/attributes/intervall-insulin-intake';
 @Injectable({ providedIn: "root" })
 export class EntryService {
 
@@ -54,34 +63,73 @@ export class EntryService {
 
     }
 
-    public mapEntriesToDays(entries: Array<Entry>): Array<{ day: number, entries: Array<Entry> }> {
+    public mapEntriesToDays(entries: Array<Entry>): Array<{ day: Date, entries: Array<Entry> }> {
         let map: Array<{ day: number, entries: Array<Entry> }> = [];
-        let curMap = d3.nest().key(function (d) {
-            return Number.parseInt((d.timeStamp / 86400).toFixed(0)) * 86400;
-        }).entries(entries).map((x) => { return { day: x.key, entries: x.values }; }).sort((a, b) => a.day - b.day);
+        let curMap = d3.nest().key(function (d: Entry) {
+            return d.timeStamp.getFullYear()+":"+d.timeStamp.getMonth()+":"+d.timeStamp.getDate() ;
+        }).entries(entries).map((x) => { 
+            let splitter = x.key.split(":");
+            let date = new Date(0);
+            date.setFullYear(Number.parseInt(splitter[0]));
+            date.setMonth(Number.parseInt(splitter[1]));
+            date.setDate(Number.parseInt(splitter[2]));
+            return { day: date, entries: x.values }; }).sort((a, b) => b.day - a.day);
         return curMap;
     }
 
     private convertNetworkEntryToInternalEntry(webEntry: EntryReprResponse): Entry {
-        const newEntry: Entry = new Entry(webEntry.timeStamp);
+        const newEntry: Entry = new Entry(webEntry.id);
+        newEntry.timeStamp = new Date(webEntry.timeStamp * 1000);
         if (webEntry.bloodSugar) {
             newEntry.bloodSuger = webEntry.bloodSugar;
         }
-        if (webEntry.mealUnits) {
-            newEntry.carbs = webEntry.mealUnits;
+
+        if (webEntry.insulinIntakes && webEntry.insulinIntakes.length) {
+            newEntry.insulinIntakes = [];
+            webEntry.insulinIntakes.forEach(x => {
+                let query: any = x;
+                if (query.endTimeStamp) {
+                    let intake: IntervallInsulinIntakeAttr = x;
+                    let simpleInsulinIntake = new IntervallInsulinIntake();
+                    if (intake.semanticIdentefier) {
+                        simpleInsulinIntake.semanticIdentifier = intake.semanticIdentefier == "mealBolus" ? BaseInsulinIntakeSemantics.FOOD_BOLUS : intake.semanticIdentefier == "correctionsBolus" ? BaseInsulinIntakeSemantics.CORRECTION_BOLUS : BaseInsulinIntakeSemantics.BASAL;
+                    }
+                    simpleInsulinIntake.units = intake.amount;
+                    simpleInsulinIntake.endTimeStamp = new Date(intake.endTimeStamp * 1000);
+                    newEntry.insulinIntakes.push(simpleInsulinIntake);
+                } else {
+                    let intake: TimeStampInsulinIntake = x;
+                    let simpleInsulinIntake = new SimpleInsulinIntake();
+                    if (intake.semanticIdentefier) {
+                        simpleInsulinIntake.semanticIdentifier = intake.semanticIdentefier == "mealBolus" ? BaseInsulinIntakeSemantics.FOOD_BOLUS : intake.semanticIdentefier == "correctionsBolus" ? BaseInsulinIntakeSemantics.CORRECTION_BOLUS : BaseInsulinIntakeSemantics.BASAL;
+                    }
+                    simpleInsulinIntake.units = intake.amount;
+                    newEntry.insulinIntakes.push(simpleInsulinIntake);
+
+                }
+            });
         }
-        if (webEntry.basal) {
-            newEntry.basal = new InsulinAttribute();
+
+        if (webEntry.foodIntakes) {
+            newEntry.foodIntakes = [];
+            webEntry.foodIntakes.forEach(x => {
+                let foodIntake = new FoodIntakeAttribute();
+                foodIntake.amount = x.amount;
+                if (x.food) {
+                    let webFood: FoodDescr = x.food as FoodDescr;
+                    let food = new Food(webEntry.id);
+                    if (webFood.resorption) {
+                        food.absorption = webFood.resorption == "fast" ? Absorption.FAST : webFood.resorption == "medium" ? Absorption.MEDIUM : Absorption.SLOW;
+                    }
+                    food.description = webFood.comment;
+                    food.carbsFactor = webFood.carbsFactor;
+                    food.name = webFood.name;
+                    foodIntake.food = food;
+                }
+                newEntry.foodIntakes.push(foodIntake);
+            });
         }
-        if (webEntry.comment) {
-            newEntry.comment = webEntry.comment;
-        }
-        if (webEntry.correctionBolus) {
-            newEntry.correctionBolus = new InsulinAttribute();
-        }
-        if (webEntry.mealBolus) {
-            newEntry.mealBolus = new InsulinAttribute();
-        }
+
         if (webEntry.tempBasalChange) {
             newEntry.tempBasalChange = new TempBasalChangeAttribute(webEntry.tempBasalChange.duration, webEntry.tempBasalChange.percentage);
         }
@@ -91,41 +139,64 @@ export class EntryService {
         return newEntry;
     }
 
-    private convertInternatlEntryToNEtworkEntry(entry: Entry): EntryRepr {
-        const webEntry: EntryRepr = { timeStamp: 0 };
-        webEntry.timeStamp = null;
+    private convertInternatlEntryToNEtworkEntry(entry: Entry): EntryReprResponse {
+        const webEntry: EntryReprResponse = { timeStamp: 0 };
+        webEntry.timeStamp = Math.round(entry.timeStamp.getTime() / 1000);;
         if (entry.bloodSuger) {
             webEntry.bloodSugar = entry.bloodSuger;
         }
-        if (entry.carbs) {
-            webEntry.mealUnits = entry.carbs;
+
+        if (entry.insulinIntakes && entry.insulinIntakes.length) {
+            let intakes = [];
+            entry.insulinIntakes.forEach(x => {
+                if (x instanceof SimpleInsulinIntake) {
+                    let identifier = x.semanticIdentifier === BaseInsulinIntakeSemantics.FOOD_BOLUS ? "mealBolus" : x.semanticIdentifier === BaseInsulinIntakeSemantics.CORRECTION_BOLUS ? "correctionBolus" : "bolus";
+                    let intake = { semanticIdentefier: identifier, amount: x.units };
+                    intakes.push(intake);
+                } else if (x instanceof IntervallInsulinIntake) {
+                    let identifier = x.semanticIdentifier === BaseInsulinIntakeSemantics.FOOD_BOLUS ? "mealBolus" : x.semanticIdentifier === BaseInsulinIntakeSemantics.CORRECTION_BOLUS ? "correctionBolus" : "bolus";
+                    let intake: IntervallInsulinIntakeAttr = { semanticIdentefier: identifier, amount: x.units, endTimeStamp: x.endTimeStamp.getTime() / 1000 };
+                    intakes.push(intake);
+                }
+            })
+            webEntry.insulinIntakes = intakes;
         }
-        if (entry.basal) {
-            webEntry.basal = {};
-           // webEntry.basal.insulin = entry.basal.insulinId;
-            webEntry.basal.units = entry.basal.units;
+
+        if (entry.foodIntakes && entry.foodIntakes.length) {
+            let intakes = [];
+            entry.foodIntakes.forEach(x => {
+                let intake: FoodIntake = { amount: x.amount };
+                if (x.food) {
+                    if (x.food.id) {
+                        intake.food = x.food.id;
+                    } else {
+                        let descr: FoodDescr = {};
+                        descr.carbsFactor = x.food.carbsFactor;
+                        descr.comment = x.food.description;
+                        descr.name = x.food.name;
+                        if (x.food.absorption) {
+                            descr.resorption = x.food.absorption === Absorption.FAST ? "fast" : x.food.absorption === Absorption.MEDIUM ? "medium" : "slow";
+                        }
+                        intake.food = descr;
+                    }
+                }
+                intakes.push(intake);
+            })
+
+            webEntry.foodIntakes = intakes;
+
         }
+
         if (entry.comment) {
             webEntry.comment = entry.comment;
         }
-        if (entry.correctionBolus) {
-            webEntry.correctionBolus = {};
-        //    webEntry.correctionBolus.insulin = entry.correctionBolus.insulinId;
-            webEntry.correctionBolus.units = entry.correctionBolus.units;
-        }
-        if (entry.mealBolus) {
-            webEntry.mealBolus = {};
-          //  webEntry.mealBolus.insulin = entry.mealBolus.insulinId;
-            webEntry.mealBolus.units = entry.mealBolus.units;
-        }
+
         if (entry.tempBasalChange) {
             webEntry.tempBasalChange = {};
             webEntry.tempBasalChange.duration = entry.tempBasalChange.duration;
             webEntry.tempBasalChange.percentage = entry.tempBasalChange.factor;
         }
-        if (entry.tags) {
-            webEntry.tags = entry.tags.map(x => x.tagId);
-        }
+
         return webEntry;
     }
 }
