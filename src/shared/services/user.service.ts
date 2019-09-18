@@ -6,10 +6,10 @@ import { UserManagementService } from './../../web-api/api/userManagement.servic
 import { Injectable } from "@angular/core";
 import { Observable, EMPTY } from 'rxjs';
 import { DiaryReference } from '../model/user/diary-reference';
-import { map } from 'rxjs/operators';
+import { map, filter } from 'rxjs/operators';
 import { Grant } from '../model/user/grant';
 
-export interface UserInfo { 
+export interface UserInfo {
     /**
      * name of the user
      */
@@ -20,11 +20,20 @@ export interface UserInfo {
     id?: string;
 }
 
+export interface RegisterInfo {
+    username?: string;
+    idToken?: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class UserService {
 
     constructor(private userManService: UserManagementService, private grantService: GrantManagementService) {
 
+    }
+
+    public register(info: RegisterInfo): Observable<UserInfo> {
+        return this.userManService.registerUser(info);
     }
 
     public getMyDiaries(): Observable<Array<DiaryReference>> {
@@ -46,7 +55,7 @@ export class UserService {
     }
 
     public getSelfInformation(): Observable<UserInfo> {
-        return this.userManService.getSelf();
+        return this.userManService.getSelf().pipe(map(x => x.id === undefined ? null : x));
     }
 
     public getMyGrants(): Observable<Array<Grant>> {

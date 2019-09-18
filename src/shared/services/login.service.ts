@@ -3,7 +3,7 @@ import { ConfigurationParameters } from './../../web-api/configuration';
 import { Configuration } from 'src/web-api';
 import { AuthService } from 'src/app/auth.service';
 import { map, tap, flatMap, catchError } from 'rxjs/operators';
-import { BehaviorSubject, Observable, Subject, combineLatest, config } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, combineLatest, config, pipe } from 'rxjs';
 import { Injectable } from "@angular/core";
 
 export class LoginInformation {
@@ -17,17 +17,31 @@ export class LoginService {
 
     private current: BehaviorSubject<LoginInformation> = new BehaviorSubject(null);
     public loginInformation$: Observable<LoginInformation>;
+    public unknownAuthentication: Observable<void>;
 
+    private unknownAuthenticationSubject: Subject<void> = new Subject();
     private initialized$: Subject<void> = new Subject();
+
     private intit = false;
 
     constructor(private auth: AuthService, private apiConfig: Configuration, private userService: UserService) {
         auth.localAuthSetup();
 
+        this.unknownAuthentication = this.unknownAuthenticationSubject;
+
         auth.isAuthenticated$.subscribe(x => {
             if (x) {
                 console.log("AUTH");
-                auth.getTokenSilently$().pipe(tap(x => apiConfig.accessToken = x), flatMap(x => userService.getSelfInformation())).subscribe(x => this.current.next(new LoginInformation(x.id, "kek")), x => console.log("LOGOUT"));
+                auth.getTokenSilently$().pipe(tap(x => apiConfig.accessToken = x), flatMap(x => userService.getSelfInformation())).subscribe(x => {
+                    if (!x) {
+                        this.unknownAuthenticationSubject.next();
+                        if (this.current.getValue()) {
+                            this.current.next(null);
+                        }
+                    } else {
+                        this.current.next(new LoginInformation(x.id, "ad"));
+                    }
+                });
             } else {
                 this.current.next(null);
             }
@@ -41,7 +55,13 @@ export class LoginService {
     }
 
     public login() {
+        this.auth.login("/callback");
+    }
 
+    public register(name: string) : Observable<void> {
+        return this.auth.getTokenSilently$().pipe(flatMap(x => 
+            this.userService.register({username: name, idToken: x})
+            ), map(x => null));
     }
 
     public get currentUserInformation(): LoginInformation {

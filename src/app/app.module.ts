@@ -70,6 +70,8 @@ import { LoginAndRegisterComponent } from './components/login-and-register/login
 import { CallbackComponent } from './components/callback/callback.component';
 import { ProfileLoaderComponent } from './components/profile-loader/profile-loader.component';
 import { EntryOverviewVisualizerComponent } from './components/entry-overview-visualizer/entry-overview-visualizer.component';
+import { RegisterViewComponent } from './components/register-view/register-view.component';
+
 
 
 @NgModule({
@@ -118,7 +120,8 @@ import { EntryOverviewVisualizerComponent } from './components/entry-overview-vi
     LoginAndRegisterComponent,
     CallbackComponent,
     ProfileLoaderComponent,
-    EntryOverviewVisualizerComponent
+    EntryOverviewVisualizerComponent,
+    RegisterViewComponent
   ],
   imports: [
     ReactiveFormsModule,

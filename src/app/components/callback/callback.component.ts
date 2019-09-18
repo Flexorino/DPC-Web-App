@@ -1,3 +1,4 @@
+import { LoginService } from './../../../shared/services/login.service';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/auth.service';
 
@@ -8,9 +9,10 @@ import { AuthService } from 'src/app/auth.service';
 })
 export class CallbackComponent implements OnInit {
 
-  constructor(private auth: AuthService) { }
+  constructor(private auth: AuthService, private loginService: LoginService) { }
 
   ngOnInit() {
+    this.loginService.unknownAuthentication.subscribe(x => console.log("unknown"));
     this.auth.handleAuthCallback();
   }
 

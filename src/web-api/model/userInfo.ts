@@ -13,6 +13,7 @@ import { UserInfoPreferences } from './userInfoPreferences';
 
 
 export interface UserInfo { 
+
     /**
      * name of the user
      */

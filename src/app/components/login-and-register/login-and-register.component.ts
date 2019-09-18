@@ -10,13 +10,13 @@ import { LoginService, LoginInformation } from 'src/shared/services/login.servic
 })
 export class LoginAndRegisterComponent implements OnInit {
 
-  constructor(public auth: AuthService, private loginService: LoginService) { }
+  constructor(private loginService: LoginService) { }
 
   ngOnInit() {
   }
 
   login() {
-    this.auth.login("/profile-loading");
+    this.loginService.login();
   }
 
   test() {
