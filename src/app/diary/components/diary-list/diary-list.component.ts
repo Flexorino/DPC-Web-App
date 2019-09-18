@@ -38,7 +38,10 @@ export class DiaryListComponent implements OnInit, OnDestroy {
       return this.entryService.mapEntriesToDays(x.loadedEntries);
     }, tap(x => console.log(x)))).subscribe(
       x => {
-        this.dayMappedEntries = x.map(z => ({ day: z.day, entries: z.entries }));
+        this.dayMappedEntries = x.map(z => {
+          let sortedEntries = z.entries.sort((a,b)=> +a.timeStamp - +b.timeStamp);
+          return { day: z.day, entries: z.entries }
+        });
       }
     );
     let promiseResolve;
@@ -55,7 +58,7 @@ export class DiaryListComponent implements OnInit, OnDestroy {
   }
 
   constructor(private entryService: EntryService, private store: Store<{ diary: Diary }>) {
-   }
+  }
 
 
 

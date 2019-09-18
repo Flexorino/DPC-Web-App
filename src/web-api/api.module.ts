@@ -45,4 +45,4 @@ export class ApiModule {
         }
     }
 }
-export function baseConfig() { return new Configuration({ basePath: "http://localhost:8889" }) }
+export function baseConfig() { return new Configuration({ basePath: "https://shy-duck-49.localtunnel.me" }) }
