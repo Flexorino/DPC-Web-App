@@ -2,8 +2,8 @@ import { UserService } from './user.service';
 import { ConfigurationParameters } from './../../web-api/configuration';
 import { Configuration } from 'src/web-api';
 import { AuthService } from 'src/app/auth.service';
-import { map, tap, flatMap, catchError } from 'rxjs/operators';
-import { BehaviorSubject, Observable, Subject, combineLatest, config, pipe } from 'rxjs';
+import { map, tap, flatMap, catchError, filter } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subject, combineLatest, config, pipe, race, timer as keko } from 'rxjs';
 import { Injectable } from "@angular/core";
 
 export class LoginInformation {
@@ -23,6 +23,7 @@ export class LoginService {
 
 
     private unknownAuthenticationSubject: Subject<void> = new Subject();
+    private initialized$: Subject<void> = new Subject();
 
     private intit = false;
 
@@ -52,8 +53,13 @@ export class LoginService {
 
         this.loginInformation$ = this.current.asObservable();
         this.initialized = this.intitializedSub.asObservable();
-        this.initialized.subscribe(x => this.intit = true);
-        setTimeout(x => this.intitializedSub.next(true), 2000);
+        this.initialized$.subscribe(x => {
+            this.intit = true;
+            this.intitializedSub.next(true)
+        });
+        let timer : Observable<void> = keko(5000, 1000).pipe(map(x => null));
+        let authg : Observable<void> = this.current.pipe(filter(x => x!== null), map(x => null));
+        race(timer, authg).subscribe(() => this.initialized$.next());
         //setTimeout(x => this.current.next(new LoginInformation("asd", "adsa")), 1000);
     }
 
@@ -73,13 +79,13 @@ export class LoginService {
 
     public get isLoggedIn(): Observable<boolean> {
         if (!this.intit) {
-            return this.initialized.pipe(map(x => this.current.getValue() !== null));
+            return this.initialized$.pipe(map(x => this.current.getValue() !== null));
         } else {
             return this.current.pipe(map(x => x !== null));
         }
     }
 
-    public logout(){
+    public logout() {
         this.auth.logout();
     }
 

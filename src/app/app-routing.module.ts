@@ -26,6 +26,7 @@ import { LoginAndRegisterComponent } from './components/login-and-register/login
 import { CallbackComponent } from './components/callback/callback.component';
 import { ProfileLoaderComponent } from './components/profile-loader/profile-loader.component';
 import { RegisterViewComponent } from './components/register-view/register-view.component';
+import { UserInfoComponent } from './user-info/user-info.component';
 
 
 
@@ -35,7 +36,9 @@ const routes: Routes = [
   { path: "callback", component: CallbackComponent },
   { path: "profile-loading", component: ProfileLoaderComponent },
   {
-    path: "", component: BaseNavComponent, canActivateChild: [AuthGuard],children: [{
+    path: "", component: BaseNavComponent, canActivateChild: [AuthGuard],children: [
+      {path:"account", component: UserInfoComponent},
+      {
       path: "diary", children: [
         { path: "", component: DiaryHeaderExtensionComponent, outlet: "base-nav-extension" },
         {
