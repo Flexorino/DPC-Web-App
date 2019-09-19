@@ -10,9 +10,12 @@ import { LoginService, LoginInformation } from 'src/shared/services/login.servic
 })
 export class LoginAndRegisterComponent implements OnInit {
 
+  public loggedIn: boolean = false;
+
   constructor(private loginService: LoginService) { }
 
   ngOnInit() {
+    this.loginService.isLoggedIn.subscribe(x => this.loggedIn = x);
   }
 
   login() {
@@ -21,6 +24,10 @@ export class LoginAndRegisterComponent implements OnInit {
 
   test() {
     //this.loginService.currentUserInformation = new LoginInformation("kekoroni", "kekus");
+  }
+
+  logout () {
+    this.loginService.logout();
   }
 
 }

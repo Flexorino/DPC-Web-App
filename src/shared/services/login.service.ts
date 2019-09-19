@@ -76,6 +76,10 @@ export class LoginService {
         }
     }
 
+    public logout(){
+        this.auth.logout();
+    }
+
 
 }
 
