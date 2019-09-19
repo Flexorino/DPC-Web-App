@@ -91,7 +91,7 @@ login(redirectPath: string = '/') {
       client.loginWithRedirect({
         redirect_uri: `${window.location.origin}/callback`,
         appState: { target: redirectPath },
-        prompt: "select_account"
+        prompt: 'login'
       });
     });
   }

@@ -1,6 +1,8 @@
 <div id="content">
     <h1>DPC</h1>
     <h3>- Project -</h3>
-    <button *ngIf="!loggedIn" class="btn" mat-raised-button color="primary" (click)="login()">Login/Registireren</button>
-    <button *ngIf="loggedIn" class="btn" mat-raised-button color="warn" (click)="logout()">Test</button>
+    <button *ngIf="!loggedIn&&init" class="btn" mat-raised-button color="primary" (click)="login()">Login/Registireren</button>
+    <button *ngIf="loggedIn&&init" class="btn" mat-raised-button color="warn" (click)="logout()">logout</button>
+
+    <mat-spinner *ngIf="!init"></mat-spinner>
 </div>

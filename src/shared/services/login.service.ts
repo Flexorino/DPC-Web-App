@@ -18,9 +18,11 @@ export class LoginService {
     private current: BehaviorSubject<LoginInformation> = new BehaviorSubject(null);
     public loginInformation$: Observable<LoginInformation>;
     public unknownAuthentication: Observable<void>;
+    public initialized: Observable<boolean>;
+    private intitializedSub = new BehaviorSubject(false);
+
 
     private unknownAuthenticationSubject: Subject<void> = new Subject();
-    private initialized$: Subject<void> = new Subject();
 
     private intit = false;
 
@@ -49,8 +51,9 @@ export class LoginService {
         auth.isAuthenticated$.subscribe(x => console.log("AUTH: " + x));
 
         this.loginInformation$ = this.current.asObservable();
-        this.initialized$.subscribe(x => this.intit = true);
-        setTimeout(x => this.initialized$.next(), 3000);
+        this.initialized = this.intitializedSub.asObservable();
+        this.initialized.subscribe(x => this.intit = true);
+        setTimeout(x => this.intitializedSub.next(true), 2000);
         //setTimeout(x => this.current.next(new LoginInformation("asd", "adsa")), 1000);
     }
 
@@ -70,7 +73,7 @@ export class LoginService {
 
     public get isLoggedIn(): Observable<boolean> {
         if (!this.intit) {
-            return this.initialized$.pipe(map(x => this.current.getValue() !== null));
+            return this.initialized.pipe(map(x => this.current.getValue() !== null));
         } else {
             return this.current.pipe(map(x => x !== null));
         }
