@@ -25,11 +25,13 @@ import { SearchViewComponent } from './diary/components/search-view/search-view.
 import { LoginAndRegisterComponent } from './components/login-and-register/login-and-register.component';
 import { CallbackComponent } from './components/callback/callback.component';
 import { ProfileLoaderComponent } from './components/profile-loader/profile-loader.component';
+import { RegisterViewComponent } from './components/register-view/register-view.component';
 
 
 
 const routes: Routes = [
   { path: "login", component: LoginAndRegisterComponent },
+  { path: "register", component: RegisterViewComponent },
   { path: "callback", component: CallbackComponent },
   { path: "profile-loading", component: ProfileLoaderComponent },
   {

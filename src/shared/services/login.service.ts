@@ -39,7 +39,7 @@ export class LoginService {
                             this.current.next(null);
                         }
                     } else {
-                        this.current.next(new LoginInformation(x.id, "ad"));
+                        this.current.next(new LoginInformation(x.id, x.preferences.defaultDiary));
                     }
                 });
             } else {
@@ -58,10 +58,10 @@ export class LoginService {
         this.auth.login("/callback");
     }
 
-    public register(name: string) : Observable<void> {
-        return this.auth.getTokenSilently$().pipe(flatMap(x => 
-            this.userService.register({username: name, idToken: x})
-            ), map(x => null));
+    public register(name: string): Observable<void> {
+        return this.auth.getTokenSilently$().pipe(flatMap(x =>
+            this.userService.register({ username: name, idToken: x })
+        ), tap(x => this.current.next(new LoginInformation(x.id, x.preferences.defaultDiary))), map(x => null));
     }
 
     public get currentUserInformation(): LoginInformation {

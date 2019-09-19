@@ -18,7 +18,16 @@ export interface UserInfo {
      * Die Nutzer-Id
      */
     id?: string;
+
+    preferences?: UserInfoPreferences;
 }
+
+
+export interface UserInfoPreferences { 
+
+    defaultDiary?: string;
+}
+
 
 export interface RegisterInfo {
     username?: string;

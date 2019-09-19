@@ -1,1 +1,8 @@
-<p>register-view works!</p>
+<div id="content">
+    <h1> Hallo! </h1>
+    <h3>Welchen Nutzernamen wollen Sie benutzen?</h3>
+    <mat-form-field class="fullWidthInput">
+        <input [(ngModel)]="username" class="name" matInput placeholder="Nutzername" type="text">
+    </mat-form-field>
+    <button class="fullWidthInput" mat-raised-button color="primary" (click)="confirm()">Bestätigen</button>
+</div>

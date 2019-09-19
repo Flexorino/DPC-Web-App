@@ -90,7 +90,8 @@ login(redirectPath: string = '/') {
       // Call method to log in
       client.loginWithRedirect({
         redirect_uri: `${window.location.origin}/callback`,
-        appState: { target: redirectPath }
+        appState: { target: redirectPath },
+        prompt: "select_account"
       });
     });
   }
@@ -117,7 +118,7 @@ login(redirectPath: string = '/') {
     // Response will be an array of user and login status
     authComplete$.subscribe(([user, loggedIn]) => {
       // Redirect to target route after callback processing
-      this.router.navigate([targetRoute]);
+      //this.router.navigate([targetRoute]);
     });
   }
 
@@ -127,7 +128,7 @@ login(redirectPath: string = '/') {
       // Call method to log out
       client.logout({
         client_id: "cPbMOvfSjhKXcUvG2BwLvbIdmji0LKq0",
-        returnTo: `${window.location.origin}`
+        returnTo: `${window.location.origin}/login`
       });
     });
   }
