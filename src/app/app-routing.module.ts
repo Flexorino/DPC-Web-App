@@ -34,7 +34,7 @@ const routes: Routes = [
             { path: "", redirectTo: "overview", pathMatch: 'full' },
             { path: "overview", component: DiaryOverviewComponent, resolve: { null: PageTitleResolver }, data: { title: "Übersicht" } },
             { path: "statistics", component: DiaryStatisticsComponent, resolve: { null: PageTitleResolver }, data: { title: "Statistik" } },
-            { path: "list", component: DiaryListComponent, resolve: { null: PageTitleResolver }, data: { title: "Listen-Ansicht" } },
+            { path: "list", component: DiaryListComponent, resolve: { null: PageTitleResolver }, data: { title: "Listenansicht" } },
           ]
         }
       ]
@@ -54,9 +54,9 @@ const routes: Routes = [
                 path: "add", children: [
                   { path: "", pathMatch: "full", redirectTo: "overview" },
                   { path: "overview", component: AddOverviewComponent, resolve: { null: PageTitleResolver }, data: { title: "Eintrag hinzufügen" } },
-                  { path: "ingestion", component: AddIngestionComponent, resolve: { null: PageTitleResolver }, data: { title: "Essens-Einnahme hinzufügen" } },
+                  { path: "ingestion", component: AddIngestionComponent, resolve: { null: PageTitleResolver }, data: { title: "Nahrungsaufnahme hinzufügen" } },
                   { path: "custom", component: ManualEntryAddComponent, resolve: { null: PageTitleResolver }, data: { title: "benutzerdefinierte Eingabe" } },
-                  { path: "blood-sugar", component: AddBSMeasureComponent, resolve: { null: PageTitleResolver }, data: { title: "Blutzucker-Messung" } }
+                  { path: "blood-sugar", component: AddBSMeasureComponent, resolve: { null: PageTitleResolver }, data: { title: "Blutzuckermessung" } }
                 ]
               },
               {path: "search", component: SearchViewComponent, resolve: { null: PageTitleResolver }, data: { title: "Suchen" }}
