@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginService } from 'src/shared/services/login.service';
 
 @Component({
   selector: 'app-user-info',
@@ -8,13 +7,9 @@ import { LoginService } from 'src/shared/services/login.service';
 })
 export class UserInfoComponent implements OnInit {
 
-  constructor(private loginSevice: LoginService) { }
+  constructor() { }
 
   ngOnInit() {
-  }
-
-  logout(){
-    this.loginSevice.logout();
   }
 
 }

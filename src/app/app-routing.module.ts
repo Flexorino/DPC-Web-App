@@ -26,7 +26,7 @@ import { LoginAndRegisterComponent } from './components/login-and-register/login
 import { CallbackComponent } from './components/callback/callback.component';
 import { ProfileLoaderComponent } from './components/profile-loader/profile-loader.component';
 import { RegisterViewComponent } from './components/register-view/register-view.component';
-import { UserInfoComponent } from './user-info/user-info.component';
+import { UserInfoComponent } from './components/user-info/user-info.component';
 
 
 

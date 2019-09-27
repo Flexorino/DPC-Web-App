@@ -71,7 +71,8 @@ import { CallbackComponent } from './components/callback/callback.component';
 import { ProfileLoaderComponent } from './components/profile-loader/profile-loader.component';
 import { EntryOverviewVisualizerComponent } from './components/entry-overview-visualizer/entry-overview-visualizer.component';
 import { RegisterViewComponent } from './components/register-view/register-view.component';
-import { UserInfoComponent } from './user-info/user-info.component';
+import { NotImplementedComponent } from './components/not-implemented/not-implemented.component';
+import { UserInfoComponent } from './components/user-info/user-info.component';
 
 
 
@@ -123,7 +124,8 @@ import { UserInfoComponent } from './user-info/user-info.component';
     ProfileLoaderComponent,
     EntryOverviewVisualizerComponent,
     RegisterViewComponent,
-    UserInfoComponent
+    UserInfoComponent,
+    NotImplementedComponent
   ],
   imports: [
     ReactiveFormsModule,

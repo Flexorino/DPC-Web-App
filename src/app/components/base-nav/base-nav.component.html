@@ -10,7 +10,9 @@
       <a *ngIf="currentSelectedDiary!=null" mat-list-item (click)='onNavigate()' routerLink="/diary/{{currentSelectedDiary}}/list">Liste</a>
       <a *ngIf="currentSelectedDiary==null"  mat-list-item class="link-deactivated" routerLink="#">Liste</a>
       <hr>
-      <a mat-list-item (click)='onNavigate()' routerLink="/diary-collaboration-settings">Kollaborations-Einst.</a>  
+      <a mat-list-item (click)='onNavigate()' routerLink="/diary-collaboration-settings">Kollaborations-Einst.</a> 
+      <hr>
+      <a  mat-list-item routerLink="/account">Account-Einstellungen</a>     
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
