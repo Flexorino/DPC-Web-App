@@ -36,24 +36,24 @@ const routes: Routes = [
   { path: "callback", component: CallbackComponent },
   { path: "profile-loading", component: ProfileLoaderComponent },
   {
-    path: "", component: BaseNavComponent, canActivateChild: [AuthGuard],children: [
-      {path:"account", component: UserInfoComponent},
+    path: "", component: BaseNavComponent, canActivateChild: [AuthGuard], canActivate: [AuthGuard], children: [
+      { path: "account", component: UserInfoComponent },
       {
-      path: "diary", children: [
-        { path: "", component: DiaryHeaderExtensionComponent, outlet: "base-nav-extension" },
-        {
-          path: ":diary-id", canActivateChild: [CanActivateDiaryViewGuard], component: DiaryNavComponent, children: [
-            { path: "", redirectTo: "overview", pathMatch: 'full' },
-            { path: "overview", component: DiaryOverviewComponent, resolve: { null: PageTitleResolver }, data: { title: "Übersicht" } },
-            { path: "statistics", component: DiaryStatisticsComponent, resolve: { null: PageTitleResolver }, data: { title: "Statistik" } },
-            { path: "list", component: DiaryListComponent, resolve: { null: PageTitleResolver }, data: { title: "Listen-Ansicht" } },
-          ]
-        }
-      ]
-    },
-    {
-      path: "diary-collaboration-settings", component: CollViewComponent, resolve: { null: PageTitleResolver }, data: { title: "Tagebücher-Verwaltung" }
-    }
+        path: "diary", children: [
+          { path: "", component: DiaryHeaderExtensionComponent, outlet: "base-nav-extension" },
+          {
+            path: ":diary-id", canActivateChild: [CanActivateDiaryViewGuard], component: DiaryNavComponent, children: [
+              { path: "", redirectTo: "overview", pathMatch: 'full' },
+              { path: "overview", component: DiaryOverviewComponent, resolve: { null: PageTitleResolver }, data: { title: "Übersicht" } },
+              { path: "statistics", component: DiaryStatisticsComponent, resolve: { null: PageTitleResolver }, data: { title: "Statistik" } },
+              { path: "list", component: DiaryListComponent, resolve: { null: PageTitleResolver }, data: { title: "Listen-Ansicht" } },
+            ]
+          }
+        ]
+      },
+      {
+        path: "diary-collaboration-settings", component: CollViewComponent, resolve: { null: PageTitleResolver }, data: { title: "Tagebücher-Verwaltung" }
+      }
     ]
   },
   {
@@ -71,7 +71,7 @@ const routes: Routes = [
                   { path: "blood-sugar", component: AddBSMeasureComponent, resolve: { null: PageTitleResolver }, data: { title: "Blutzucker-Messung" } }
                 ]
               },
-              {path: "search", component: SearchViewComponent, resolve: { null: PageTitleResolver }, data: { title: "Suchen" }}
+              { path: "search", component: SearchViewComponent, resolve: { null: PageTitleResolver }, data: { title: "Suchen" } }
             ]
           }
         ]
