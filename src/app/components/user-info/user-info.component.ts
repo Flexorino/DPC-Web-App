@@ -1,3 +1,4 @@
+import { LoginService } from 'src/shared/services/login.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,11 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserInfoComponent implements OnInit {
 
-  constructor() { }
+  constructor(private loginService: LoginService) { }
 
   public name: string ="Peter";
 
   ngOnInit() {
+  }
+
+  logout(){
+    this.loginService.logout();
   }
 
 }

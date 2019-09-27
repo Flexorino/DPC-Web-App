@@ -99,7 +99,7 @@ login(redirectPath: string = '/') {
   handleAuthCallback() {
     // Only the callback component should call this method
     // Call when app reloads after user logs in with Auth0
-    let targetRoute: string; // Path to redirect to after login processsed
+    let targetRoute: string = "/profile-loading"; // Path to redirect to after login processsed
     const authComplete$ = this.handleRedirectCallback$.pipe(
       // Have client, now call method to handle auth callback redirect
       tap(cbRes => {
@@ -118,7 +118,7 @@ login(redirectPath: string = '/') {
     // Response will be an array of user and login status
     authComplete$.subscribe(([user, loggedIn]) => {
       // Redirect to target route after callback processing
-      //this.router.navigate([targetRoute]);
+      window.location.href = `${window.location.origin}/profile-loading`;
     });
   }
 

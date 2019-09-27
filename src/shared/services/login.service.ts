@@ -2,7 +2,7 @@ import { UserService } from './user.service';
 import { ConfigurationParameters } from './../../web-api/configuration';
 import { Configuration } from 'src/web-api';
 import { AuthService } from 'src/app/auth.service';
-import { map, tap, flatMap, catchError, filter } from 'rxjs/operators';
+import { map, tap, flatMap, catchError, filter, take, skip } from 'rxjs/operators';
 import { BehaviorSubject, Observable, Subject, combineLatest, config, pipe, race, timer as keko } from 'rxjs';
 import { Injectable } from "@angular/core";
 
@@ -54,12 +54,13 @@ export class LoginService {
         this.loginInformation$ = this.current.asObservable();
         this.initialized = this.intitializedSub.asObservable();
         this.initialized$.subscribe(x => {
+            console.log("init");
             this.intit = true;
             this.intitializedSub.next(true)
         });
         let timer : Observable<void> = keko(5000, 1000).pipe(map(x => null));
-        let authg : Observable<void> = this.current.pipe(filter(x => x!== null), map(x => null));
-        race(timer, authg).subscribe(() => this.initialized$.next());
+        let authg : Observable<void> = this.current.pipe(skip(1), map(x => null));
+        race(timer, authg).pipe(take(1)).subscribe(() => this.initialized$.next());
         //setTimeout(x => this.current.next(new LoginInformation("asd", "adsa")), 1000);
     }
 

@@ -2,6 +2,9 @@ import { UserManagementService } from './../../../web-api/api/userManagement.ser
 import { UserService } from './../../../shared/services/user.service';
 import { AuthService } from 'src/app/auth.service';
 import { Component, OnInit } from '@angular/core';
+import { LoginService } from 'src/shared/services/login.service';
+import { filter } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile-loader',
@@ -10,13 +13,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProfileLoaderComponent implements OnInit {
 
-  constructor(private auth: AuthService, private userAPI: UserManagementService) { }
+  constructor(private loginService: LoginService, private userAPI: UserManagementService, private router: Router) { }
 
   ngOnInit() {
-    this.auth.getTokenSilently$().subscribe(x => {
-      console.log("READY");
-     // this.userAPI.tokenToUserMatcherPost({ iDtoken: x }).subscribe(x => console.log(x));
-  });
-}
+    this.loginService.unknownAuthentication.subscribe(x => this.router.navigateByUrl("register"));
+    this.loginService.loginInformation$.pipe(filter(x => x != null)).subscribe(x => this.router.navigateByUrl("diary/" + x.defaultDiary));
+  }
 
 }
