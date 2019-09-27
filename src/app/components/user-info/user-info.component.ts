@@ -9,6 +9,8 @@ export class UserInfoComponent implements OnInit {
 
   constructor() { }
 
+  public name: string ="Peter";
+
   ngOnInit() {
   }
 

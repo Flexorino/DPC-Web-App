@@ -1,1 +1,15 @@
-<p>user-info works!</p>
+<div id="content">
+    <h3>Hallo {{name}}</h3>
+
+    <mat-list>
+        <mat-divider></mat-divider>
+        <mat-list-item matRipple (click)="changeUsername()">Nutzername ändern
+            <mat-divider></mat-divider>
+        </mat-list-item>
+
+        <mat-list-item matRipple (click)="changePasswort()">Passwort ändern</mat-list-item>
+        <mat-divider></mat-divider>
+    </mat-list>
+
+    <button class="btn" (click)="logout()" mat-raised-button color="warn" (click)="logout()">logout</button>
+</div>
