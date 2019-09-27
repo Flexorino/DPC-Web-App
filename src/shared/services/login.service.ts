@@ -20,7 +20,7 @@ export class LoginService {
     public unknownAuthentication: Observable<void>;
     public initialized: Observable<boolean>;
     private intitializedSub = new BehaviorSubject(false);
-
+    private dirty = false;
 
     private unknownAuthenticationSubject: Subject<void> = new Subject();
     private initialized$: Subject<void> = new Subject();
@@ -28,14 +28,27 @@ export class LoginService {
     private intit = false;
 
     constructor(private auth: AuthService, private apiConfig: Configuration, private userService: UserService) {
-        auth.localAuthSetup();
+ 
+    }
+
+    public login() {
+        this.auth.login("/callback");
+    }
+
+    public init() {
+        if(this.dirty){
+            return;
+        }
+        this.dirty = true;
+        console.log("loginService");
+        this.auth.localAuthSetup();
 
         this.unknownAuthentication = this.unknownAuthenticationSubject;
 
-        auth.isAuthenticated$.subscribe(x => {
+        this.auth.isAuthenticated$.subscribe(x => {
             if (x) {
                 console.log("AUTH");
-                auth.getTokenSilently$().pipe(tap(x => apiConfig.accessToken = x), flatMap(x => userService.getSelfInformation())).subscribe(x => {
+                this.auth.getTokenSilently$().pipe(tap(x => this.apiConfig.accessToken = x), flatMap(x => this.userService.getSelfInformation())).subscribe(x => {
                     if (!x) {
                         this.unknownAuthenticationSubject.next();
                         if (this.current.getValue()) {
@@ -49,7 +62,7 @@ export class LoginService {
                 this.current.next(null);
             }
         });
-        auth.isAuthenticated$.subscribe(x => console.log("AUTH: " + x));
+        this.auth.isAuthenticated$.subscribe(x => console.log("AUTH: " + x));
 
         this.loginInformation$ = this.current.asObservable();
         this.initialized = this.intitializedSub.asObservable();
@@ -61,11 +74,6 @@ export class LoginService {
         let timer : Observable<void> = keko(5000, 1000).pipe(map(x => null));
         let authg : Observable<void> = this.current.pipe(skip(1), map(x => null));
         race(timer, authg).pipe(take(1)).subscribe(() => this.initialized$.next());
-        //setTimeout(x => this.current.next(new LoginInformation("asd", "adsa")), 1000);
-    }
-
-    public login() {
-        this.auth.login("/callback");
     }
 
     public register(name: string): Observable<void> {

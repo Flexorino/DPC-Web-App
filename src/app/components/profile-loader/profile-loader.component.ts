@@ -16,6 +16,7 @@ export class ProfileLoaderComponent implements OnInit {
   constructor(private loginService: LoginService, private userAPI: UserManagementService, private router: Router) { }
 
   ngOnInit() {
+    this.loginService.init();
     this.loginService.unknownAuthentication.subscribe(x => this.router.navigateByUrl("register"));
     this.loginService.loginInformation$.pipe(filter(x => x != null)).subscribe(x => this.router.navigateByUrl("diary/" + x.defaultDiary));
   }

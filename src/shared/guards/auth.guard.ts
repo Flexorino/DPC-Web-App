@@ -23,6 +23,7 @@ export class AuthGuard implements CanActivateChild, CanActivate {
     }
 
     private isLoggedIn(): Promise<boolean> {
+        this.auth.init();
         return new Promise((resolve, reject) => {
             race(timer(5000).pipe(map(x => false)), this.auth.isLoggedIn).subscribe(x => {
                 if (x) {

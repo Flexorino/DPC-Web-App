@@ -118,7 +118,8 @@ login(redirectPath: string = '/') {
     // Response will be an array of user and login status
     authComplete$.subscribe(([user, loggedIn]) => {
       // Redirect to target route after callback processing
-      window.location.href = `${window.location.origin}/profile-loading`;
+      console.log("callback-ready");
+      this.router.navigateByUrl("/profile-loading");
     });
   }
 

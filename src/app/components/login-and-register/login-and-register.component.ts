@@ -17,6 +17,7 @@ export class LoginAndRegisterComponent implements OnInit {
   constructor(private loginService: LoginService) { }
 
   ngOnInit() {
+    this.loginService.init();
     this.loginService.isLoggedIn.subscribe(x => this.loggedIn = x);
     this.loginService.initialized.subscribe(x => this.init = x);
   }
