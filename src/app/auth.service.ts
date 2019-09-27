@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import Auth0Client from '@auth0/auth0-spa-js/dist/typings/Auth0Client';
-import { from, of, Observable, BehaviorSubject, combineLatest, throwError } from 'rxjs';
+import { from, of, Observable, BehaviorSubject, combineLatest, throwError, Subject } from 'rxjs';
 import { tap, catchError, concatMap, shareReplay } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import createAuth0Client from '@auth0/auth0-spa-js';
@@ -48,7 +48,7 @@ export class AuthService {
     return this.auth0Client$.pipe(
       concatMap((client: Auth0Client) => from(client.getTokenSilently(options)))
     );
-    
+
   }
 
   // When calling, options can be passed if desired
@@ -82,7 +82,7 @@ export class AuthService {
     });
   }
 
-login(redirectPath: string = '/') {
+  login(redirectPath: string = '/') {
     // A desired redirect path can be passed to login method
     // (e.g., from a route guard)
     // Ensure Auth0 client instance exists
@@ -96,9 +96,10 @@ login(redirectPath: string = '/') {
     });
   }
 
-  handleAuthCallback() {
+  handleAuthCallback(): Observable<void> {
     // Only the callback component should call this method
     // Call when app reloads after user logs in with Auth0
+    let ready = new Subject<void>();
     let targetRoute: string = "/profile-loading"; // Path to redirect to after login processsed
     const authComplete$ = this.handleRedirectCallback$.pipe(
       // Have client, now call method to handle auth callback redirect
@@ -119,8 +120,10 @@ login(redirectPath: string = '/') {
     authComplete$.subscribe(([user, loggedIn]) => {
       // Redirect to target route after callback processing
       console.log("callback-ready");
-      this.router.navigateByUrl("/profile-loading");
+      ready.next();
+      ready.complete();
     });
+    return ready;
   }
 
   logout() {

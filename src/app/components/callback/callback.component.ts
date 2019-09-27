@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/auth.service';
+import { LoginService } from 'src/shared/services/login.service';
+import { Router } from '@angular/router';
+import { filter, tap } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -9,10 +13,29 @@ import { AuthService } from 'src/app/auth.service';
 })
 export class CallbackComponent implements OnInit {
 
-  constructor(private auth: AuthService) { }
+  sub1: Subscription;
+  sub2: Subscription;
+
+  constructor(private auth: AuthService, private loginService: LoginService, private router: Router) { }
 
   ngOnInit() {
-    this.auth.handleAuthCallback();
+    this.auth.handleAuthCallback().subscribe(x => {
+      console.log("CCallback");
+      this.loginService.init();
+      this.sub1 = this.loginService.unknownAuthentication.subscribe(x => {
+        this.clear();
+        this.router.navigateByUrl("register");
+      });
+      this.sub2 = this.loginService.loginInformation$.pipe(filter(x => x != null)).subscribe(x => {
+        this.clear();
+        this.router.navigateByUrl("diary/" + x.defaultDiary);
+      }
+      );
+    });
   }
 
+  clear() {
+    this.sub1.unsubscribe();
+    this.sub2.unsubscribe();
+  }
 }
