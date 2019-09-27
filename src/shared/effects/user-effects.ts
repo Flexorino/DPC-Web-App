@@ -42,7 +42,7 @@ export class UserEffects {
 
     private handleOpened(props: CompletableAction<UserInfoActions, void>): Observable<Action> {
 
-        return timer(1000, 1000).pipe(take(1), tap(x => props.resolve(null)), map(x => GeneralEffectActions.UserPatchReady({ patch: new Patch([], [{name: "Franz"}]) })));
+        return this.userService.getSelfInformation().pipe(tap(x => props.resolve(null)), map(x => GeneralEffectActions.UserPatchReady({ patch: new Patch([], [{name: x.name}]) })));
         console.log("POOST");
     }
 }

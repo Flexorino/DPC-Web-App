@@ -14,7 +14,7 @@ export class UserInfoComponent implements OnInit {
 
   constructor(private loginService: LoginService, private store: Store<{ user: User }>) { }
 
-  public name: string = "Peter";
+  public name: string = "";
   public loading = true;
 
 
