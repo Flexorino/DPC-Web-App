@@ -7,15 +7,15 @@
         </div>
         <div *ngIf=" rating===-1" class="rating-message">
             <mat-icon>warning</mat-icon>
-            <div> Sie befinden sich unter dem Ziel-Bereich!</div>
+            <div> Sie befinden sich unter dem Zielbereich!</div>
         </div>
         <div *ngIf="rating===0" class="rating-message">
             <mat-icon style="color: green">check_box</mat-icon>
-            <div> Sie befinden sich im Ziel-Bereich!!</div>
+            <div> Sie befinden sich im Zielbereich!!</div>
         </div>
         <div *ngIf="rating===1" class="rating-message">
             <mat-icon>warning</mat-icon>
-            <div> Sie befinden sich über dem Ziel-Bereich! </div>
+            <div> Sie befinden sich über dem Zielbereich! </div>
         </div>
         <div *ngIf="rating===2" class="rating-message">
             <mat-icon>error</mat-icon>

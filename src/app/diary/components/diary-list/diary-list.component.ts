@@ -39,7 +39,7 @@ export class DiaryListComponent implements OnInit, OnDestroy {
     }, tap(x => console.log(x)))).subscribe(
       x => {
         this.dayMappedEntries = x.map(z => {
-          let sortedEntries = z.entries.sort((a,b)=> +a.timeStamp - +b.timeStamp);
+          let sortedEntries = z.entries.sort((a,b)=> +b.timeStamp - +a.timeStamp);
           return { day: z.day, entries: z.entries }
         });
       }
