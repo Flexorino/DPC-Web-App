@@ -1,4 +1,3 @@
 export class DiaryReference {
-    public diaryId : string;
-    public diaryName : string;
+    constructor(public diaryId: string, public diaryName: string) { }
 }

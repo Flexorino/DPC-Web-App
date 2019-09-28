@@ -18,14 +18,14 @@ export class CollViewComponent implements OnInit, OnDestroy {
 
   public currentDiary: string;
   public test;
-  public myDiaries : Array<DiaryReference>;
-  public myGrants : Array<Grant>;
+  public myDiaries: Array<DiaryReference>;
+  public myGrants: Array<Grant>;
   private userSubscription: Subscription;
-
+  public loading = true;
 
   constructor(public diarySelectionService: DiaryNavigationService, private store: Store<{ user: User }>) {
 
-    }
+  }
 
   switchDiary(id: string) {
     this.diarySelectionService.currentDiaryId$.getValue();
@@ -33,14 +33,17 @@ export class CollViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.store.dispatch(CollViewActions.OPENED(new CompletableAction(this)));
-    this.userSubscription = this.store.pipe(select("user")).subscribe((x : User ) => {
+    let action = CollViewActions.OPENED(new CompletableAction(this));
+    this.store.dispatch(action);
+    action.then(x => this.loading = false);
+    this.userSubscription = this.store.pipe(select("user")).subscribe((x: User) => {
       this.myGrants = x.grants;
-      this.myDiaries = x.myDiaries;});
+      this.myDiaries = x.myDiaries;
+    });
   }
 
   ngOnDestroy(): void {
-    if(this.userSubscription){
+    if (this.userSubscription) {
       this.userSubscription.unsubscribe();
     }
   }

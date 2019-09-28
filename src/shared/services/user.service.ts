@@ -75,7 +75,7 @@ export class UserService {
                     let grant = new Grant();
                     grant.userReference = new UserReference(y.user.name, y.user.id);
                     grant.rights = [Rights.FULL_ACCESS];
-                    let diaryRef = new DiaryReference();
+                    let diaryRef = new DiaryReference(null,null);
                     diaryRef.diaryId = y.diaryReference.diaryId;
                     diaryRef.diaryName = y.diaryReference.diaryName;
                     grant.diaryReference = diaryRef;

@@ -1,3 +1,5 @@
+import { CollViewEffects } from './../shared/effects/col-view-effects';
+import { CollViewActions } from './configs/component/coll-view/coll-view.actions';
 
 import { AddEntryFoodSelectionDecider } from './diary/components/add-entry-components/inputs/components/add-entry-food-selection-decider/add-entry-food-selection-decider.component';
 import { AddEnetryFoodIntakeListPicker } from './diary/components/add-entry-components/inputs/components/add-entry-food-intake-list-picker/add-entry-food-intake-list-picker.component';
@@ -136,7 +138,7 @@ import { UserInfoComponent } from './components/user-info/user-info.component';
     ApiModule.forRoot(baseConfig),
     HttpClientModule,
     StoreModule.forRoot({ diary: diaryReducerExport, user: userReducerExport }),
-    EffectsModule.forRoot([DiaryEffects, UserEffects, AddIngestionEffects, AddBSEffects]),
+    EffectsModule.forRoot([DiaryEffects, UserEffects, AddIngestionEffects, AddBSEffects, CollViewEffects]),
     FormsModule,
     MaterialModule,
     BrowserAnimationsModule,

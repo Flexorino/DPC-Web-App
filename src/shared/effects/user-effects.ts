@@ -19,21 +19,6 @@ import { GeneralEffectActions } from './general-effect-actions';
 export class UserEffects {
 
     private loadProfile$;
-
-    addEntry$ = createEffect(() => this.actions$.pipe(
-        ofType(CollViewActions.OPENED),
-
-        tap(x => console.log("kek")),
-        mergeMap(x => {
-            return forkJoin([
-                this.userService.getMyDiaries(),
-                this.userService.getMyGrants()
-            ]).pipe(tap(x => console.log(x)), map(x => UserEffectsActions.MY_DIARIES_AND_GRANTS_LOADED({ myDiaries: x[0], gants: x[1] })));
-        }
-        )
-    )
-        , { dispatch: true });
-
     constructor(
         private actions$: Actions, private util: EffectsUtil, private userService: UserService
     ) {
@@ -41,8 +26,6 @@ export class UserEffects {
     }
 
     private handleOpened(props: CompletableAction<UserInfoActions, void>): Observable<Action> {
-
         return this.userService.getSelfInformation().pipe(tap(x => props.resolve(null)), map(x => GeneralEffectActions.UserPatchReady({ patch: new Patch([], [{name: x.name}]) })));
-        console.log("POOST");
     }
 }
