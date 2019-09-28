@@ -5,6 +5,7 @@ import { Component, OnInit } from '@angular/core';
 import { CompletableAction } from 'src/shared/actions/CompletableAction';
 import { Store, select } from '@ngrx/store';
 import { NotImplementedService } from 'src/shared/services/not-implemented.service';
+import { takeWhile, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-user-info',
