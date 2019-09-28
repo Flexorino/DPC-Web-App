@@ -9,15 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { DiaryDrugs } from './diaryDrugs';
-import { DiaryInsulins } from './diaryInsulins';
 
 
-export interface Diary { 
-    name: string;
-    patient: string;
-    drugs?: Array<DiaryDrugs>;
-    insulins?: Array<DiaryInsulins>;
-    tags?: Array<string>;
+export interface InsulinConfigMappings { 
+    semantic?: string;
+    intakeType?: string;
+    insulinId?: string;
 }
 

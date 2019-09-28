@@ -16,8 +16,7 @@ import { KEFactors } from './kEFactors';
 import { CorrectionsFactors } from './correctionsFactors';
 
 
-export interface Context { 
-    id?: string;
+export interface ContextUpdateRequestContextUpdate { 
     frameValues?: FrameValueAttribute;
     keFactors?: KEFactors;
     correctionsFactors?: CorrectionsFactors;
