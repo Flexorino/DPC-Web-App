@@ -1,11 +1,9 @@
 <b>Grenzwerte:</b>
 <div *ngIf="currentFrameValues">
-    Hyperglykämie-Grenze: {{(currentFrameValues.hyperglycemiaLimit * bsunit.factor) | number:'1.0-2'}}
-    {{bsunit.identifier}}
-    Obergrenze-Grenze: {{(currentFrameValues.higherBSLimit * bsunit.factor)| number:'1.0-2'}} {{bsunit.identifier}}
-    Untergenze-Grenze: {{(currentFrameValues.lowerBSLimit * bsunit.factor) | number:'1.0-2'}} {{bsunit.identifier}}
-    Hypoglykämie-Grenze: {{(currentFrameValues.hypoglycemiaLimit * bsunit.factor)| number:'1.0-2'}}
-    {{bsunit.identifier}}
+    Hyperglykämie-Grenze: {{(currentFrameValues.hyperglycemiaLimit * bsunit.factor) | number:'1.0-2'}} {{bsunit.identifier}} <br>
+    Obergrenze: {{(currentFrameValues.higherBSLimit * bsunit.factor)| number:'1.0-2'}} {{bsunit.identifier}} <br>
+    Untergenze: {{(currentFrameValues.lowerBSLimit * bsunit.factor) | number:'1.0-2'}} {{bsunit.identifier}} <br>
+    Hypoglykämie-Grenze: {{(currentFrameValues.hypoglycemiaLimit * bsunit.factor)| number:'1.0-2'}} {{bsunit.identifier}}
 </div>
 
 <div id="sec" *ngIf="currentFrameValues">

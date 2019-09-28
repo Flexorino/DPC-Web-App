@@ -1,6 +1,6 @@
 <div [formGroup]="group">
     <mat-form-field class="fullWidthInput">
-        <input class="fullWidthInput" matInput placeholder="Essens-Bolus" formControlName="bolus" type="number">
+        <input class="fullWidthInput" matInput placeholder="Nahrungsbolus" formControlName="bolus" type="number">
         <span matPrefix style="color: gray" *ngIf="currentMinus!==0">(-{{currentMinus}})</span>
         <span matSuffix>IE</span>
     </mat-form-field>
