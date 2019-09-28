@@ -1,3 +1,4 @@
+import { UserManagementService } from './../../web-api/api/userManagement.service';
 import { CollViewComponent } from './../../app/configs/component/coll-view/coll-view.component';
 import { CollViewActions } from './../../app/configs/component/coll-view/coll-view.actions';
 import { Injectable } from '@angular/core';
@@ -17,12 +18,16 @@ export class CollViewEffects {
 
     private onOpened$;
     constructor(
-        private actions$: Actions, private util: EffectsUtil, private userService: UserService
+        private actions$: Actions, private util: EffectsUtil, private userService: UserService, private userManService: UserManagementService
     ) {
         this.onOpened$ = util.when(CollViewActions.OPENED).do(x => this.handleOpened(x));
     }
 
     private handleOpened(props: CompletableAction<CollViewComponent, void>): Observable<Action> {
-        return timer(1000,1000).pipe(take(1),tap(x => props.resolve(null)), map(x => GeneralEffectActions.UserPatchReady({ patch: new Patch([], [{myDiaries: [new DiaryReference("kek","mein Tagebuch1")]}]) })));
+        return this.userManService.getUserDiaries().pipe(take(1), tap(x => props.resolve(null)), map(x => {
+            let ownedDiares = x.owned.map(x => new DiaryReference(x.id, x.preferences.name));
+            return GeneralEffectActions.UserPatchReady({ patch: new Patch([], [{ myDiaries: ownedDiares }]) })
+        }
+        ));
     }
 } 
