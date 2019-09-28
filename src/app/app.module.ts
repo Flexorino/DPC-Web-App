@@ -145,6 +145,6 @@ import { UserInfoComponent } from './components/user-info/user-info.component';
   ],
   providers: [BloodSugarPipe, AbsorptionPipe, CarbsPipe, { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }, { provide: 'IBolusUtilDao', useClass: RestNetworkBolusUtilDAO }],
   bootstrap: [AppComponent],
-  entryComponents: [AddEntryFoodSelectionDecider, FoodInfoShowerPopupwrapperComponent]
+  entryComponents: [AddEntryFoodSelectionDecider, FoodInfoShowerPopupwrapperComponent, NotImplementedComponent]
 })
 export class AppModule { }

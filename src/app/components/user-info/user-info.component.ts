@@ -4,6 +4,7 @@ import { LoginService } from 'src/shared/services/login.service';
 import { Component, OnInit } from '@angular/core';
 import { CompletableAction } from 'src/shared/actions/CompletableAction';
 import { Store, select } from '@ngrx/store';
+import { NotImplementedService } from 'src/shared/services/not-implemented.service';
 
 @Component({
   selector: 'app-user-info',
@@ -12,7 +13,7 @@ import { Store, select } from '@ngrx/store';
 })
 export class UserInfoComponent implements OnInit {
 
-  constructor(private loginService: LoginService, private store: Store<{ user: User }>) { }
+  constructor(private loginService: LoginService, private store: Store<{ user: User }>, private notImplementedService: NotImplementedService) { }
 
   public name: string = "";
   public loading = true;
@@ -27,6 +28,14 @@ export class UserInfoComponent implements OnInit {
 
   logout() {
     this.loginService.logout();
+  }
+
+  changeUsername() {
+    this.notImplementedService.showMessage("Funktionalität zum ändern des Nutzernamens");
+  }
+
+  changePassword() {
+    this.notImplementedService.showMessage("Funktionalität zum ändern des Passwortes");
   }
 
 }
