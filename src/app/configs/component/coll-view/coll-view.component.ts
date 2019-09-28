@@ -1,4 +1,8 @@
-import { map } from 'rxjs/operators';
+import { CompletableActionWithData } from './../../../../shared/actions/CompletableActionWitHData';
+import { AddDiaryFormInfo } from './../../../components/diary-name-pop-up/diary-name-pop-up.component';
+
+import { MatDialog } from '@angular/material/dialog';
+import { map, take } from 'rxjs/operators';
 import { User } from './../../../../shared/model/user/user';
 import { CompletableAction } from 'src/shared/actions/CompletableAction';
 import { CollViewActions } from './coll-view.actions';
@@ -8,6 +12,7 @@ import { Store, select } from '@ngrx/store';
 import { DiaryReference } from 'src/shared/model/user/diary-reference';
 import { Grant } from 'src/shared/model/user/grant';
 import { Subscription } from 'rxjs';
+import { DiaryNamePopUpComponent } from 'src/app/components/diary-name-pop-up/diary-name-pop-up.component';
 
 @Component({
   selector: 'app-coll-view',
@@ -23,7 +28,7 @@ export class CollViewComponent implements OnInit, OnDestroy {
   private userSubscription: Subscription;
   public loading = true;
 
-  constructor(public diarySelectionService: DiaryNavigationService, private store: Store<{ user: User }>) {
+  constructor(public diarySelectionService: DiaryNavigationService, private store: Store<{ user: User }>, private matDialog: MatDialog) {
 
   }
 
@@ -46,6 +51,17 @@ export class CollViewComponent implements OnInit, OnDestroy {
     if (this.userSubscription) {
       this.userSubscription.unsubscribe();
     }
+  }
+
+  addDiary() {
+    this.matDialog.open(DiaryNamePopUpComponent).afterClosed().pipe(take(1)).subscribe((info: AddDiaryFormInfo) => {
+      if (info) {
+        this.loading = true;
+        let action = CollViewActions.DIARY_ADDED(new CompletableActionWithData(this, { name: info.name }));
+        this.store.dispatch(action);
+        action.then(x => this.loading = false);
+      }
+    });
   }
 
 }

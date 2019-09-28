@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>Tagebuchname</h1>
+<form [formGroup]="group" id="diary" (ngSubmit)="onSubmit()">
+    <mat-form-field class="fullWidthInput">
+        <input class="fullWidthInput" matInput placeholder="Tagebuchname" formControlName="name" type="text">
+    </mat-form-field>
+</form>
+<div mat-dialog-actions id="actions">
+    <button mat-raised-button id="ok" color="warn" (click)="abort()">Abbruch</button>
+    <button mat-raised-button id="ok" color="primary" [disabled]="!group.valid" type="submit" form="diary">OK</button>
+</div>

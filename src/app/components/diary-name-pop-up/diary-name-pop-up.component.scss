@@ -1,0 +1,11 @@
+.fullWidthInput {
+    width: 100%;
+}
+
+#actions{
+    display: flex;
+    * {
+        flex-basis: 45%;
+        flex-grow: 1;
+    }
+}

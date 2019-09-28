@@ -75,6 +75,7 @@ import { EntryOverviewVisualizerComponent } from './components/entry-overview-vi
 import { RegisterViewComponent } from './components/register-view/register-view.component';
 import { NotImplementedComponent } from './components/not-implemented/not-implemented.component';
 import { UserInfoComponent } from './components/user-info/user-info.component';
+import { DiaryNamePopUpComponent } from './components/diary-name-pop-up/diary-name-pop-up.component';
 
 
 
@@ -127,7 +128,8 @@ import { UserInfoComponent } from './components/user-info/user-info.component';
     EntryOverviewVisualizerComponent,
     RegisterViewComponent,
     UserInfoComponent,
-    NotImplementedComponent
+    NotImplementedComponent,
+    DiaryNamePopUpComponent
   ],
   imports: [
     ReactiveFormsModule,
@@ -147,6 +149,6 @@ import { UserInfoComponent } from './components/user-info/user-info.component';
   ],
   providers: [BloodSugarPipe, AbsorptionPipe, CarbsPipe, { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }, { provide: 'IBolusUtilDao', useClass: RestNetworkBolusUtilDAO }],
   bootstrap: [AppComponent],
-  entryComponents: [AddEntryFoodSelectionDecider, FoodInfoShowerPopupwrapperComponent, NotImplementedComponent]
+  entryComponents: [AddEntryFoodSelectionDecider, FoodInfoShowerPopupwrapperComponent, NotImplementedComponent, DiaryNamePopUpComponent]
 })
 export class AppModule { }
