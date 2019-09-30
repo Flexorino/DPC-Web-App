@@ -5,7 +5,7 @@ import { AddEntryActionsProps } from './../../app/diary/components/add-entry-com
 import { DiaryContext } from './../model/diary/context/diary-context';
 import { AddIngestionComponent } from './../../app/diary/components/add-entry-components/add-ingestion/add-ingestion.component';
 
-import { CompletableAction } from 'src/shared/actions/CompletableAction';
+import { ExtendedAction } from 'src/shared/actions/ExtendedAction';
 import { Food } from './../model/diary/food';
 import { Insulin, InsulinEffect } from './../model/diary/insulin';
 
@@ -36,7 +36,7 @@ export class AddIngestionEffects {
         return this.entryService.addEntry(this.diaryNav.currentDiaryId$.getValue(), props.entryToAdd).pipe(tap(x => props.resolve(null)), flatMap(x => EMPTY));
     }
 
-    private handleOpened(props: CompletableAction<AddIngestionComponent, void>): Observable<Action> {
+    private handleOpened(props: ExtendedAction<AddIngestionComponent, void>): Observable<Action> {
 
         return combineLatest(this.diaryService.getDiary2(this.diaryNav.currentDiaryId$.getValue())).pipe(map(x => {
             let fullDiary: FullDiary = x[0];

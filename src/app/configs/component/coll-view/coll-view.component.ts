@@ -1,10 +1,9 @@
-import { CompletableActionWithData } from './../../../../shared/actions/CompletableActionWitHData';
 import { AddDiaryFormInfo } from './../../../components/diary-name-pop-up/diary-name-pop-up.component';
 
 import { MatDialog } from '@angular/material/dialog';
 import { map, take } from 'rxjs/operators';
 import { User } from './../../../../shared/model/user/user';
-import { CompletableAction } from 'src/shared/actions/CompletableAction';
+import { ExtendedAction } from 'src/shared/actions/ExtendedAction';
 import { CollViewActions } from './coll-view.actions';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DiaryNavigationService } from 'src/shared/services/diary.navigation.service';
@@ -39,7 +38,7 @@ export class CollViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    let action = CollViewActions.OPENED(new CompletableAction(this));
+    let action = CollViewActions.OPENED(new ExtendedAction(this));
     this.store.dispatch(action);
     action.then(x => this.loading = false);
     this.userSubscription = this.store.pipe(select("user")).subscribe((x: User) => {
@@ -58,7 +57,7 @@ export class CollViewComponent implements OnInit, OnDestroy {
     this.matDialog.open(DiaryNamePopUpComponent).afterClosed().pipe(take(1)).subscribe((info: AddDiaryFormInfo) => {
       if (info) {
         this.loading = true;
-        let action = CollViewActions.DIARY_ADDED(new CompletableActionWithData(this, { name: info.name }));
+        let action = CollViewActions.DIARY_ADDED(new ExtendedAction(this, { name: info.name }));
         this.store.dispatch(action);
         action.then(x => this.loading = false);
       }

@@ -1,7 +1,6 @@
 import { DiaryViews } from './../../services/DiaryViews';
-import { CancelableAction } from './../../../../shared/actions/CancelableAction';
-import { CompletableAction } from './../../../../shared/actions/CompletableAction';
-import { BasicActionProps } from './../../../../shared/actions/basic-action-props';
+import { ExtendedAction } from '../../../../shared/actions/ExtendedAction';
+import { BaseSourceAction } from '../../../../shared/actions/base-source-action';
 import { Store, select } from '@ngrx/store';
 import { EntryService } from './../../../../shared/services/entry.service';
 import { EintrgeService } from './../../../../web-api/api/eintrge.service';
@@ -25,12 +24,13 @@ export class DiaryListComponent implements OnInit, OnDestroy {
   public dayMappedEntries = [];
   public graphViewActivated = false;
   private entrySubscription: Subscription;
+  private currentAction: ExtendedAction<DiaryListComponent> = null;
 
-  private currentAction: CancelableAction<DiaryListComponent, void> = null;
+  public loading = true;
 
   ngOnDestroy(): void {
     this.currentAction.cancel(null);
-    this.store.dispatch(DiaryListActions.CLOSED(new BasicActionProps(this)));
+    this.store.dispatch(DiaryListActions.CLOSED(new ExtendedAction(this)));
     this.entrySubscription.unsubscribe();
   }
   ngOnInit(): void {
@@ -44,15 +44,10 @@ export class DiaryListComponent implements OnInit, OnDestroy {
         });
       }
     );
-    let promiseResolve;
-    let promiseReject;
-    let promise = new Promise((resolve, reject) => {
-      promiseResolve = resolve;
-      promiseReject = reject;
-    });
-    let action: CancelableAction<DiaryListComponent, void> = new CancelableAction(this);
+
+    let action: ExtendedAction<DiaryListComponent> = new ExtendedAction(this);
     this.store.dispatch(DiaryListActions.OPENEND(action));
-    promise.then(() => console.log("fertig"));
+    action.then(() => console.log("fertig"));
     this.currentAction = action;
     this.entrySubscription = x;
   }

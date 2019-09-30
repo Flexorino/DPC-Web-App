@@ -6,7 +6,7 @@ import { DiaryNavActions } from './diary-nav.actions';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store, select } from '@ngrx/store';
-import { CompletableAction } from 'src/shared/actions/CompletableAction';
+import { ExtendedAction } from 'src/shared/actions/ExtendedAction';
 import { Router, NavigationEnd, RouterEvent } from '@angular/router';
 
 @Component({
@@ -31,7 +31,7 @@ export class DiaryNavComponent implements OnInit, OnDestroy {
   private currentSelectedDiaryName = "";
 
   ngOnInit() {
-    this.store.dispatch(DiaryNavActions.OPEN(new CompletableAction(this)));
+    this.store.dispatch(DiaryNavActions.OPEN(new ExtendedAction(this)));
     this.store.pipe(select('diary')).pipe(select('name')).subscribe(
       x => {
         if (x) {

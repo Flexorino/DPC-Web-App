@@ -16,7 +16,7 @@ import { Validators, FormBuilder, FormGroup, FormArray, FormControl, AbstractCon
 import { MatStepper, MatStep } from '@angular/material/stepper';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { Store } from '@ngrx/store';
-import { CompletableAction } from 'src/shared/actions/CompletableAction';
+import { ExtendedAction } from 'src/shared/actions/ExtendedAction';
 import { FullScreenModalCloser } from 'src/shared/components/base-full-screen-modal/full_screen_closer.service';
 import { Entry } from 'src/shared/model/diary/entry/entry';
 import { IEntryTimestampPicker } from '../inputs/interfaces/IEntryTimestampPicker';
@@ -116,7 +116,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
     FormUtil.waitForInitialization(this.timeStampControl, this.foodIntakeListPicker, this.bsMeasureControl, this.simpleFoodBolusControl, this.intervallFoodBolusControl, this.correctionFoodBolusControl).subscribe(x => this.handleSubFormSubsciptions());
     this.initializeForms();
     //this.selectedNormalBolus = this.simpleFoodBolusControl.valueChanges.pipe(map(x => x.constructed ? x.constructed.units : null));
-    let action = AddIngestionActions.OPENED(new CompletableAction(this));
+    let action = AddIngestionActions.OPENED(new ExtendedAction(this));
     this.store.dispatch(action);
     action.then(x => this.loading = false);
     if (this.deepNav.recoverData) {

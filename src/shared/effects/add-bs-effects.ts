@@ -11,7 +11,7 @@ import { DiaryContextKEFactors } from '../model/diary/context/diary-context-KE-f
 import { DiaryContextFrameValues } from '../model/diary/context/diary-context-frame-values';
 import { InsulinEffect } from '../model/diary/insulin';
 import { Absorption, Food } from '../model/diary/food';
-import { CompletableAction } from '../actions/CompletableAction';
+import { ExtendedAction } from '../actions/ExtendedAction';
 import { GeneralEffectActions } from './general-effect-actions';
 import { Patch } from '../services/patcherino/patch';
 import { Action } from '@ngrx/store';
@@ -21,7 +21,7 @@ export class AddBSEffects {
     openedListener$;
     confirmListener$;
 
-    private handleOpened(props: CompletableAction<AddBSMeasureComponent, void>): Observable<Action> {
+    private handleOpened(props: ExtendedAction<AddBSMeasureComponent, void>): Observable<Action> {
         let f = new Food("asd");
         f.absorption = Absorption.FAST;
         f.name = "Sauerkraut-Saft";

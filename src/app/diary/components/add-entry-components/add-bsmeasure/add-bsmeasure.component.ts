@@ -6,7 +6,7 @@ import { FormService } from './../../../../../shared/services/form-service';
 import { ConstructionConstrol } from './../../../../../shared/util/construction-control';
 import { Component, OnInit } from '@angular/core';
 import { AddBSMeasreActions } from './add-bsmeasure.actions';
-import { CompletableAction } from 'src/shared/actions/CompletableAction';
+import { ExtendedAction } from 'src/shared/actions/ExtendedAction';
 import { Store } from '@ngrx/store';
 import { Entry } from 'src/shared/model/diary/entry/entry';
 import { DepthNavigationService } from 'src/shared/services/depth-navigation.service';
@@ -43,7 +43,7 @@ export class AddBSMeasureComponent implements OnInit {
 
   private handleActionForInit() {
     //this view throws this action from which all required data for the sub-controls should be loaded!
-    let action = AddBSMeasreActions.OPENED(new CompletableAction(this));
+    let action = AddBSMeasreActions.OPENED(new ExtendedAction(this));
     this.store.dispatch(action);
     action.then(() => this.loading = false);
     if (this.deepNav.recoverData) {

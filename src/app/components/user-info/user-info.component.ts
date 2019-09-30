@@ -2,7 +2,7 @@ import { User } from './../../../shared/model/user/user';
 import { UserInfoActions } from 'src/app/components/user-info/user-info.actions';
 import { LoginService } from 'src/shared/services/login.service';
 import { Component, OnInit } from '@angular/core';
-import { CompletableAction } from 'src/shared/actions/CompletableAction';
+import { ExtendedAction } from 'src/shared/actions/ExtendedAction';
 import { Store, select } from '@ngrx/store';
 import { NotImplementedService } from 'src/shared/services/not-implemented.service';
 import { takeWhile, filter } from 'rxjs/operators';
@@ -22,7 +22,7 @@ export class UserInfoComponent implements OnInit {
 
   ngOnInit() {
     this.store.pipe(select("user")).subscribe((x: User) => this.name = x.name);
-    let action = UserInfoActions.OPENED(new CompletableAction(this));
+    let action = UserInfoActions.OPENED(new ExtendedAction(this));
     this.store.dispatch(action);
     action.then(x => this.loading = false);
   }
