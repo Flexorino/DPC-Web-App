@@ -29,19 +29,21 @@ export class AddEntryTimestampPickerComponent implements OnInit, ControlValueAcc
     this.group.addControl("date", this.dateControl);
     timeStamp: Date;
 
-    this.group.valueChanges.pipe(delay(0),map((y) => {
+    this.group.valueChanges.pipe(delay(0), map((y) => {
       let obj: ConstructionControlValue<Date> = new ConstructionControlValue();
       obj.raw = this.group.value;
-      try {
-        let timestamp = 0;
-        let secondsString: string = this.group.get("time").value;
-        let date: Date = new Date(<string>this.group.get("date").value);
-        date.setHours(Number.parseInt(secondsString.split(':')[0]));
-        date.setMinutes(timestamp += Number.parseInt(secondsString.split(':')[1]));
-        obj.constructed = date;
-        this.timestamp = date;
-      } catch (e) {
-        obj.constructed = null;
+      if (this.timeConstrol.value && this.dateControl.value) {
+        try {
+          let timestamp = 0;
+          let secondsString: string = this.group.get("time").value;
+          let date: Date = new Date(<string>this.group.get("date").value);
+          date.setHours(Number.parseInt(secondsString.split(':')[0]));
+          date.setMinutes(timestamp += Number.parseInt(secondsString.split(':')[1]));
+          obj.constructed = date;
+          this.timestamp = date;
+        } catch (e) {
+          obj.constructed = null;
+        }
       }
       return obj;
     })).subscribe(x => this.obs.next(x));

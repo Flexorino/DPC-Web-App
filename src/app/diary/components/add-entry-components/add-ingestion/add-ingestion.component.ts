@@ -1,3 +1,4 @@
+import { CustomValidators } from './../misc/custom-validators';
 import { DepthNavigationService } from './../../../../../shared/services/depth-navigation.service';
 import { DiaryNavigationService } from './../../../../../shared/services/diary.navigation.service';
 import { FoodIntakeAttribute } from 'src/shared/model/diary/entry/attributes/food-intake-attribute';
@@ -115,7 +116,6 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {
     FormUtil.waitForInitialization(this.timeStampControl, this.foodIntakeListPicker, this.bsMeasureControl, this.simpleFoodBolusControl, this.intervallFoodBolusControl, this.correctionFoodBolusControl).subscribe(x => this.handleSubFormSubsciptions());
     this.initializeForms();
-    //this.selectedNormalBolus = this.simpleFoodBolusControl.valueChanges.pipe(map(x => x.constructed ? x.constructed.units : null));
     let action = AddIngestionActions.OPENED(new ExtendedAction(this));
     this.store.dispatch(action);
     action.then(x => this.loading = false);
@@ -149,6 +149,9 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
       correctionFoodBolusControl: this.correctionFoodBolusControl
     });
     this.mainFormGroup = this.fb.group({ timeAndBs: this.firstFormGroup, mealForm: this.secondFormGroup, bolusEtc: this.thirdFormGroup });
+    this.mainFormGroup.setValidators([CustomValidators.complexRequiredFactory([this.timeStampControl],
+      [this.simpleFoodBolusControl,this.correctionFoodBolusControl,this.intervallFoodBolusControl, this.bsMeasureControl, this.foodIntakeListPicker])
+    ]);
   }
 
   submit() {
@@ -178,7 +181,7 @@ export class AddIngestionComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       });
       setTimeout(() => {
-        this.simpleFoodBolusControl.reset(null,{emitEvent:false});
+        this.simpleFoodBolusControl.reset(null, { emitEvent: false });
         let intake = x.insulinIntakes.find(x => x.semanticIdentifier === BaseInsulinIntakeSemantics.FOOD_BOLUS && x instanceof SimpleInsulinIntake);
         if (intake) {
           this.simpleFoodBolusControl.setValue(new ConstructionControlValue(null, intake));
