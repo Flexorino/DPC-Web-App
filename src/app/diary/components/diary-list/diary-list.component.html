@@ -20,4 +20,11 @@
             <mat-spinner></mat-spinner>
         </div>
     </ng-template>
+    <div *ngIf="!loading&&!dayMappedEntries.length" id="noEntries">
+        <div id="message">Du hast noch keine Einträge <br>
+            mache jetzt deinen ersten Eintrag! </div>
+        <div id="img">
+
+        </div>
+    </div>
 </div>

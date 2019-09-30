@@ -43,6 +43,29 @@
     height: 100%;
 }
 
+#noEntries {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    #img {
+        position: absolute;
+        background-image: url("/assets/images/arrow.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        height: 200px;
+        width: 120px;
+        right: 35px;
+        bottom: 30px;
+    }
+    #message {
+        color: gray;
+    }
+}
+
 .hide {
     flex-grow: 0 i;
 }
