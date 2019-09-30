@@ -7,7 +7,7 @@ import { ExtendedAction } from 'src/shared/actions/ExtendedAction';
 // any relevant events that this component can dispatch
 
 export class DiaryListActions {
-    static OPENEND = createAction('[diary-list Component] opened', props<ExtendedAction<DiaryListComponent, void>>());
+    static OPENEND = createAction('[diary-list Component] opened', props<ExtendedAction<DiaryListComponent>>());
     static CLOSED = createAction('[diary-list Component] closed', props<ExtendedAction<DiaryListComponent>>());
     static SCROLL = createAction('[diary-list Component] scroll', props<ExtendedAction<DiaryListComponent>>());
 }

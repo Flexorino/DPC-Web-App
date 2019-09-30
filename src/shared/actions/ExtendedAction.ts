@@ -9,8 +9,8 @@ export class ExtendedAction<T, R = void, D = any, C = void> extends BaseSourceAc
     public cancel: (x: C) => void;
     public resolve: (x: R) => void;
     public reject: (x: Error) => void;
-    private promise: Promise<R>;
-    private readonly cancelPromise: Promise<C>;
+    public promise: Promise<R>;
+    public readonly cancelPromise: Promise<C>;
 
     constructor(source: T, public readonly data?: D) {
         super(source);
@@ -19,7 +19,7 @@ export class ExtendedAction<T, R = void, D = any, C = void> extends BaseSourceAc
     }
 
     public then = <H>(funky: (x: R) => H): Promise<H> => {
-        return this.promise.then(funky);
+        return this.promise.then(x => { console.log("fertig"); return x }).then(funky);
     }
 
     public catch = <H>(funky: (x: any) => H | R): Promise<H | R> => {

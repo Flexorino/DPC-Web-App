@@ -45,6 +45,8 @@ export class DiaryListComponent implements OnInit, OnDestroy {
         });
       }
     );
-    ActionUtil.dispatch(this.store, DiaryListActions.OPENEND, new ExtendedAction(this), this.destroy).then(() => this.loading = false);;
+
+    ActionUtil.dispatch(this.store, DiaryListActions.OPENEND, new ExtendedAction(this), this.destroy).then(() => this.loading = false);
+
   }
 }

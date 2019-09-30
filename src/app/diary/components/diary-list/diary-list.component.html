@@ -3,7 +3,7 @@
     </div>
 </div>
 <div id="entryArea">
-    <ng-template [ngIf]="dayMappedEntries.length" [ngIfElse]="elseBlock">
+    <ng-template [ngIf]="!loading" [ngIfElse]="elseBlock">
         <mat-card *ngFor="let aggr of dayMappedEntries">
             <mat-card-title> {{aggr.day |customTime:"date"}}
             </mat-card-title>
