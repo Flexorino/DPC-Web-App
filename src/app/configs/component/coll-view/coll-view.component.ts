@@ -13,6 +13,7 @@ import { DiaryReference } from 'src/shared/model/user/diary-reference';
 import { Grant } from 'src/shared/model/user/grant';
 import { Subscription } from 'rxjs';
 import { DiaryNamePopUpComponent } from 'src/app/components/diary-name-pop-up/diary-name-pop-up.component';
+import { NotImplementedService } from 'src/shared/services/not-implemented.service';
 
 @Component({
   selector: 'app-coll-view',
@@ -28,7 +29,7 @@ export class CollViewComponent implements OnInit, OnDestroy {
   private userSubscription: Subscription;
   public loading = true;
 
-  constructor(public diarySelectionService: DiaryNavigationService, private store: Store<{ user: User }>, private matDialog: MatDialog) {
+  constructor(public diarySelectionService: DiaryNavigationService, private store: Store<{ user: User }>, private matDialog: MatDialog, private notImplementedService: NotImplementedService) {
 
   }
 
@@ -63,5 +64,15 @@ export class CollViewComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  delete() {
+    this.notImplementedService.showMessage("Löschen von Tagebuch");
+  }
+
+  share() {
+    this.notImplementedService.showMessage("Teilen von Tagebuch");
+  }
+
+
 
 }

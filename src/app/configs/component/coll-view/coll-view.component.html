@@ -8,7 +8,8 @@
         (click)="switchDiary(ref.diaryId)" matRipple *ngFor="let ref of myDiaries">
         <div>{{ref.diaryName}}</div>
         <div class="list-icons">
-            <div class="material-icons">settings</div>
+            <div class="material-icons" (click)="share()">share</div>
+            <div class="material-icons" (click)="delete()">close</div>
         </div>
         <mat-divider></mat-divider>
     </mat-list-item>
