@@ -1,3 +1,4 @@
+import { BaseHandlers } from './baseHandler';
 import { DiaryNavActions } from './../../app/diary/diary-nav/diary-nav.actions';
 import { DiaryListActions } from './../../app/diary/components/diary-list/diary-list.actions';
 import { Store, on } from '@ngrx/store';
@@ -39,9 +40,10 @@ export class DiaryEffects {
         private entryService: EntryService,
         private diaryService: DiaryService,
         private currentDiaryService: DiaryNavigationService,
-        private effectsUtil: EffectsUtil
+        private effectsUtil: EffectsUtil,
+        private baseHandlers: BaseHandlers
     ) {
-        this.onOpended$ = effectsUtil.when(DiaryListActions.OPENEND).do(x => this.handleOpened(x));
+        this.onOpended$ = effectsUtil.when(DiaryListActions.OPENEND).do(x => this.handleOpened(x), x => this.baseHandlers.loadBaseDiaryData(x));
     }
 
     private handleOpened(props: ExtendedAction<DiaryListComponent, void>): Observable<Action> {
