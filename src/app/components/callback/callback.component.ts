@@ -1,3 +1,4 @@
+import { DiaryNavigationService } from './../../../shared/services/diary.navigation.service';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/auth.service';
 import { LoginService } from 'src/shared/services/login.service';
@@ -16,7 +17,7 @@ export class CallbackComponent implements OnInit {
   sub1: Subscription;
   sub2: Subscription;
 
-  constructor(private auth: AuthService, private loginService: LoginService, private router: Router) { }
+  constructor(private auth: AuthService, private loginService: LoginService, private router: Router, private diaryNavService: DiaryNavigationService) { }
 
   ngOnInit() {
     this.auth.handleAuthCallback().subscribe(x => {
@@ -29,7 +30,7 @@ export class CallbackComponent implements OnInit {
       this.sub2 = this.loginService.loginInformation$.pipe(filter(x => x != null)).subscribe(x => {
         this.clear();
         if (x.defaultDiary) {
-          this.router.navigateByUrl("diary/" + x.defaultDiary);
+          setTimeout(() => this.router.navigateByUrl("diary/" + x.defaultDiary), 50);
         } else {
           this.router.navigateByUrl("diary-collaboration-settings");
         }
