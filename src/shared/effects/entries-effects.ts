@@ -48,18 +48,7 @@ export class DiaryEffects {
         return this.entryService.getEntries(this.currentDiaryService.currentDiaryId$.getValue()).pipe(
             map(entries => {
                 return (EntryServiceActions.ENTRIES_LOADED({ entries: entries }));
-            }),
-            takeUntil(from(props.cancelPromise)),
-            tap(x => {
-                console.log("resolve");
-                props.resolve(null);
-            }),
-            catchError((err) => {
-                console.log("reject");
-                props.reject(err);
-                return EMPTY;
-            }
-            )
+            })
         );
     }
 
