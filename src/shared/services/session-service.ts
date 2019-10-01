@@ -9,6 +9,7 @@ export class SavedSessionData {
     public lastDiary: string;
 }
 
+@Injectable({ providedIn: "root" })
 export class SessionService {
 
     public sessionData$: Observable<SavedSessionData>;
