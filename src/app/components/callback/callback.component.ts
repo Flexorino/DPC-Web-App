@@ -28,7 +28,11 @@ export class CallbackComponent implements OnInit {
       });
       this.sub2 = this.loginService.loginInformation$.pipe(filter(x => x != null)).subscribe(x => {
         this.clear();
-        this.router.navigateByUrl("diary/" + x.defaultDiary);
+        if (x.defaultDiary) {
+          this.router.navigateByUrl("diary/" + x.defaultDiary);
+        } else {
+          this.router.navigateByUrl("diary-collaboration-settings");
+        }
       }
       );
     });

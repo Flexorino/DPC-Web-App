@@ -17,10 +17,14 @@ export class RegisterViewComponent implements OnInit {
   ngOnInit() {
   }
 
-  confirm(){
+  confirm() {
     this.loginService.register(this.username).subscribe();
-    this.loginService.loginInformation$.pipe(filter(x => x!=null)).subscribe(x => {
-      this.router.navigateByUrl("diary/"+x.userId);
+    this.loginService.loginInformation$.pipe(filter(x => x != null)).subscribe(x => {
+      if (x.defaultDiary) {
+        this.router.navigateByUrl("diary/" + x.defaultDiary);
+      } else {
+        this.router.navigateByUrl("diary-collaboration-settings");
+      }
     });
   }
 
