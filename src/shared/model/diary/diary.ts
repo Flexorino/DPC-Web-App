@@ -14,7 +14,7 @@ export class Diary {
     public tags: Array<Tag>;
     public food: Array<Food>;
 
-    public name: string = "mein Tagebuch";
+    public name: string = "";
 
     public contexts: Array<DiaryContext>;
 
