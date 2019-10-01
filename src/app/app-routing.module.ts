@@ -59,7 +59,7 @@ const routes: Routes = [
   {
     path: "", component: BaseFullScreenModalComponent, children: [
       {
-        path: "diary", children: [
+        path: "diary", canActivateChild: [AuthGuard], canActivate: [AuthGuard], children: [
           {
             path: ":diary-id", canActivateChild: [CanActivateDiaryViewGuard], children: [
               {
