@@ -1,3 +1,4 @@
+import { ExtendedAction } from './../actions/ExtendedAction';
 
 import { Action, ActionCreator } from '@ngrx/store';
 import { Injectable } from "@angular/core";
