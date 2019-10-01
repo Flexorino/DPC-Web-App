@@ -1,6 +1,6 @@
 import { DiaryNavigationService } from './diary.navigation.service';
 import { DiariesService } from './../../web-api/api/diaries.service';
-import { map } from 'rxjs/operators';
+import { map, delay } from 'rxjs/operators';
 import { LoginService } from './login.service';
 import { Observable } from 'rxjs';
 import { Injectable, Injector } from '@angular/core';
@@ -18,7 +18,6 @@ export class SessionService {
 
 
     constructor(private injector: Injector, private loginService: LoginService) {
-        loginService.init();
         this.sessionData$ = loginService.loginInformation$.pipe(
             map(x => {
                 if (!x) {

@@ -24,6 +24,7 @@ export class CallbackComponent implements OnInit {
       console.log("CCallback");
       this.loginService.init();
       this.sub1 = this.loginService.unknownAuthentication.subscribe(x => {
+        console.log("register");
         this.clear();
         this.router.navigateByUrl("register");
       });

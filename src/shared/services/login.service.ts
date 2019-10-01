@@ -28,7 +28,7 @@ export class LoginService {
     private intit = false;
 
     constructor(private auth: AuthService, private apiConfig: Configuration, private userService: UserService) {
- 
+        this.loginInformation$ = this.current.asObservable();
     }
 
     public login() {
@@ -63,8 +63,6 @@ export class LoginService {
             }
         });
         this.auth.isAuthenticated$.subscribe(x => console.log("AUTH: " + x));
-
-        this.loginInformation$ = this.current.asObservable();
         this.initialized = this.intitializedSub.asObservable();
         this.initialized$.subscribe(x => {
             console.log("init");
