@@ -74,7 +74,7 @@ export class AddEntryBSMeasureEntryComponent implements OnInit, AfterViewInit, V
       fastKE: this.fastKE
     });
     this.mainFormGroup = this.fb.group({ timeAndBs: this.firstFormGroup, bolusEtc: this.secondFormGroup });
-    this.mainFormGroup.setValidators([FormUtil.save(((x: AbstractControl) => this.bsMeasureControl.value.constructed || this.correctionFoodBolusControl.value.constructed ? null : { atleastOneEntryAttributeNeedsToBeSet: null }))])
+    this.mainFormGroup.setValidators([FormUtil.save(((x: AbstractControl) => this.bsMeasureControl.value.constructed || this.correctionFoodBolusControl.value.constructed || this.fastKE.value.constructed ? null : { atleastOneEntryAttributeNeedsToBeSet: null }))])
   }
 
   private handleSubFormSubsciptions() {
