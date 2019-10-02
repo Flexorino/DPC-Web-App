@@ -1,10 +1,11 @@
+import { AddEntryBSMeasureEntryComponent } from './../../app/diary/components/add-entry-components/inputs/components/add-entry-bsmeasure-entry/add-entry-bsmeasure-entry.component';
 import { AddBSMeasureComponent } from './../../app/diary/components/add-entry-components/add-bsmeasure/add-bsmeasure.component';
 import { Injectable } from "@angular/core";
 import { Actions } from '@ngrx/effects';
 import { EffectsUtil } from './effects-util';
 import { AddBSMeasreActions } from 'src/app/diary/components/add-entry-components/add-bsmeasure/add-bsmeasure.actions';
 import { EMPTY, Observable, of } from 'rxjs';
-import { finalize, delay, tap } from 'rxjs/operators';
+import { finalize, delay, tap, flatMap } from 'rxjs/operators';
 import { DiaryContext } from '../model/diary/context/diary-context';
 import { DiaryCorrectionFactors } from '../model/diary/context/diary-correction-factors';
 import { DiaryContextKEFactors } from '../model/diary/context/diary-context-KE-factors';
@@ -15,6 +16,9 @@ import { ExtendedAction } from '../actions/ExtendedAction';
 import { GeneralEffectActions } from './general-effect-actions';
 import { Patch } from '../services/patcherino/patch';
 import { Action } from '@ngrx/store';
+import { AddEntryActionsProps } from 'src/app/diary/components/add-entry-components/sharedActionsProps.ts/add-entry-props';
+import { EntryService } from '../services/entry.service';
+import { DiaryNavigationService } from '../services/diary.navigation.service';
 
 @Injectable()
 export class AddBSEffects {
@@ -65,11 +69,16 @@ export class AddBSEffects {
     }
 
     constructor(
-        private actions$: Actions, private util: EffectsUtil
+        private actions$: Actions, private util: EffectsUtil, private entryService: EntryService, private diaryNav: DiaryNavigationService
     ) {
         this.openedListener$ = util.when(AddBSMeasreActions.OPENED).do(this.handleOpened);
-        this.confirmListener$ = util.when(AddBSMeasreActions.CONFIRM).do(x => {
-            return EMPTY.pipe().pipe(delay(2000), finalize(() => x.resolve(null)));
-        });
+        this.confirmListener$ = util.when(AddBSMeasreActions.CONFIRM).do(x =>
+            this.handleSubmit(x)
+        );
+    }
+
+    private handleSubmit(props: AddEntryActionsProps<AddBSMeasureComponent>): Observable<Action> {
+        console.log("POOST");
+        return this.entryService.addEntry(this.diaryNav.currentDiaryId$.getValue(), props.entryToAdd).pipe(tap(x => props.resolve(null)), flatMap(x => EMPTY));
     }
 }
