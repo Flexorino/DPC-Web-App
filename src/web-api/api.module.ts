@@ -1,6 +1,7 @@
 import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core';
 import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
+import config from "./../assets/appConfig/appConfig.json";
 
 
 import { DiariesService } from './api/diaries.service';
@@ -45,4 +46,4 @@ export class ApiModule {
         }
     }
 }
-export function baseConfig() { return new Configuration({ basePath: "http://localhost:8889" }) };
+export function baseConfig() { return new Configuration({ basePath: config.webserviceAddress }) };
