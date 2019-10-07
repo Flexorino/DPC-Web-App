@@ -4,6 +4,7 @@ import { from, of, Observable, BehaviorSubject, combineLatest, throwError, Subje
 import { tap, catchError, concatMap, shareReplay } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import createAuth0Client from '@auth0/auth0-spa-js';
+import appConfig from './../assets/appConfig/appConfig.json'
 
 @Injectable({
   providedIn: 'root'
@@ -12,10 +13,10 @@ export class AuthService {
   // Create an observable of Auth0 instance of client
   auth0Client$ = (from(
     createAuth0Client({
-      domain: "dev-9nr7-5qr.eu.auth0.com",
-      client_id: "cPbMOvfSjhKXcUvG2BwLvbIdmji0LKq0",
+      domain: appConfig.domain,
+      client_id: appConfig.client_id,
       redirect_uri: `${window.location.origin}/callback`,
-      audience: "kekorino"
+      audience: appConfig.audience
     })
   ) as Observable<Auth0Client>).pipe(
     shareReplay(1), // Every subscription receives the same shared value
@@ -131,7 +132,7 @@ export class AuthService {
     this.auth0Client$.subscribe((client: Auth0Client) => {
       // Call method to log out
       client.logout({
-        client_id: "cPbMOvfSjhKXcUvG2BwLvbIdmji0LKq0",
+        client_id: appConfig.client_id,
         returnTo: `${window.location.origin}/login`
       });
     });

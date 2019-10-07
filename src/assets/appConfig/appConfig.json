@@ -1,3 +1,6 @@
 {
-    "webserviceAddress": "http://localhost:8889"
+    "webserviceAddress": "http://localhost:8889",
+    "domain": "dev-9nr7-5qr.eu.auth0.com",
+    "client_id": "cPbMOvfSjhKXcUvG2BwLvbIdmji0LKq0",
+    "audience": "kekorino"
 }
