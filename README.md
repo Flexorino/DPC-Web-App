@@ -21,3 +21,4 @@ Unter  https://nodejs.org/en/download/ kann beides zusammen bezogen werden.
 ## Sonstiges
 
 * Für eine Nutzung eines Service Workers muss eine Web-App mit HTTPS geliefert werden oder über localhost aufgerufen werden. Mit Diensten, wie z.B. https://www.npmjs.com/package/localtunnel, ist es einfach möglich einen lokalen Server öffentlich über HTTPS verfügbar zu machen. Da die vergebenen Domainnahmen jedoch immer zufällig sind, ist die Anwendung mit Auth0 (Origin-Problematik) kritisch, da immer eine entsprechende Anpassung in den Auth0 Konfigurationen vorgenommen werden muss. Außerdem muss auch dann stets die Webservice Origin angepasst werden, da diese gleichermaßen über HTTPS angeboten werden muss und der Name der Origin zufällig ist.
+* Bei der Anmeldung über Google ist momentan immer eine Neuanmeldung nach dem Neuladen der Web-App notwendig.
