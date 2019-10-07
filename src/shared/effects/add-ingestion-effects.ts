@@ -78,10 +78,10 @@ export class AddIngestionEffects {
             keFactors.dialyKeFactors = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2];
             let frameValues: DiaryContextFrameValues = new DiaryContextFrameValues("frame values");
             frameValues.dailyBSGoalValues = [5.6, 5.3, 5.2, 5, 5, 6, 5.7, 6, 6, 5, 5, 6, 5.3, 5.3, 5.3, 4, 5, 6, 5.3, 5.4, 5.3, 4, 5, 6];
-            frameValues.higherBSLimit = 7.2;
-            frameValues.lowerBSLimit = 4.4;
+            frameValues.higherBSLimit = 9,7;
+            frameValues.lowerBSLimit = 5;
             frameValues.hypoglycemiaLimit = 3.3;
-            frameValues.hyperglycemiaLimit = 10.5;
+            frameValues.hyperglycemiaLimit = 12,2;
             context.validFrom = new Date(1553334757 * 1000);
             context.correctionFactors = correctionFactors;
             context.keFactor = keFactors;
